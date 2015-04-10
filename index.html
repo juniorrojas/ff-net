@@ -174,7 +174,7 @@ function init() {
 	];
 
 	var spikes = [
-		{x: 300, y: 300}
+		{x: nodes[0].x, y: nodes[0].y, source: nodes[0], target: nodes[3]}
 	];
 
 	var force = d3.layout.force()
@@ -215,7 +215,16 @@ function init() {
 	var circle = svg.append('svg:g').selectAll('g');
 	var spike = svg.append('svg:g');
 
+	var t = 0;
+	var propagationT = 50;
+
 	function tick() {
+		if (t >= propagationT) {
+			t = propagationT;
+		} else {
+			t++;
+		}
+
 		// draw directed edges with proper padding from node centers
 		path.attr('d', function(d) {
 			var deltaX = d.target.x - d.source.x,
@@ -237,7 +246,10 @@ function init() {
 		});
 
 		spike.attr('transform', function(d) {
-			d.x++;
+			var v = {x: d.target.x - d.source.x, y: d.target.y - d.source.y};
+			// var magnitude = Math.sqrt(v.x * v.x + v.y * v.y);
+			d.x = d.source.x + v.x * t / propagationT;
+			d.y = d.source.y + v.y * t / propagationT;
 			return 'translate(' + d.x + ',' + d.y + ')';
 		});
 	}
