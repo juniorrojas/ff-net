@@ -29,6 +29,7 @@ p.addNeuron = function(pos) {
 p.addLink = function(n0, nf, weight) {
 	var link = new Link(n0, nf, weight);
 	n0.links.push(link);
+	nf.backLinks.push(link);
 	var spike = new Spike(link);
 	link.spike = spike;
 	this.links.push(link);

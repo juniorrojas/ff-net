@@ -36,11 +36,6 @@ circle.node {
 	cursor: pointer;
 }
 
-circle.node.reflexive {
-	stroke: #000 !important;
-	stroke-width: 2.5px;
-}
-
 text {
 	font: 12px sans-serif;
 	pointer-events: none;
