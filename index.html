@@ -1,106 +1,16 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="css/style.css">
+<charset="utf-8">
+<link rel="stylesheet" type="text/css" href="css/style.css" charset="utf-8">
 <script src="lib/d3/d3.js" charset="utf-8"></script>
 <script src="js/Vector2.js" charset="utf-8"></script>
+<script src="js/Link.js" charset="utf-8"></script>
+<script src="js/Spike.js" charset="utf-8"></script>
+<script src="js/Neuron.js" charset="utf-8"></script>
+<script src="js/NeuralNet.js" charset="utf-8"></script>
 
 <script>
-
-var Link;
-(function () {
-Link = function(n0, nf, weight) {
-	this.init(n0, nf, weight);
-}
-
-var p = Link.prototype;
-p.n0 = null;
-p.nf = null;
-p.weight = null;
-
-p.init = function(n0, nf, weight) {
-	this.n0 = n0;
-	this.nf = nf;
-	this.weight = weight;
-}
-
-})();
-
-var Neuron;
-(function() {
-Neuron = function(pos) {
-	this.init(pos);
-}
-
-var p = Neuron.prototype;
-
-p.pos = null;
-p.links = null;
-
-p.init = function(pos) {
-	this.links = [];
-	this.pos = pos;
-}
-
-})();
-
-var Spike;
-(function() {
-Spike = function(link) {
-	this.init(link);
-}
-
-var p = Spike.prototype;
-
-p.pos = null;
-p.link = null;
-
-p.init = function(link) {
-	this.link = link;
-	this.pos = new Vector2(0, 0);
-}
-})();
-
-var NeuralNet;
-
-(function () {
-NeuralNet = function() {
-	this.init();
-}
-
-var p = NeuralNet.prototype;
-p.neurons = null;
-p.links = null;
-p.spikes = null;
-p.input = null;
-p.output = null;
-
-p.init = function() {
-	this.neurons = [];
-	this.links = [];
-	this.spikes = [];
-	this.input = [];
-	this.output = [];
-}
-
-p.addNeuron = function(pos) {
-	var neuron = new Neuron(pos);
-	this.neurons.push(neuron);
-	return neuron;
-}
-
-p.addLink = function(n0, nf, weight) {
-	var link = new Link(n0, nf, weight);
-	n0.links.push(link);
-	var spike = new Spike(link);
-	link.spike = spike;
-	this.links.push(link);
-	this.spikes.push(spike);
-	return link;
-}
-
-})();
 
 function init() {
 	var width = 960;
