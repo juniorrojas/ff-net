@@ -15,7 +15,7 @@ svg {
 }
 
 svg:not(.active):not(.ctrl) {
-	cursor: crosshair;
+	/* cursor: crosshair; */
 }
 
 path.link {
@@ -31,10 +31,6 @@ svg:not(.active):not(.ctrl) path.link {
 
 path.link.selected {
 	stroke-dasharray: 10,2;
-}
-
-path.link.dragline {
-	pointer-events: none;
 }
 
 path.link.hidden {
@@ -64,16 +60,17 @@ text.id {
 </style>
 
 <script src="lib/d3/d3.js" charset="utf-8"></script>
+<script src="js/Vector2.js" charset="utf-8"></script>
 
 <script>
 
-var Synapse;
+var Link;
 (function () {
-Synapse = function(n0, nf, weight) {
+Link = function(n0, nf, weight) {
 	this.init(n0, nf, weight);
 }
 
-var p = Synapse.prototype;
+var p = Link.prototype;
 p.n0 = null;
 p.nf = null;
 p.weight = null;
@@ -87,19 +84,38 @@ p.init = function(n0, nf, weight) {
 })();
 
 var Neuron;
-(function () {
-Neuron = function() {
-	this.init();
+(function() {
+Neuron = function(pos) {
+	this.init(pos);
 }
 
 var p = Neuron.prototype;
 
-p.synapses = null;
+p.pos = null;
+p.links = null;
 
-p.init = function() {
-	this.synapses = [];
+p.init = function(pos) {
+	this.links = [];
+	this.pos = pos;
 }
 
+})();
+
+var Spike;
+(function() {
+Spike = function(link) {
+	this.init(link);
+}
+
+var p = Spike.prototype;
+
+p.pos = null;
+p.link = null;
+
+p.init = function(link) {
+	this.link = link;
+	this.pos = new Vector2(0, 0);
+}
 })();
 
 var NeuralNet;
@@ -110,37 +126,34 @@ NeuralNet = function() {
 }
 
 var p = NeuralNet.prototype;
-p.inputNeurons = null;
-p.outputNeurons = null;
+p.neurons = null;
+p.links = null;
+p.spikes = null;
+p.input = null;
+p.output = null;
 
 p.init = function() {
-	this.inputNeurons = [];
-	this.outputNeurons = [];
-
-	this.inputNeurons.push(new Neuron());
-	this.inputNeurons.push(new Neuron());
-	this.inputNeurons.push(new Neuron());
+	this.neurons = [];
+	this.links = [];
+	this.spikes = [];
+	this.input = [];
+	this.output = [];
 }
 
-p.getD3DataRec = function(level, node) {
-	var data = {};
-	data.name = "" + level + ":" + node.char;
-	data.children = [];
-	data.node = node;
-
-	for (var i in node.children) {
-		var childData = this.getD3DataRec(level + 1, node.children[i]);
-		childData.parent = data.name;
-		data.children.push(childData);
-	}
-
-	return data;
+p.addNeuron = function(pos) {
+	var neuron = new Neuron(pos);
+	this.neurons.push(neuron);
+	return neuron;
 }
 
-p.getD3Data = function() {
-	var nodeData = this.getD3DataRec(0, this.root);
-	nodeData.parent = "null";
-	return [nodeData];
+p.addLink = function(n0, nf, weight) {
+	var link = new Link(n0, nf, weight);
+	n0.links.push(link);
+	var spike = new Spike(link);
+	link.spike = spike;
+	this.links.push(link);
+	this.spikes.push(spike);
+	return link;
 }
 
 })();
@@ -149,108 +162,95 @@ function init() {
 	var width = 960;
 	var height = 500;
 	var colors = d3.scale.category10();
+	var neuronRadius = 12;
+	var spikeRadius = 4;
+
+	var neuralNet = new NeuralNet();
+	neuralNet.addNeuron(new Vector2(500, 300));
+	neuralNet.addNeuron(new Vector2(500, 400));
+	neuralNet.addNeuron(new Vector2(400, 300));
+	neuralNet.addNeuron(new Vector2(400, 400));
+	neuralNet.addNeuron(new Vector2(300, 350));
+	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[2], 1);
+	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[3], 1);
+	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[2], 1);
+	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[3], 1);
+	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[4], 1);
+	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[4], 1);
+	neuralNet.input = [neuralNet.neurons[0], neuralNet.neurons[1]];
+
+	var nodes = neuralNet.neurons;
+	var links = neuralNet.links;
+	var spikes = neuralNet.spikes;
 
 	var svg = d3.select('body')
 		.append('svg')
 		.attr('width', width)
 		.attr('height', height);
 
-	var nodes = [
-		{id: 0, reflexive: false, x: 558, y: 300},
-		{id: 1, reflexive: false, x: 558, y: 290},
-		{id: 2, reflexive: false, x: 358, y: 290},
-		{id: 3, reflexive: false, x: 400, y: 300},
-		{id: 4, reflexive: false, x: 410, y: 250}
-	];
-	var lastNodeId = 2;
-	var links = [
-		{source: nodes[0], target: nodes[3], left: false, right: true, weight: 1},
-		{source: nodes[1], target: nodes[3], left: false, right: true, weight: 0.5},
-		{source: nodes[0], target: nodes[4], left: false, right: true, weight: 0.3},
-		{source: nodes[1], target: nodes[4], left: false, right: true, weight: 0.2},
-
-		{source: nodes[3], target: nodes[2], left: false, right: true, weight: 0.3},
-		{source: nodes[4], target: nodes[2], left: false, right: true, weight: 0.2}
-	];
-
-	var spikes = [
-		{x: nodes[0].x, y: nodes[0].y, source: nodes[0], target: nodes[3]}
-	];
-
-	var force = d3.layout.force()
-		.nodes(nodes)
-		.links(links)
-		.size([width, height])
-		.linkDistance(150)
-		.charge(-500)
-		.on('tick', tick);
-
-	svg.append('svg:defs').append('svg:marker')
-			.attr('id', 'end-arrow')
-			.attr('viewBox', '0 -5 10 10')
-			.attr('refX', 6)
-			.attr('markerWidth', 3)
-			.attr('markerHeight', 3)
-			.attr('orient', 'auto')
-		.append('svg:path')
-			.attr('d', 'M0,-5L10,0L0,5')
-			.attr('fill', '#000');
-
-	svg.append('svg:defs').append('svg:marker')
-			.attr('id', 'start-arrow')
-			.attr('viewBox', '0 -5 10 10')
-			.attr('refX', 4)
-			.attr('markerWidth', 3)
-			.attr('markerHeight', 3)
-			.attr('orient', 'auto')
-		.append('svg:path')
-			.attr('d', 'M10,-5L0,0L10,5')
-			.attr('fill', '#000');
-
-	var dragLine = svg.append('svg:path')
-		.attr('class', 'link dragline hidden')
-		.attr('d', 'M0,0L0,0');
-
 	var path = svg.append('svg:g').selectAll('path');
 	var circle = svg.append('svg:g').selectAll('g');
-	var spike = svg.append('svg:g');
+	var d3Spike = svg.append('svg:g').selectAll('g');
 
 	var t = 0;
-	var propagationT = 50;
+	var propagationT = 200;
+	var firingNeurons = neuralNet.input;
+	restart();
+
+	setInterval(tick, 1 / 30);
 
 	function tick() {
 		if (t >= propagationT) {
 			t = propagationT;
+			var newFiringNeurons = [];
+			for (var i = 0; i < firingNeurons.length; i++) {
+				var neuron = firingNeurons[i];
+				for (var j = 0; j < neuron.links.length; j++) {
+					var link = neuron.links[j];
+					newFiringNeurons.push(link.nf);
+				}
+			}
+			firingNeurons = newFiringNeurons;
+			t = 0;
 		} else {
 			t++;
 		}
 
+		for (var i = 0; i < firingNeurons.length; i++) {
+			for (var j = 0; j < firingNeurons[i].links.length; j++) {
+				var spike = firingNeurons[i].links[j].spike;
+				var link = spike.link;
+
+				var v = link.nf.pos.subtract(link.n0.pos).normalize();
+				var p0 = link.n0.pos.add(v.times(neuronRadius - spikeRadius));
+				var pf = link.nf.pos.subtract(v.times(neuronRadius - spikeRadius));
+				v = pf.subtract(p0);
+				spike.pos = p0.add(v.times(t / propagationT));
+			}
+		}
+
 		// draw directed edges with proper padding from node centers
 		path.attr('d', function(d) {
-			var deltaX = d.target.x - d.source.x,
-					deltaY = d.target.y - d.source.y,
+			var deltaX = d.nf.pos.x - d.n0.pos.x,
+					deltaY = d.nf.pos.y - d.n0.pos.y,
 					dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
 					normX = deltaX / dist,
 					normY = deltaY / dist,
-					sourcePadding = d.left ? 17 : 12,
-					targetPadding = d.right ? 15 - d.weight : 12,
-					sourceX = d.source.x + (sourcePadding * normX),
-					sourceY = d.source.y + (sourcePadding * normY),
-					targetX = d.target.x - (targetPadding * normX),
-					targetY = d.target.y - (targetPadding * normY);
+					sourcePadding = d.left ? neuronRadius - 5 : neuronRadius,
+					targetPadding = d.right ? neuronRadius - 5: neuronRadius,
+					sourceX = d.n0.pos.x + (sourcePadding * normX),
+					sourceY = d.n0.pos.y + (sourcePadding * normY),
+					targetX = d.nf.pos.x - (targetPadding * normX),
+					targetY = d.nf.pos.y - (targetPadding * normY);
 			return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
 		});
 
 		circle.attr('transform', function(d) {
-			return 'translate(' + d.x + ',' + d.y + ')';
+			return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
 		});
 
-		spike.attr('transform', function(d) {
-			var v = {x: d.target.x - d.source.x, y: d.target.y - d.source.y};
-			// var magnitude = Math.sqrt(v.x * v.x + v.y * v.y);
-			d.x = d.source.x + v.x * t / propagationT;
-			d.y = d.source.y + v.y * t / propagationT;
-			return 'translate(' + d.x + ',' + d.y + ')';
+		d3Spike.attr('transform', function(d) {
+			return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
 		});
 	}
 
@@ -263,42 +263,40 @@ function init() {
 
 		path.enter().append('svg:path')
 		.attr('class', 'link')
-		.style('stroke-width', function(d) { return 10 * d.weight; } )
+		.style('stroke-width', function(d) { return 2; } )
 		.classed('selected', function(d) { return false; })
 		.style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
 		.style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; });
 
 		path.exit().remove();
 
-		circle = circle.data(nodes, function(d) { return d.id; });
+		circle = circle.data(nodes);
 		circle.selectAll('circle')
-		.style('fill', function(d) { return d3.rgb(colors(d.id)); })
+		.style('fill', function(d) { return d3.rgb(colors(1)); })
 		.classed('reflexive', function(d) { return d.reflexive; });
 
 		var g = circle.enter().append('svg:g');
 
 		g.append('svg:circle')
 		.attr('class', 'node')
-		.attr('r', 12)
-		.style('fill', function(d) { return d3.rgb(colors(d.id)); })
-		.style('stroke', function(d) { return d3.rgb(colors(d.id)).darker().toString(); })
-		.classed('reflexive', function(d) { return d.reflexive; });
+		.attr('r', neuronRadius)
+		.style('fill', function(d) { return d3.rgb(colors(1)); })
+		.style('stroke', function(d) { return d3.rgb(colors(1)).darker().toString(); });
 
-		spike.data(spikes);
-		spike
-		.attr('transform', function(d) { return 'translate(' + '300' + ',' + '300' + ')' })
-		.append('svg:circle')
+		circle.exit().remove();
+
+		d3Spike = d3Spike.data(spikes);
+		g = d3Spike.enter().append('svg:g');
+
+		g.append('svg:circle')
 		.attr('class', 'node')
-		.attr('r', 12)
+		.attr('r', spikeRadius)
 		.style('fill', function(d) { return d3.rgb(colors(0)); })
 		.style('stroke', function(d) { return d3.rgb(colors(0)).darker().toString(); });
 
+		d3Spike.exit().remove();
 
-		circle.exit().remove();
-		force.start();
 	}
-
-	restart();
 
 }
 
