@@ -27,9 +27,9 @@ function init() {
 	neuralNet.addNeuron(new Vector2(300, 350));
 	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[2], 3);
 	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[3], 1);
-	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[2], 3);
-	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[3], 7);
-	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[4], 1);
+	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[2], -5);
+	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[3], -7);
+	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[4], -1);
 	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[4], 2);
 	neuralNet.input = [neuralNet.neurons[0], neuralNet.neurons[1]];
 
@@ -87,7 +87,7 @@ function init() {
 				console.log(neuron.activation);
 				for (var j = 0; j < firingNeurons[i].links.length; j++) {
 					var spike = neuron.links[j].spike;
-					spike.radius = maxSpikeRadius * Math.min(1, spike.getMagnitude() / preactivationTop);
+					spike.radius = maxSpikeRadius * Math.min(1, Math.abs(spike.getMagnitude()) / preactivationTop);
 				}
 			}
 
@@ -138,16 +138,11 @@ function init() {
 	function restart() {
 		d3Link = d3Link.data(neuralNet.links);
 
-		d3Link.classed('selected', function(d) { return false; })
-		.style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
-		.style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; });
-
 		d3Link.enter().append('svg:path')
 		.attr('class', 'link')
-		.style('stroke-width', function(d) { return maxSpikeRadius * 2 * Math.min(1, d.weight / preactivationTop); } )
-		.classed('selected', function(d) { return false; })
-		.style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
-		.style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; });
+		.style('stroke-width', function(d) {
+			return maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
+		});
 
 		d3Link.exit().remove();
 
@@ -155,7 +150,7 @@ function init() {
 		var g = d3Neuron.enter().append('svg:g');
 
 		g.append('svg:circle')
-		.attr('class', 'node')
+		.attr('class', 'neuron')
 		.attr('r', neuronRadius)
 		.style('fill', function(d) { return d3.rgb(250, 250, 200); })
 		.style('stroke', function(d) { return d3.rgb(0, 0, 0); });
