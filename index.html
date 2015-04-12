@@ -26,9 +26,9 @@ function init() {
 	neuralNet.addNeuron(new Vector2(400, 400));
 	neuralNet.addNeuron(new Vector2(300, 350));
 	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[2], 3);
-	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[3], 1);
+	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[3], 5);
 	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[2], -5);
-	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[3], -7);
+	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[3], -1);
 	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[4], -1);
 	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[4], 2);
 	neuralNet.input = [neuralNet.neurons[0], neuralNet.neurons[1]];
@@ -48,7 +48,7 @@ function init() {
 	var firingNeurons = neuralNet.input;
 	for (var i = 0; i < firingNeurons.length; i++) {
 		var neuron = firingNeurons[i];
-		neuron.activation = 1;
+		neuron.activation = 0.5;
 	}
 	var firstPass = true;
 
@@ -127,6 +127,14 @@ function init() {
 
 		d3Neuron.attr('transform', function(d) {
 			return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
+		})
+		.selectAll('circle').style('fill', function(d) {
+			var v = Math.abs(d.activation);
+			return d3.rgb(
+				(1 - v) * 255,
+				(1 - v) * 255,
+				255
+				);
 		});
 
 		d3Spike.attr('transform', function(d) {
@@ -142,7 +150,15 @@ function init() {
 		.attr('class', 'link')
 		.style('stroke-width', function(d) {
 			return maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
-		});
+		})
+		.style('stroke', function(d) {
+			if (d.weight > 0) {
+				return d3.rgb(0, 0, 255);
+			} else {
+				return d3.rgb(255, 0, 0);
+			}
+		})
+		.style('stroke-opacity', function(d) { return 0.3; });
 
 		d3Link.exit().remove();
 
@@ -162,7 +178,13 @@ function init() {
 
 		g.append('svg:circle')
 		.attr('class', 'spike')
-		.style('fill', function(d) { return d3.rgb(255, 255, 255); });
+		.attr('fill', function(d) {
+			if (d.link.weight > 0) {
+				return d3.rgb(0, 0, 200);
+			} else {
+				return d3.rgb(200, 0, 0);
+			}
+		});
 
 		d3Spike.exit().remove();
 
