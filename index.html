@@ -20,17 +20,17 @@ function init() {
 	var preactivationTop = 5;
 
 	var neuralNet = new NeuralNet();
-	neuralNet.addNeuron(new Vector2(500, 300));
-	neuralNet.addNeuron(new Vector2(500, 400));
-	neuralNet.addNeuron(new Vector2(400, 300));
-	neuralNet.addNeuron(new Vector2(400, 400));
-	neuralNet.addNeuron(new Vector2(300, 350));
+	neuralNet.addNeuron(new Vector2(500, 300), 0);
+	neuralNet.addNeuron(new Vector2(500, 400), 0);
+	neuralNet.addNeuron(new Vector2(400, 300), -1);
+	neuralNet.addNeuron(new Vector2(400, 400), -1);
+	neuralNet.addNeuron(new Vector2(300, 350), -5);
 	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[2], 3);
 	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[3], 5);
 	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[2], -5);
-	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[3], -1);
+	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[3], 1);
 	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[4], -1);
-	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[4], 2);
+	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[4], 8);
 	neuralNet.input = [neuralNet.neurons[0], neuralNet.neurons[1]];
 
 	var svg = d3.select('body')
@@ -46,10 +46,8 @@ function init() {
 	var propagationT = 200;
 
 	var firingNeurons = neuralNet.input;
-	for (var i = 0; i < firingNeurons.length; i++) {
-		var neuron = firingNeurons[i];
-		neuron.activation = 0.5;
-	}
+	neuralNet.neurons[0].activation = 0.5;
+	neuralNet.neurons[1].activation = 1;
 	var firstPass = true;
 
 	restart();

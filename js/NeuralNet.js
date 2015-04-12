@@ -20,8 +20,8 @@ p.init = function() {
 	this.output = [];
 }
 
-p.addNeuron = function(pos) {
-	var neuron = new Neuron(pos);
+p.addNeuron = function(pos, bias) {
+	var neuron = new Neuron(pos, bias);
 	this.neurons.push(neuron);
 	return neuron;
 }
