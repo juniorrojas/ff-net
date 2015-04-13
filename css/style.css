@@ -24,3 +24,9 @@ circle.neuron {
 	stroke-width: 1.5px;
 	cursor: pointer;
 }
+
+canvas {
+	border-color: "#000000";
+	border-style: solid;
+	border-width: 1px;
+}

@@ -37,4 +37,43 @@ p.addLink = function(n0, nf, weight) {
 	return link;
 }
 
+p.reset= function(input) {
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		neuron.reset();
+	}
+}
+
+p.computeOutput = function(input) {
+	var spikingNeurons = [];
+
+	for (var i = 0; i < this.input.length; i++) {
+		var neuron = this.input[i];
+		neuron.activation = input[i];
+		for (var j = 0; j < neuron.links.length; j++) {
+			var nf = neuron.links[j].nf;
+			if (spikingNeurons.indexOf(nf) == -1) {
+				spikingNeurons.push(nf);
+			}
+		}
+	}
+
+	while (spikingNeurons.length > 0) {
+		var newSpikingNeurons = [];
+		for (var i = 0; i < spikingNeurons.length; i++) {
+			var neuron = spikingNeurons[i];
+			neuron.update();
+			for (var j = 0; j < neuron.links.length; j++) {
+				var nf = neuron.links[j].nf;
+				if (newSpikingNeurons.indexOf(nf) == -1){
+					newSpikingNeurons.push(nf);
+				}
+			}
+		}
+		spikingNeurons = newSpikingNeurons;
+	}
+
+	return [this.output[0].activation];
+}
+
 })();

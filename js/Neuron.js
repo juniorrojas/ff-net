@@ -20,10 +20,10 @@ p.init = function(pos, bias) {
 	this.pos = pos;
 	this.bias = bias;
 	this.preactivation = 0;
-	this.activation = this.activationFunction(this.bias);
+	this.activation = Neuron.activationFunction(this.bias);
 }
 
-p.activationFunction = function(x) {
+Neuron.activationFunction = function(x) {
 	return 1 / (1 + Math.exp(-x));
 }
 
@@ -34,7 +34,12 @@ p.update = function() {
 		var link = this.backLinks[i];
 		this.preactivation += link.weight * link.n0.activation;
 	}
-	this.activation = this.activationFunction(this.preactivation);
+	this.activation = Neuron.activationFunction(this.preactivation);
+}
+
+p.reset = function() {
+	this.preactivation = 0;
+	this.activation = Neuron.activationFunction(this.bias);
 }
 
 })();
