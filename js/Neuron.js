@@ -13,6 +13,9 @@ p.backLinks = null;
 p.preactivation = 0;
 p.activation = 0;
 p.bias = 0;
+p.da = 0; // d activation
+p.dz = 0; // d preactivation
+p.db = 0; // d bias
 
 p.init = function(pos, bias) {
 	this.links = [];
@@ -20,10 +23,14 @@ p.init = function(pos, bias) {
 	this.pos = pos;
 	this.bias = bias;
 	this.preactivation = 0;
-	this.activation = Neuron.activationFunction(this.bias);
+	this.activation = Neuron.sigmoid(this.bias);
+	this.error = 0;
+	this.da = 0;
+	this.dz = 0;
+	this.db = 0;
 }
 
-Neuron.activationFunction = function(x) {
+Neuron.sigmoid = function(x) {
 	return 1 / (1 + Math.exp(-x));
 }
 
@@ -34,12 +41,12 @@ p.update = function() {
 		var link = this.backLinks[i];
 		this.preactivation += link.weight * link.n0.activation;
 	}
-	this.activation = Neuron.activationFunction(this.preactivation);
+	this.activation = Neuron.sigmoid(this.preactivation);
 }
 
 p.reset = function() {
 	this.preactivation = 0;
-	this.activation = Neuron.activationFunction(this.bias);
+	this.activation = Neuron.sigmoid(this.bias);
 }
 
 })();

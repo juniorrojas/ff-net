@@ -14,31 +14,34 @@
 
 function init() {
 	var trainingSet = [
-		[0.5, 0.55, 1],
-		[0.6, 0.6, 1],
-		[0.4, 0.43, 1],
-		[0.45, 0.7, 1],
-		[0.48, 0.32, 1],
+		{x: [0.5, 0.25], y: 1},
+		{x: [0.6, 0.23], y: 1},
+		{x: [0.4, 0.21], y: 1},
+		{x: [0.45, 0.11], y: 1},
+		{x: [0.88, 0.32], y: 1},
+		{x: [0.08, 0.24], y: 1},
+		{x: [0.2, 0.27], y: 1},
+		{x: [0.05, 0.30], y: 1},
+		{x: [0.1, 0.1], y: 1},
 
-		[0.1, 0.1, 0],
-		[0.2, 0.2, 0],
-		[0.15, 0.13, 0],
-		[0.1, 0.4, 0],
+		{x: [0.1, 0.41], y: 0},
+		{x: [0.2, 0.42], y: 0},
+		{x: [0.15, 0.53], y: 0},
+		{x: [0.1, 0.54], y: 0},
 
-		[0.9, 0.9, 0],
-		[0.9, 0.8, 0],
-		[0.8, 0.7, 0],
+		{x: [0.9, 0.9], y: 0},
+		{x: [0.9, 0.8], y: 0},
+		{x: [0.8, 0.7], y: 0},
 
-		[0.06, 0.87, 0],
-		[0.09, 0.8, 0],
-		[0.4, 0.9, 0],
+		{x: [0.06, 0.87], y: 0},
+		{x: [0.09, 0.8], y: 0},
+		{x: [0.4, 0.9], y: 0},
 
-
-		[0.89, 0.1, 0],
-		[0.79, 0.2, 0],
-		[0.77, 0.4, 0],
-
+		{x: [0.59, 0.5], y: 0},
+		{x: [0.39, 0.3], y: 0},
+		{x: [0.57, 0.4], y: 0}
 	];
+
 	var svgWidth = 340;
 	var svgHeight = 250;
 	var canvasWidth = 250;
@@ -54,23 +57,23 @@ function init() {
 	neuralNet.addNeuron(new Vector2(20, svgHeight/2 - dy*0.5), -9999);//0
 	neuralNet.addNeuron(new Vector2(20, svgHeight/2 + dy*0.5), -9999);//1
 
-	neuralNet.addNeuron(new Vector2(120, svgHeight/2 - dy*1.5), -0.1);//2
+	neuralNet.addNeuron(new Vector2(120, svgHeight/2 - dy*1.5), 0);//2
 	neuralNet.addNeuron(new Vector2(120, svgHeight/2 - dy*0.5), 0);//3
 	neuralNet.addNeuron(new Vector2(120, svgHeight/2 + dy*0.5), 0);//4
 	neuralNet.addNeuron(new Vector2(120, svgHeight/2 + dy*1.5), 0);//5
 
-	neuralNet.addNeuron(new Vector2(220, svgHeight/2 - dy*1.5), -0.1);//6
-	neuralNet.addNeuron(new Vector2(220, svgHeight/2 - dy*0.5), 5);//7
-	neuralNet.addNeuron(new Vector2(220, svgHeight/2 + dy*0.5), 5);//8
+	neuralNet.addNeuron(new Vector2(220, svgHeight/2 - dy*1.5), 0);//6
+	neuralNet.addNeuron(new Vector2(220, svgHeight/2 - dy*0.5), 0);//7
+	neuralNet.addNeuron(new Vector2(220, svgHeight/2 + dy*0.5), 0);//8
 	neuralNet.addNeuron(new Vector2(220, svgHeight/2 + dy*1.5), 0);//9
 
-	neuralNet.addNeuron(new Vector2(320, svgHeight/2), -0.7);//10
+	neuralNet.addNeuron(new Vector2(320, svgHeight/2), 0);//10
 
 
 	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[2], 1);
-	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[3], -5);
-	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[4], 0.9);
-	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[5], 5);
+	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[3], 1);
+	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[4], -0.9);
+	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[5], -5);
 
 	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[2], -3);
 	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[3], 5);
@@ -82,10 +85,10 @@ function init() {
 	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[8], -2);
 	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[9], 5);
 
-	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[6], 4);
-	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[7], -4);
-	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[8], 4);
-	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[9], 2);
+	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[6], 1);
+	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[7], -2);
+	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[8], -3);
+	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[9], 1);
 
 	neuralNet.addLink(neuralNet.neurons[4], neuralNet.neurons[6], -2.5);
 	neuralNet.addLink(neuralNet.neurons[4], neuralNet.neurons[8], -2.5);
@@ -97,10 +100,10 @@ function init() {
 	neuralNet.addLink(neuralNet.neurons[5], neuralNet.neurons[8], -2.5);
 	neuralNet.addLink(neuralNet.neurons[5], neuralNet.neurons[9], -2.5);
 
-	neuralNet.addLink(neuralNet.neurons[6], neuralNet.neurons[10], 1.7);
+	neuralNet.addLink(neuralNet.neurons[6], neuralNet.neurons[10], 2.7);
 	neuralNet.addLink(neuralNet.neurons[7], neuralNet.neurons[10], -2.5);
 	neuralNet.addLink(neuralNet.neurons[8], neuralNet.neurons[10], -1);
-	neuralNet.addLink(neuralNet.neurons[9], neuralNet.neurons[10], 3.5);
+	neuralNet.addLink(neuralNet.neurons[9], neuralNet.neurons[10], 3);
 
 	neuralNet.input = [neuralNet.neurons[0], neuralNet.neurons[1]];
 	neuralNet.output = [neuralNet.neurons[10]];
@@ -117,6 +120,8 @@ function init() {
 	var canvas = canvasDiv.append('canvas')
 	.attr('width', canvasWidth)
 	.attr('height', canvasHeight);
+
+	var ctx = canvas.node().getContext('2d');
 
 	var canvasSvg = canvasDiv.append('svg')
 	.attr('width', canvasWidth)
@@ -136,18 +141,21 @@ function init() {
 
 	restart();
 
-	neuralNet.reset();
-
 	var firstPass = true;
 	var firingNeurons = [];
-
+	/*
 	firingNeurons = neuralNet.input;
 	neuralNet.neurons[0].activation = 0.8;
 	neuralNet.neurons[1].activation = 0.8;
+	*/
 
+	// neuralNet.reset();
 	setInterval(tick, 1 / 30);
 
 	function tick() {
+		neuralNet.train(trainingSet);
+		updateCanvas();
+
 		if (t >= propagationT) {
 			t = propagationT;
 			var newFiringNeurons = [];
@@ -227,6 +235,11 @@ function init() {
 				);
 		});
 
+		d3Link
+		.style('stroke-width', function(d) {
+			return maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
+		});
+
 		d3Spike.attr('transform', function(d) {
 			return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
 		});
@@ -234,12 +247,14 @@ function init() {
 	}
 
 	function restart() {
+		var g;
+
 		d3Link = d3Link.data(neuralNet.links);
 
 		d3Link.enter().append('svg:path')
 		.attr('class', 'link')
 		.style('stroke-width', function(d) {
-			return maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
+			return 1; // maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
 		})
 		.style('stroke', function(d) {
 			if (d.weight > 0) {
@@ -253,7 +268,7 @@ function init() {
 		d3Link.exit().remove();
 
 		d3Neuron = d3Neuron.data(neuralNet.neurons);
-		var g = d3Neuron.enter().append('svg:g');
+		g = d3Neuron.enter().append('svg:g');
 
 		g.append('svg:circle')
 		.attr('class', 'neuron')
@@ -286,21 +301,23 @@ function init() {
 		.attr('r', 5)
 		.style('stroke', function(d) { return d3.rgb(0, 0, 0) })
 		.style('fill', function(d) {
-			if (d[2] == 1) return d3.rgb(0, 0, 255);
+			if (d.y == 1) return d3.rgb(0, 0, 255);
 			else return d3.rgb(255, 0, 0);
 		});
 
 		d3Sample.attr('transform', function(d) {
-			console.log(d);
-			return 'translate(' + d[0] * canvasWidth + ',' + d[1] * canvasHeight + ')';
+			return 'translate(' + d.x[0] * canvasWidth + ',' + d.x[1] * canvasHeight + ')';
 		});
 
 		d3Sample.exit().remove();
 
-		var ctx = canvas.node().getContext('2d');
+		updateCanvas();
+
+	}
+
+	function updateCanvas() {
 		for (var i = 0; i < canvasWidth; i++) {
 			for (var j = 0; j < canvasHeight; j++) {
-				neuralNet.reset();
 				var output = neuralNet.computeOutput([i / canvasWidth, j / canvasHeight]);
 				var v = output[0];
 				if (v > maxOutputPaint) ctx.fillStyle = d3.rgb(0, 0, 255);
@@ -313,7 +330,6 @@ function init() {
 				ctx.fillRect(i, j, 1, 1);
 			}
 		}
-
 	}
 
 }
