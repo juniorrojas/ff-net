@@ -81,4 +81,70 @@ p.computeOutput = function(input) {
 	return output;
 }
 
+p.train = function(trainingSet) {
+	for (var k = 0; k < trainingSet.length; k++) {
+		var sample = trainingSet[k];
+		var output = this.computeOutput(sample.x);
+		var d = sample.y - output[0];
+		var neuron = this.output[0];
+		neuron.da = -d; // a = output[0]
+		neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));
+
+		neuron.db = 1 * neuron.dz;
+		for (var l = 0; l < neuron.backLinks.length; l++) {
+			var link = neuron.backLinks[l];
+			link.dw = link.n0.activation * neuron.dz;
+		}
+
+		var backNeurons = [];
+		for (var i = 0; i < neuron.backLinks.length; i++) {
+			var n0 = neuron.backLinks[i].n0;
+			if (backNeurons.indexOf(n0) == -1) backNeurons.push(n0);
+		}
+
+		while (backNeurons.length > 0) {
+			var newBackNeurons = [];
+
+			for (var i = 0; i < backNeurons.length; i++) {
+				var neuron = backNeurons[i];
+
+				neuron.da = 0;
+				for (var l = 0; l < neuron.links.length; l++) {
+					var link = neuron.links[l];
+					neuron.da += link.weight * link.dw;
+				}
+				neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));;
+
+				neuron.db = 1 * neuron.dz;
+				for (var l = 0; l < neuron.backLinks.length; l++) {
+					var link = neuron.backLinks[l];
+					var n0 = link.n0;
+					link.dw = link.n0.activation * neuron.dz;
+
+					if (newBackNeurons.indexOf(n0) == -1) newBackNeurons.push(n0);
+				}
+			}
+
+			backNeurons = newBackNeurons;
+		}
+
+		var lr = 0.2; // learning rate
+
+		// at this point we have computer the gradient
+		// we have to update the weights and biases
+		for (var i = 0; i < this.links.length; i++) {
+			var link = this.links[i];
+			link.weight -= lr * link.dw;
+		}
+
+		for (var i = 0; i < this.neurons.length; i++) {
+			var neuron = this.neurons[i];
+			neuron.bias -= lr * neuron.db;
+			neuron.activation = Neuron.sigmoid(neuron.bias);
+		}
+
+		this.reset();
+	}
+}
+
 })();
