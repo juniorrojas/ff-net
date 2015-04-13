@@ -1,5 +1,4 @@
 svg {
-	background-color: #FFF;
 	cursor: default;
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -21,6 +20,11 @@ svg:not(.active):not(.ctrl) path.link {
 }
 
 circle.neuron {
+	stroke-width: 1.5px;
+	cursor: pointer;
+}
+
+circle.sample {
 	stroke-width: 1.5px;
 	cursor: pointer;
 }

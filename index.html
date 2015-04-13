@@ -13,6 +13,32 @@
 <script>
 
 function init() {
+	var trainingSet = [
+		[0.5, 0.55, 1],
+		[0.6, 0.6, 1],
+		[0.4, 0.43, 1],
+		[0.45, 0.7, 1],
+		[0.48, 0.32, 1],
+
+		[0.1, 0.1, 0],
+		[0.2, 0.2, 0],
+		[0.15, 0.13, 0],
+		[0.1, 0.4, 0],
+
+		[0.9, 0.9, 0],
+		[0.9, 0.8, 0],
+		[0.8, 0.7, 0],
+
+		[0.06, 0.87, 0],
+		[0.09, 0.8, 0],
+		[0.4, 0.9, 0],
+
+
+		[0.89, 0.1, 0],
+		[0.79, 0.2, 0],
+		[0.77, 0.4, 0],
+
+	];
 	var svgWidth = 340;
 	var svgHeight = 250;
 	var canvasWidth = 250;
@@ -20,8 +46,8 @@ function init() {
 	var neuronRadius = 12;
 	var maxSpikeRadius = 5;
 	var preactivationTop = 5;
-	var minOutputPaint = 0.5 - 0.5;
-	var maxOutputPaint = 0.5 + 0.5;
+	var minOutputPaint = 0.5 - 0;
+	var maxOutputPaint = 0.5 + 0;
 
 	var neuralNet = new NeuralNet();
 	var dy = 70;
@@ -84,14 +110,26 @@ function init() {
 	.attr('width', svgWidth)
 	.attr('height', svgHeight);
 
-	var canvas = d3.select('body')
-	.append('canvas')
+	var canvasDiv = d3.select('body')
+	.append('div')
+	.style('position', 'relative');
+
+	var canvas = canvasDiv.append('canvas')
 	.attr('width', canvasWidth)
 	.attr('height', canvasHeight);
+
+	var canvasSvg = canvasDiv.append('svg')
+	.attr('width', canvasWidth)
+	.attr('height', canvasHeight)
+	.style('position', 'absolute')
+	.style('left', '0px')
+	.style('top', '0px')
+	.style('z-index', '2');
 
 	var d3Link = svg.append('svg:g').selectAll('path');
 	var d3Spike = svg.append('svg:g').selectAll('g');
 	var d3Neuron = svg.append('svg:g').selectAll('g');
+	var d3Sample = canvasSvg.append('svg:g').selectAll('g');
 
 	var t = 0;
 	var propagationT = 200;
@@ -137,7 +175,6 @@ function init() {
 
 			for (var i = 0; i < firingNeurons.length; i++) {
 				var neuron = firingNeurons[i];
-				console.log(neuron.activation);
 				for (var j = 0; j < firingNeurons[i].links.length; j++) {
 					var spike = neuron.links[j].spike;
 					spike.radius = maxSpikeRadius * Math.min(1, Math.abs(spike.getMagnitude()) / preactivationTop);
@@ -240,6 +277,25 @@ function init() {
 		});
 
 		d3Spike.exit().remove();
+
+		d3Sample = d3Sample.data(trainingSet);
+		g = d3Sample.enter().append('svg:g');
+
+		g.append('svg:circle')
+		.attr('class', 'sample')
+		.attr('r', 5)
+		.style('stroke', function(d) { return d3.rgb(0, 0, 0) })
+		.style('fill', function(d) {
+			if (d[2] == 1) return d3.rgb(0, 0, 255);
+			else return d3.rgb(255, 0, 0);
+		});
+
+		d3Sample.attr('transform', function(d) {
+			console.log(d);
+			return 'translate(' + d[0] * canvasWidth + ',' + d[1] * canvasHeight + ')';
+		});
+
+		d3Sample.exit().remove();
 
 		var ctx = canvas.node().getContext('2d');
 		for (var i = 0; i < canvasWidth; i++) {
