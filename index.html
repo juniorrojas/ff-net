@@ -20,6 +20,8 @@ function init() {
 	var neuronRadius = 12;
 	var maxSpikeRadius = 5;
 	var preactivationTop = 5;
+	var minOutputPaint = 0.5 - 0.5;
+	var maxOutputPaint = 0.5 + 0.5;
 
 	var neuralNet = new NeuralNet();
 	var dy = 70;
@@ -34,9 +36,11 @@ function init() {
 	neuralNet.addNeuron(new Vector2(220, svgHeight/2 - dy*1.5), -0.1);//6
 	neuralNet.addNeuron(new Vector2(220, svgHeight/2 - dy*0.5), 5);//7
 	neuralNet.addNeuron(new Vector2(220, svgHeight/2 + dy*0.5), 5);//8
-	neuralNet.addNeuron(new Vector2(220, svgHeight/2 + dy*1.5), 5);//9
+	neuralNet.addNeuron(new Vector2(220, svgHeight/2 + dy*1.5), 0);//9
 
-	neuralNet.addNeuron(new Vector2(320, svgHeight/2), -1);//10
+	neuralNet.addNeuron(new Vector2(320, svgHeight/2), -0.7);//10
+
+
 	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[2], 1);
 	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[3], -5);
 	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[4], 0.9);
@@ -67,7 +71,7 @@ function init() {
 	neuralNet.addLink(neuralNet.neurons[5], neuralNet.neurons[8], -2.5);
 	neuralNet.addLink(neuralNet.neurons[5], neuralNet.neurons[9], -2.5);
 
-	neuralNet.addLink(neuralNet.neurons[6], neuralNet.neurons[10], 2);
+	neuralNet.addLink(neuralNet.neurons[6], neuralNet.neurons[10], 1.7);
 	neuralNet.addLink(neuralNet.neurons[7], neuralNet.neurons[10], -2.5);
 	neuralNet.addLink(neuralNet.neurons[8], neuralNet.neurons[10], -1);
 	neuralNet.addLink(neuralNet.neurons[9], neuralNet.neurons[10], 3.5);
@@ -95,10 +99,13 @@ function init() {
 	restart();
 
 	neuralNet.reset();
-	var firingNeurons = neuralNet.input;
-	neuralNet.neurons[0].activation = 0.5;
-	neuralNet.neurons[1].activation = 1;
+
 	var firstPass = true;
+	var firingNeurons = [];
+
+	firingNeurons = neuralNet.input;
+	neuralNet.neurons[0].activation = 0.8;
+	neuralNet.neurons[1].activation = 0.8;
 
 	setInterval(tick, 1 / 30);
 
@@ -178,8 +185,8 @@ function init() {
 			var v = Math.abs(d.activation);
 			return d3.rgb(
 				(1 - v) * 255,
-				(1 - v) * 255,
-				255
+				0,
+				v * 255
 				);
 		});
 
@@ -240,19 +247,11 @@ function init() {
 				neuralNet.reset();
 				var output = neuralNet.computeOutput([i / canvasWidth, j / canvasHeight]);
 				var v = output[0];
-				/*
-				ctx.fillStyle = d3.rgb(
-					255 * (1 - v),
-					255 * (1 - v),
-					255);
-				*/
-				var min = 0.5;
-				var max = 0.5;
-				if (v > max) ctx.fillStyle = d3.rgb(0, 0, 255);
-				else if (v < min) ctx.fillStyle = d3.rgb(255, 255, 255);
+				if (v > maxOutputPaint) ctx.fillStyle = d3.rgb(0, 0, 255);
+				else if (v < minOutputPaint) ctx.fillStyle = d3.rgb(255, 0, 0);
 				else {
-					v = (v - min) / (max - min);
-					ctx.fillStyle = d3.rgb(255 * (1 - v), 255 * (1 - v), 255);
+					v = (v - minOutputPaint) / (maxOutputPaint - minOutputPaint);
+					ctx.fillStyle = d3.rgb(255 * (1 - v), 0, 255 * (v));
 				}
 
 				ctx.fillRect(i, j, 1, 1);

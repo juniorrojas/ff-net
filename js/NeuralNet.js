@@ -73,7 +73,12 @@ p.computeOutput = function(input) {
 		spikingNeurons = newSpikingNeurons;
 	}
 
-	return [this.output[0].activation];
+	var output = [];
+	for (var i = 0; i< this.output.length; i++) {
+		output.push(this.output[i].activation);
+	}
+
+	return output;
 }
 
 })();
