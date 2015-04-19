@@ -82,6 +82,9 @@ p.computeOutput = function(input) {
 }
 
 p.train = function(trainingSet) {
+	var learningRate = 0.2;
+	var regularization = 0.0001;
+
 	for (var k = 0; k < trainingSet.length; k++) {
 		var sample = trainingSet[k];
 		var output = this.computeOutput(sample.x);
@@ -120,6 +123,8 @@ p.train = function(trainingSet) {
 					var link = neuron.backLinks[l];
 					var n0 = link.n0;
 					link.dw = link.n0.activation * neuron.dz;
+					// regularization loss
+					link.dw += regularization * link.weight;
 
 					if (newBackNeurons.indexOf(n0) == -1) newBackNeurons.push(n0);
 				}
@@ -128,18 +133,16 @@ p.train = function(trainingSet) {
 			backNeurons = newBackNeurons;
 		}
 
-		var lr = 0.2; // learning rate
-
-		// at this point we have computer the gradient
+		// at this point we have computed the gradient,
 		// we have to update the weights and biases
 		for (var i = 0; i < this.links.length; i++) {
 			var link = this.links[i];
-			link.weight -= lr * link.dw;
+			link.weight -= learningRate * link.dw;
 		}
 
 		for (var i = 0; i < this.neurons.length; i++) {
 			var neuron = this.neurons[i];
-			neuron.bias -= lr * neuron.db;
+			neuron.bias -= learningRate * neuron.db;
 			neuron.activation = Neuron.sigmoid(neuron.bias);
 		}
 
