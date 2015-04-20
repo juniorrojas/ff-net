@@ -2,6 +2,7 @@
 <html>
 <head>
 <charset="utf-8">
+<title>Neural Network</title>
 <link rel="stylesheet" type="text/css" href="css/style.css" charset="utf-8">
 <script src="lib/d3/d3.js" charset="utf-8"></script>
 <script src="js/Vector2.js" charset="utf-8"></script>
@@ -11,6 +12,17 @@
 <script src="js/NeuralNet.js" charset="utf-8"></script>
 
 <script>
+
+cLightBlue = d3.rgb(186, 224, 251);
+cLightRed = d3.rgb(252, 163, 163);
+
+function colorBlend(a, b, t) {
+	return d3.rgb(
+		a.r * t + b.r * (1 - t),
+		a.g * t + b.g * (1 - t),
+		a.b * t + b.b * (1 - t)
+	);
+}
 
 function init() {
 	var trainingSet = [
@@ -54,15 +66,15 @@ function init() {
 
 	var svgWidth = 340;
 	var svgHeight = 250;
-	var canvasWidth = 250;
-	var canvasHeight = 250;
+	var canvasWidth = 340;
+	var canvasHeight = 340;
 	var canvasWidthMini = 50;
 	var canvasHeightMini = 50;
 	var neuronRadius = 12;
-	var maxSpikeRadius = 5;
-	var preactivationTop = 5;
-	var minOutputPaint = 0.5 - 0;
-	var maxOutputPaint = 0.5 + 0;
+	var maxSpikeRadius = 7;
+	var preactivationTop = 10;
+	var minOutputPaint = 0.5;
+	var maxOutputPaint = 0.5;
 
 	var fWidth = canvasWidth / canvasWidthMini;
 	var fHeight = canvasHeight / canvasHeightMini;
@@ -344,11 +356,11 @@ function init() {
 			for (var j = 0; j < canvasHeightMini; j++) {
 				var output = neuralNet.computeOutput([i / canvasWidthMini, j / canvasHeightMini]);
 				var v = output[0];
-				if (v > maxOutputPaint) d = d3.rgb(0, 0, 255);
-				else if (v < minOutputPaint) d = d3.rgb(255, 0, 0);
+				if (v > maxOutputPaint) d = cLightBlue;
+				else if (v < minOutputPaint) d = cLightRed;
 				else {
 					v = (v - minOutputPaint) / (maxOutputPaint - minOutputPaint);
-					d = d3.rgb(255 * (1 - v), 0, 255 * (v));
+					d = colorBlend(cLightBlue, cLightRed, v);
 				}
 
 				miniCanvasData[i][j] = d;
@@ -367,15 +379,6 @@ function init() {
 			imgData.data[4 * i + 3] = 255;
 		}
 		ctx.putImageData(imgData, 0, 0);
-
-		/*
-		for (var i = 0; i < canvasWidth; i++) {
-			for (var j = 0; j < canvasHeight; j++) {
-				ctx.fillStyle = miniCanvasData[Math.floor(i / fWidth)][Math.floor(j / fHeight)];
-				ctx.fillRect(i, j, 1, 1);
-			}
-		}
-		*/
 
 	}
 
