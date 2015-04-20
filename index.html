@@ -27,6 +27,12 @@ function colorBlend(a, b, t) {
 	);
 }
 
+function roundDigits(n, decimalDigits) {
+	var factor = 1;
+	for (var i = 0; i < decimalDigits; i++) factor*= 10;
+	return Math.round(n * factor) / factor;
+}
+
 function init() {
 	var trainingSet = [
 		{x: [0.08, 0.24], y: 1},
@@ -81,6 +87,9 @@ function init() {
 
 	var fWidth = canvasWidth / canvasWidthMini;
 	var fHeight = canvasHeight / canvasHeightMini;
+
+	var learningRate = 0.2;
+	var regularization = 0.0001;
 
 	var neuralNet = new NeuralNet();
 	var dy = 70;
@@ -141,19 +150,22 @@ function init() {
 	var svg = d3.select('body')
 	.append('svg')
 	.attr('width', svgWidth)
-	.attr('height', svgHeight);
+	.attr('height', svgHeight)
+	.style('vertical-align', 'middle');
 
-	var canvasDiv = d3.select('body')
+	var divCanvas = d3.select('body')
 	.append('div')
-	.style('position', 'relative');
+	.style('position', 'relative')
+	.style('display', 'inline-block')
+	.style('vertical-align', 'middle');
 
-	var canvas = canvasDiv.append('canvas')
+	var canvas = divCanvas.append('canvas')
 	.attr('width', canvasWidth)
 	.attr('height', canvasHeight);
 
 	var ctx = canvas.node().getContext('2d');
 
-	var canvasSvg = canvasDiv.append('svg')
+	var canvasSvg = divCanvas.append('svg')
 	.attr('width', canvasWidth)
 	.attr('height', canvasHeight)
 	.style('position', 'absolute')
@@ -168,6 +180,39 @@ function init() {
 			miniCanvasData[i].push(0);
 		}
 	}
+
+	var divControls = d3.select('body')
+	.append('div')
+	.style('display', 'inline-block')
+	.style('vertical-align', 'middle')
+	.style('padding-left', '5px');
+
+	divControls.html('Learning rate:<br>');
+
+	var txtLearningRate = divControls
+	.append('input')
+	.attr('type', 'text')
+	.attr('value', learningRate);
+
+	txtLearningRate[0][0].addEventListener('blur',
+	function(e) {
+		learningRate = txtLearningRate[0][0].value;
+	});
+
+	divControls.html(divControls.html() + "<br>Regularization:<br>");
+
+	var txtRegularization = divControls
+	.append('input')
+	.attr('type', 'text')
+	.attr('value', regularization);
+
+	var divInfo = divControls
+	.append('div');
+
+	txtRegularization[0][0].addEventListener('blur',
+	function(e) {
+		regularization = txtRegularization[0][0].value;
+	});
 
 	var d3Link = svg.append('svg:g').selectAll('path');
 	var d3Spike = svg.append('svg:g').selectAll('g');
@@ -188,11 +233,21 @@ function init() {
 	*/
 
 	neuralNet.reset();
-	setInterval(tick, 1 / 30);
+	setInterval(update, 1 / 30);
 
-	function tick() {
-		neuralNet.train(trainingSet);
+	function update() {
+		var trainInfo = neuralNet.train(trainingSet, learningRate, regularization);
 		updateCanvas();
+
+		var totalLoss = trainInfo.dataLoss + trainInfo.regularizationLoss;
+		var decimalDigits = 5;
+		divInfo.html(
+			'<br>Data loss: ' +
+			roundDigits(trainInfo.dataLoss, decimalDigits) + '<br>' +
+			'Regularization loss: ' +
+			roundDigits(trainInfo.regularizationLoss, decimalDigits) + '<br>' +
+			'Total loss: ' +
+			roundDigits(totalLoss, decimalDigits) + '<br>');
 
 		if (t >= propagationT) {
 			t = propagationT;
