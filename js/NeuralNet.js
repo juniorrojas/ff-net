@@ -85,7 +85,7 @@ p.train = function(trainingSet, learningRate, regularization) {
 	var dataLoss = 0;
 	var regularizationLoss = 0;
 
-	for (var k = 0; k < trainingSet.length; k++) {
+	for (var k = trainingSet.length - 1; k >= 0; k--) {
 		var sample = trainingSet[k];
 		var output = this.computeOutput(sample.x);
 		var d = sample.y - output[0];
@@ -121,8 +121,8 @@ p.train = function(trainingSet, learningRate, regularization) {
 					var link = neuron.links[l];
 					neuron.da += link.weight * link.dw;
 				}
-				neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));;
 
+				neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));;
 				neuron.db = 1 * neuron.dz;
 				for (var l = 0; l < neuron.backLinks.length; l++) {
 					var link = neuron.backLinks[l];
@@ -149,7 +149,12 @@ p.train = function(trainingSet, learningRate, regularization) {
 		for (var i = 0; i < this.neurons.length; i++) {
 			var neuron = this.neurons[i];
 			neuron.bias -= learningRate * neuron.db;
-			neuron.activation = Neuron.sigmoid(neuron.bias);
+		}
+
+		for (var i = 0; i < this.input.length; i++) {
+			// input neurons have always 0 bias
+			var neuron = this.input[i];
+			neuron.bias = 0;
 		}
 
 		this.reset();

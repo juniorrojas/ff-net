@@ -96,8 +96,8 @@ function init() {
 
 	var neuralNet = new NeuralNet();
 	var dy = 70;
-	neuralNet.addNeuron(new Vector2(20, svgHeight/2 - dy*0.5), -9999);//0
-	neuralNet.addNeuron(new Vector2(20, svgHeight/2 + dy*0.5), -9999);//1
+	neuralNet.addNeuron(new Vector2(20, svgHeight/2 - dy*0.5), -900);//0
+	neuralNet.addNeuron(new Vector2(20, svgHeight/2 + dy*0.5), -900);//1
 
 	neuralNet.addNeuron(new Vector2(120, svgHeight/2 - dy*1.5), 0);//2
 	neuralNet.addNeuron(new Vector2(120, svgHeight/2 - dy*0.5), 0);//3
@@ -318,7 +318,7 @@ function init() {
 				targetY = d.nf.pos.y - (targetPadding * normY);
 			return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
 		});
-
+		
 		d3Neuron.attr('transform', function(d) {
 			return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
 		})
@@ -436,6 +436,7 @@ function init() {
 		}
 		ctx.putImageData(imgData, 0, 0);
 
+		neuralNet.reset();
 
 	}
 
