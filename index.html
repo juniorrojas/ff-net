@@ -16,6 +16,9 @@
 cLightBlue = d3.rgb(186, 224, 251);
 cLightRed = d3.rgb(252, 163, 163);
 
+cRed = d3.rgb(226, 86, 86);
+cBlue = d3.rgb(135, 163, 196);
+
 function colorBlend(a, b, t) {
 	return d3.rgb(
 		a.r * t + b.r * (1 - t),
@@ -263,11 +266,7 @@ function init() {
 		})
 		.selectAll('circle').style('fill', function(d) {
 			var v = Math.abs(d.activation);
-			return d3.rgb(
-				(1 - v) * 255,
-				0,
-				v * 255
-				);
+			return colorBlend(cBlue, cRed, v);
 		});
 
 		d3Link
@@ -293,9 +292,9 @@ function init() {
 		})
 		.style('stroke', function(d) {
 			if (d.weight > 0) {
-				return d3.rgb(0, 0, 255);
+				return cBlue;
 			} else {
-				return d3.rgb(255, 0, 0);
+				return cRed;
 			}
 		})
 		.style('stroke-opacity', function(d) { return 0.3; });
@@ -308,7 +307,6 @@ function init() {
 		g.append('svg:circle')
 		.attr('class', 'neuron')
 		.attr('r', neuronRadius)
-		.style('fill', function(d) { return d3.rgb(250, 250, 200); })
 		.style('stroke', function(d) { return d3.rgb(0, 0, 0); });
 
 		d3Neuron.exit().remove();
@@ -320,9 +318,9 @@ function init() {
 		.attr('class', 'spike')
 		.attr('fill', function(d) {
 			if (d.link.weight > 0) {
-				return d3.rgb(0, 0, 200);
+				return cBlue;
 			} else {
-				return d3.rgb(200, 0, 0);
+				return cRed;
 			}
 		});
 
@@ -336,8 +334,8 @@ function init() {
 		.attr('r', 3)
 		.style('stroke', function(d) { return d3.rgb(0, 0, 0) })
 		.style('fill', function(d) {
-			if (d.y == 1) return d3.rgb(0, 0, 255);
-			else return d3.rgb(255, 0, 0);
+			if (d.y == 1) return cBlue;
+			else return cRed;
 		});
 
 		d3Sample.attr('transform', function(d) {
