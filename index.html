@@ -75,8 +75,8 @@ function init() {
 
 	var svgWidth = 340;
 	var svgHeight = 250;
-	var canvasWidth = 340;
-	var canvasHeight = 340;
+	var canvasWidth = 250;
+	var canvasHeight = 250;
 	var canvasWidthMini = 50;
 	var canvasHeightMini = 50;
 	var neuronRadius = 12;
@@ -90,6 +90,9 @@ function init() {
 
 	var learningRate = 0.2;
 	var regularization = 0.0001;
+
+	var fWidth = canvasWidth / canvasWidthMini;
+	var fHeight = canvasHeight / canvasHeightMini;
 
 	var neuralNet = new NeuralNet();
 	var dy = 70;
@@ -432,6 +435,7 @@ function init() {
 			imgData.data[4 * i + 3] = 255;
 		}
 		ctx.putImageData(imgData, 0, 0);
+
 
 	}
 
