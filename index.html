@@ -3,9 +3,21 @@
 <head>
 <charset="utf-8">
 <title>Neural Network</title>
-<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700" type="text/css">
+
+<link rel="stylesheet" href="lib/jquery-ui-bootstrap/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="lib/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.10.3.custom.css">
+<link rel="stylesheet" href="lib/jquery-ui-bootstrap/assets/css/font-awesome.min.css">
+<link rel="stylesheet" href="lib/jquery-ui-bootstrap/assets/css/docs.css">
+<link rel="stylesheet" href="lib/jquery-ui-bootstrap/assets/js/google-code-prettify/prettify.css">
+<link rel="stylesheet" href="lib/d3/d3.slider/d3.slider.css">
+
 <link rel="stylesheet" type="text/css" href="css/style.css" charset="utf-8">
-<script src="lib/d3/d3.js" charset="utf-8"></script>
+
+<script src="lib/d3/d3.min.js" charset="utf-8"></script>
+<script src="lib/d3/d3.slider/d3.slider.js" charset="utf-8"></script>
+
 <script src="js/Vector2.js" charset="utf-8"></script>
 <script src="js/Link.js" charset="utf-8"></script>
 <script src="js/Spike.js" charset="utf-8"></script>
@@ -212,16 +224,42 @@ function init() {
 	.style('width', '150px')
 	.style('display', 'inline-block')
 	.style('vertical-align', 'middle')
-	.style('padding-left', '5px');
+	.style('padding-left', '25px');
 
 	var btnRandomizeWeights = divControls
 	.append('button')
 	.html('Randomize weights')
 	.on('click', randomizeWeights);
 
-	divControls.append('div')
-	.html('<b>Learning rate:</b>');
+	var $btnRandomizeWeights = $(btnRandomizeWeights[0]);
+	$btnRandomizeWeights.button();
 
+	divControls.append('div')
+	.html('<b>Learning rate</b>');
+
+	var txtLearningRate = divControls
+	.append('span')
+	.text(learningRate);
+
+	var sldLearningRate = divControls
+	.append('div');
+
+	sldLearningRate.call(d3.slider()
+		.axis(d3.svg.axis().ticks(6))
+		.min(0)
+		.max(1)
+		.step(0.01)
+		.value(learningRate)
+		.on('slide', function(event, value) {
+			learningRate = value;
+			txtLearningRate.text(roundDigits(learningRate, 2).toString());
+		})
+	)
+	.style('margin-left', '0px')
+	.style('margin-top', '2px')
+	.style('margin-bottom', '17px');
+
+	/*
 	var txtLearningRate = divControls
 	.append('input')
 	.attr('type', 'text')
@@ -229,10 +267,34 @@ function init() {
 	.on('blur', function() {
 		learningRate = this.value;
 	});
+	*/
 
 	divControls.append('div')
-	.html("<br><b>Regularization:</b><br>");
+	.html('<b>Regularization</b><br>');
 
+	var txtRegularization = divControls
+	.append('span')
+	.text(regularization);
+
+	var sldRegularization = divControls
+	.append('div');
+
+	sldRegularization.call(d3.slider()
+		.axis(d3.svg.axis().ticks(3))
+		.min(0)
+		.max(0.0001)
+		.step(0.0000001)
+		.value(regularization)
+		.on('slide', function(event, value) {
+			regularization = value;
+			txtRegularization.text(roundDigits(regularization, 5).toString());
+		})
+	)
+	.style('margin-left', '0px')
+	.style('margin-top', '2px')
+	.style('margin-bottom', '17px');
+
+	/*
 	var txtRegularization = divControls
 	.append('input')
 	.attr('type', 'text')
@@ -240,6 +302,7 @@ function init() {
 	.on('blur', function() {
 		regularization = this.value;
 	});
+	*/
 
 	var divInfo = divControls
 	.append('div');
@@ -271,13 +334,14 @@ function init() {
 
 		var totalLoss = trainInfo.dataLoss + trainInfo.regularizationLoss;
 		var decimalDigits = 5;
+
 		divInfo.html(
-			'<br><b>Data loss:</b><br>' +
-			roundDigits(trainInfo.dataLoss, decimalDigits) + '<br>' +
-			'<b>Regularization loss:</b><br>' +
-			roundDigits(trainInfo.regularizationLoss, decimalDigits) + '<br>' +
-			'<b>Total loss:</b><br>' +
-			roundDigits(totalLoss, decimalDigits) + '<br>');
+		'<b>Data loss:</b><br>' +
+		roundDigits(trainInfo.dataLoss, decimalDigits) + '<br>' +
+		'<b>Regularization loss:</b><br>' +
+		roundDigits(trainInfo.regularizationLoss, decimalDigits) + '<br>' +
+		'<b>Total loss:</b><br>' +
+		roundDigits(totalLoss, decimalDigits) + '<br>');
 
 		if (t >= propagationT) {
 			t = propagationT;
@@ -468,7 +532,6 @@ function init() {
 		ctx.putImageData(imgData, 0, 0);
 
 		neuralNet.reset();
-
 	}
 
 }
@@ -481,5 +544,15 @@ function init() {
 		Neural-JS
 	</h1>
 	<p style="text-align: center">A neural network learning to classify two-dimensional vectors in real-time</p>
+
+	<script src="lib/jquery-ui-bootstrap/assets/js/vendor/jquery-1.9.1.min.js" type="text/javascript"></script>
+	<script src="lib/jquery-ui-bootstrap/assets/js/vendor/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+	<script src="lib/jquery-ui-bootstrap/assets/js/vendor/bootstrap.js" type="text/javascript"></script>
+	<script src="lib/jquery-ui-bootstrap/assets/js/vendor/holder.js" type="text/javascript"></script>
+	<script src="lib/jquery-ui-bootstrap/assets/js/vendor/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+	<script src="lib/jquery-ui-bootstrap/assets/js/google-code-prettify/prettify.js" type="text/javascript"></script>
+	<script src="lib/jquery-ui-bootstrap/assets/js/docs.js" type="text/javascript"></script>
+	<script src="lib/jquery-ui-bootstrap/assets/js/demo.js" type="text/javascript"></script>
+
 </body>
 </html>

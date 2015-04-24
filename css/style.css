@@ -1,9 +1,11 @@
 html, body, p {
+	padding-top: 0px;
 	font-family: 'Open Sans', sans-serif;
 	font-size: small;
 }
 
 h1 {
+	font-family: 'Open Sans', sans-serif;
 	text-align: center;
 }
 
