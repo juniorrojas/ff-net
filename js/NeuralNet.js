@@ -37,10 +37,19 @@ p.addLink = function(n0, nf, weight) {
 	return link;
 }
 
-p.reset= function(input) {
+p.reset = function(input) {
 	for (var i = 0; i < this.neurons.length; i++) {
 		var neuron = this.neurons[i];
 		neuron.reset();
+	}
+}
+
+p.randomizeWeights = function() {
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		var weight = 2 + Math.random() * 4;
+		if (Math.random() <= 0.5) weight *= -1;
+		link.weight = weight;
 	}
 }
 
@@ -81,14 +90,16 @@ p.computeOutput = function(input) {
 	return output;
 }
 
-p.train = function(trainingSet) {
-	var learningRate = 0.2;
-	var regularization = 0.0001;
+p.train = function(trainingSet, learningRate, regularization) {
+	var dataLoss = 0;
+	var regularizationLoss = 0;
 
-	for (var k = 0; k < trainingSet.length; k++) {
+	for (var k = trainingSet.length - 1; k >= 0; k--) {
 		var sample = trainingSet[k];
 		var output = this.computeOutput(sample.x);
 		var d = sample.y - output[0];
+		// data loss = 0.5 * d^2
+		dataLoss += 0.5 * d * d;
 		var neuron = this.output[0];
 		neuron.da = -d; // a = output[0]
 		neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));
@@ -97,6 +108,9 @@ p.train = function(trainingSet) {
 		for (var l = 0; l < neuron.backLinks.length; l++) {
 			var link = neuron.backLinks[l];
 			link.dw = link.n0.activation * neuron.dz;
+			// regularization loss = 0.5 * regularization * w^2
+			link.dw += regularization * link.weight;
+			regularizationLoss += regularization * link.weight * link.weight;
 		}
 
 		var backNeurons = [];
@@ -116,15 +130,16 @@ p.train = function(trainingSet) {
 					var link = neuron.links[l];
 					neuron.da += link.weight * link.dw;
 				}
-				neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));;
 
+				neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));;
 				neuron.db = 1 * neuron.dz;
 				for (var l = 0; l < neuron.backLinks.length; l++) {
 					var link = neuron.backLinks[l];
 					var n0 = link.n0;
 					link.dw = link.n0.activation * neuron.dz;
-					// regularization loss
+					// regularization loss = 0.5 * regularization * w^2
 					link.dw += regularization * link.weight;
+					regularizationLoss += regularization * link.weight * link.weight;
 
 					if (newBackNeurons.indexOf(n0) == -1) newBackNeurons.push(n0);
 				}
@@ -143,11 +158,21 @@ p.train = function(trainingSet) {
 		for (var i = 0; i < this.neurons.length; i++) {
 			var neuron = this.neurons[i];
 			neuron.bias -= learningRate * neuron.db;
-			neuron.activation = Neuron.sigmoid(neuron.bias);
+		}
+
+		for (var i = 0; i < this.input.length; i++) {
+			// input neurons have always 0 bias
+			var neuron = this.input[i];
+			neuron.bias = 0;
 		}
 
 		this.reset();
 	}
+
+	return {
+		dataLoss: dataLoss,
+		regularizationLoss: regularizationLoss
+	};
 }
 
 })();

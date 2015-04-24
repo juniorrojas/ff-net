@@ -1,3 +1,7 @@
+div {
+	font-family: Arial;
+}
+
 svg {
 	cursor: default;
 	-webkit-user-select: none;

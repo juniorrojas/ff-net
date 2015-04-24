@@ -2,6 +2,7 @@
 <html>
 <head>
 <charset="utf-8">
+<title>Neural Network</title>
 <link rel="stylesheet" type="text/css" href="css/style.css" charset="utf-8">
 <script src="lib/d3/d3.js" charset="utf-8"></script>
 <script src="js/Vector2.js" charset="utf-8"></script>
@@ -12,6 +13,26 @@
 
 <script>
 
+cLightBlue = d3.rgb(186, 224, 251);
+cLightRed = d3.rgb(252, 163, 163);
+
+cRed = d3.rgb(226, 86, 86);
+cBlue = d3.rgb(135, 163, 196);
+
+function colorBlend(a, b, t) {
+	return d3.rgb(
+		a.r * t + b.r * (1 - t),
+		a.g * t + b.g * (1 - t),
+		a.b * t + b.b * (1 - t)
+	);
+}
+
+function roundDigits(n, decimalDigits) {
+	var factor = 1;
+	for (var i = 0; i < decimalDigits; i++) factor*= 10;
+	return Math.round(n * factor) / factor;
+}
+
 function init() {
 	var trainingSet = [
 		{x: [0.08, 0.24], y: 1},
@@ -21,14 +42,39 @@ function init() {
 
 		{x: [0.4, 0.4], y: 0},
 		{x: [0.6, 0.4], y: 0},
-		{x: [0.5, 0.5], y: 0},
 		{x: [0.65, 0.7], y: 0},
 		{x: [0.7, 0.3], y: 0},
 		{x: [0.35, 0.65], y: 0},
 
 		{x: [0.3, 0.5], y: 0},
 		{x: [0.7, 0.5], y: 0},
+		{x: [0.75, 0.55], y: 0},
+		{x: [0.7, 0.6], y: 0},
+		{x: [0.65, 0.34], y: 0},
+		{x: [0.8, 0.65], y: 0},
 		{x: [0.5, 0.7], y: 0},
+		{x: [0.5, 0.66], y: 0},
+		{x: [0.56, 0.66], y: 0},
+		{x: [0.46, 0.36], y: 0},
+		{x: [0.46, 0.26], y: 0},
+		{x: [0.36, 0.26], y: 0},
+		{x: [0.26, 0.36], y: 0},
+		{x: [0.56, 0.28], y: 0},
+		{x: [0.33, 0.54], y: 0},
+		{x: [0.23, 0.52], y: 0},
+
+		{x: [0.26, 0.16], y: 1},
+		{x: [0.06, 0.46], y: 1},
+		{x: [0.13, 0.66], y: 1},
+
+		{x: [0.2, 0.8], y: 1},
+
+		{x: [0.5, 0.5], y: 1},
+		{x: [0.45, 0.5], y: 1},
+		{x: [0.5, 0.45], y: 1},
+		{x: [0.45, 0.45], y: 1},
+		{x: [0.55, 0.55], y: 1},
+		{x: [0.5, 0.55], y: 1},
 
 		{x: [0.2, 0.8], y: 1},
 
@@ -46,6 +92,8 @@ function init() {
 		{x: [0.9, 0.9], y: 1},
 		{x: [0.9, 0.8], y: 1},
 		{x: [0.75, 0.85], y: 1},
+		{x: [0.55, 0.92], y: 1},
+		{x: [0.6, 0.95], y: 1},
 
 		{x: [0.06, 0.57], y: 1},
 		{x: [0.09, 0.8], y: 1},
@@ -59,86 +107,85 @@ function init() {
 	var canvasWidthMini = 50;
 	var canvasHeightMini = 50;
 	var neuronRadius = 12;
-	var maxSpikeRadius = 5;
-	var preactivationTop = 5;
-	var minOutputPaint = 0.5 - 0;
-	var maxOutputPaint = 0.5 + 0;
+	var maxSpikeRadius = 7;
+	var preactivationTop = 10;
+	var minOutputPaint = 0.5 - 0.5;
+	var maxOutputPaint = 0.5 + 0.5;
+
+	var fWidth = canvasWidth / canvasWidthMini;
+	var fHeight = canvasHeight / canvasHeightMini;
+
+	var learningRate = 0.3;
+	var regularization = 0.00001;
 
 	var fWidth = canvasWidth / canvasWidthMini;
 	var fHeight = canvasHeight / canvasHeightMini;
 
 	var neuralNet = new NeuralNet();
-	var dy = 70;
-	neuralNet.addNeuron(new Vector2(20, svgHeight/2 - dy*0.5), -9999);//0
-	neuralNet.addNeuron(new Vector2(20, svgHeight/2 + dy*0.5), -9999);//1
 
-	neuralNet.addNeuron(new Vector2(120, svgHeight/2 - dy*1.5), 0);//2
-	neuralNet.addNeuron(new Vector2(120, svgHeight/2 - dy*0.5), 0);//3
-	neuralNet.addNeuron(new Vector2(120, svgHeight/2 + dy*0.5), 3);//4
-	neuralNet.addNeuron(new Vector2(120, svgHeight/2 + dy*1.5), 0);//5
+	var neuronsPerLayer = [2, 5, 5, 2, 1];
 
-	neuralNet.addNeuron(new Vector2(220, svgHeight/2 - dy*1.5), 0);//6
-	neuralNet.addNeuron(new Vector2(220, svgHeight/2 - dy*0.5), 0);//7
-	neuralNet.addNeuron(new Vector2(220, svgHeight/2 + dy*0.5), 0);//8
-	neuralNet.addNeuron(new Vector2(220, svgHeight/2 + dy*1.5), 0);//9
+	var dy = 50;
+	var x = 20;
+	var dx = 70;
 
-	neuralNet.addNeuron(new Vector2(320, svgHeight/2), -1);//10
+	var layers = [];
 
+	for (var i = 0; i < neuronsPerLayer.length; i++) {
+		layers.push([]);
+		for (var j = 0; j < neuronsPerLayer[i]; j++) {
+			var y = svgHeight / 2 + (j - (neuronsPerLayer[i] - 1) / 2) * dy;
+			var pos = new Vector2(x, y);
+			var bias;
+			if (i == 0) bias = 0;
+			else bias = 1.5 - Math.random() * 3;
 
-	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[2], 1);
-	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[3], -1);
-	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[4], -1);
-	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[5], 2);
+			var neuron = neuralNet.addNeuron(pos, bias);
 
-	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[2], -4);
-	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[3], 4);
-	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[4], -1);
-	neuralNet.addLink(neuralNet.neurons[1], neuralNet.neurons[5], -0.5);
+			layers[i].push(neuron);
 
-	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[6], -5);
-	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[7], -5);
-	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[8], 2);
-	neuralNet.addLink(neuralNet.neurons[2], neuralNet.neurons[9], -5);
+			if (i == 0) neuralNet.input.push(neuron);
+			else
+			if (i == neuronsPerLayer.length - 1) neuralNet.output.push(neuron);
+		}
+		x += dx;
+	}
 
-	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[6], -1);
-	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[7], 2);
-	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[8], 3);
-	neuralNet.addLink(neuralNet.neurons[3], neuralNet.neurons[9], -1);
-
-	neuralNet.addLink(neuralNet.neurons[4], neuralNet.neurons[6], 2.5);
-	neuralNet.addLink(neuralNet.neurons[4], neuralNet.neurons[8], 2.5);
-	neuralNet.addLink(neuralNet.neurons[4], neuralNet.neurons[7], -1);
-	neuralNet.addLink(neuralNet.neurons[4], neuralNet.neurons[9], -5);
-
-	neuralNet.addLink(neuralNet.neurons[5], neuralNet.neurons[6], 2.5);
-	neuralNet.addLink(neuralNet.neurons[5], neuralNet.neurons[7], -2.5);
-	neuralNet.addLink(neuralNet.neurons[5], neuralNet.neurons[8], 2.5);
-	neuralNet.addLink(neuralNet.neurons[5], neuralNet.neurons[9], 2.5);
-
-	neuralNet.addLink(neuralNet.neurons[6], neuralNet.neurons[10], -2.7);
-	neuralNet.addLink(neuralNet.neurons[7], neuralNet.neurons[10], 2.5);
-	neuralNet.addLink(neuralNet.neurons[8], neuralNet.neurons[10], 1);
-	neuralNet.addLink(neuralNet.neurons[9], neuralNet.neurons[10], -3);
-
-	neuralNet.input = [neuralNet.neurons[0], neuralNet.neurons[1]];
-	neuralNet.output = [neuralNet.neurons[10]];
+	for (var i = 0; i < layers.length; i++) {
+		var layer = layers[i];
+		for (var j = 0; j < layer.length; j++) {
+			var n0 = layer[j];
+			if (i < layers.length - 1) {
+				var nextLayer = layers[i + 1];
+				for (var k = 0; k < nextLayer.length; k++) {
+					var nf = nextLayer[k];
+					var weight = 2 + Math.random() * 4;
+					if (Math.random() <= 0.5) weight *= -1;
+					neuralNet.addLink(n0, nf, weight);
+				}
+			}
+		}
+	}
 
 	var svg = d3.select('body')
 	.append('svg')
 	.attr('width', svgWidth)
-	.attr('height', svgHeight);
+	.attr('height', svgHeight)
+	.style('vertical-align', 'middle');
 
-	var canvasDiv = d3.select('body')
+	var divCanvas = d3.select('body')
 	.append('div')
-	.style('position', 'relative');
+	.style('position', 'relative')
+	.style('display', 'inline-block')
+	.style('vertical-align', 'middle');
 
-	var canvas = canvasDiv.append('canvas')
+	var canvas = divCanvas.append('canvas')
 	.attr('width', canvasWidth)
 	.attr('height', canvasHeight);
 
 	var ctx = canvas.node().getContext('2d');
 
-	var canvasSvg = canvasDiv.append('svg')
+	var canvasSvg = divCanvas.append('svg')
 	.attr('width', canvasWidth)
 	.attr('height', canvasHeight)
 	.style('position', 'absolute')
@@ -153,6 +200,42 @@ function init() {
 			miniCanvasData[i].push(0);
 		}
 	}
+
+	var divControls = d3.select('body')
+	.append('div')
+	.style('display', 'inline-block')
+	.style('vertical-align', 'middle')
+	.style('padding-left', '5px');
+
+	var btnRandomizeWeights = divControls
+	.append('button')
+	.html('Randomize weights')
+	.on('click', randomizeWeights);
+
+	divControls.append('div')
+	.html('Learning rate:');
+
+	var txtLearningRate = divControls
+	.append('input')
+	.attr('type', 'text')
+	.attr('value', learningRate)
+	.on('blur', function() {
+		learningRate = this.value;
+	});
+
+	divControls.append('div')
+	.html("<br>Regularization:<br>");
+
+	var txtRegularization = divControls
+	.append('input')
+	.attr('type', 'text')
+	.attr('value', regularization)
+	.on('blur', function() {
+		regularization = this.value;
+	});
+
+	var divInfo = divControls
+	.append('div');
 
 	var d3Link = svg.append('svg:g').selectAll('path');
 	var d3Spike = svg.append('svg:g').selectAll('g');
@@ -173,11 +256,21 @@ function init() {
 	*/
 
 	neuralNet.reset();
-	setInterval(tick, 1 / 30);
+	setInterval(update, 1 / 30);
 
-	function tick() {
-		neuralNet.train(trainingSet);
+	function update() {
+		var trainInfo = neuralNet.train(trainingSet, learningRate, regularization);
 		updateCanvas();
+
+		var totalLoss = trainInfo.dataLoss + trainInfo.regularizationLoss;
+		var decimalDigits = 5;
+		divInfo.html(
+			'<br>Data loss: ' +
+			roundDigits(trainInfo.dataLoss, decimalDigits) + '<br>' +
+			'Regularization loss: ' +
+			roundDigits(trainInfo.regularizationLoss, decimalDigits) + '<br>' +
+			'Total loss: ' +
+			roundDigits(totalLoss, decimalDigits) + '<br>');
 
 		if (t >= propagationT) {
 			t = propagationT;
@@ -251,11 +344,7 @@ function init() {
 		})
 		.selectAll('circle').style('fill', function(d) {
 			var v = Math.abs(d.activation);
-			return d3.rgb(
-				(1 - v) * 255,
-				0,
-				v * 255
-				);
+			return colorBlend(cBlue, cRed, v);
 		});
 
 		d3Link
@@ -267,6 +356,10 @@ function init() {
 			return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
 		});
 		d3Spike.selectAll('circle').attr('r', function(d) { return d.radius; });
+	}
+
+	function randomizeWeights() {
+		neuralNet.randomizeWeights();
 	}
 
 	function restart() {
@@ -281,12 +374,12 @@ function init() {
 		})
 		.style('stroke', function(d) {
 			if (d.weight > 0) {
-				return d3.rgb(0, 0, 255);
+				return cBlue;
 			} else {
-				return d3.rgb(255, 0, 0);
+				return cRed;
 			}
 		})
-		.style('stroke-opacity', function(d) { return 0.3; });
+		.style('stroke-opacity', function(d) { return 0.4; });
 
 		d3Link.exit().remove();
 
@@ -296,7 +389,6 @@ function init() {
 		g.append('svg:circle')
 		.attr('class', 'neuron')
 		.attr('r', neuronRadius)
-		.style('fill', function(d) { return d3.rgb(250, 250, 200); })
 		.style('stroke', function(d) { return d3.rgb(0, 0, 0); });
 
 		d3Neuron.exit().remove();
@@ -308,9 +400,9 @@ function init() {
 		.attr('class', 'spike')
 		.attr('fill', function(d) {
 			if (d.link.weight > 0) {
-				return d3.rgb(0, 0, 200);
+				return cBlue;
 			} else {
-				return d3.rgb(200, 0, 0);
+				return cRed;
 			}
 		});
 
@@ -324,8 +416,8 @@ function init() {
 		.attr('r', 3)
 		.style('stroke', function(d) { return d3.rgb(0, 0, 0) })
 		.style('fill', function(d) {
-			if (d.y == 1) return d3.rgb(0, 0, 255);
-			else return d3.rgb(255, 0, 0);
+			if (d.y == 1) return cBlue;
+			else return cRed;
 		});
 
 		d3Sample.attr('transform', function(d) {
@@ -344,11 +436,11 @@ function init() {
 			for (var j = 0; j < canvasHeightMini; j++) {
 				var output = neuralNet.computeOutput([i / canvasWidthMini, j / canvasHeightMini]);
 				var v = output[0];
-				if (v > maxOutputPaint) d = d3.rgb(0, 0, 255);
-				else if (v < minOutputPaint) d = d3.rgb(255, 0, 0);
+				if (v > maxOutputPaint) d = cLightBlue;
+				else if (v < minOutputPaint) d = cLightRed;
 				else {
 					v = (v - minOutputPaint) / (maxOutputPaint - minOutputPaint);
-					d = d3.rgb(255 * (1 - v), 0, 255 * (v));
+					d = colorBlend(cLightBlue, cLightRed, v);
 				}
 
 				miniCanvasData[i][j] = d;
@@ -368,14 +460,7 @@ function init() {
 		}
 		ctx.putImageData(imgData, 0, 0);
 
-		/*
-		for (var i = 0; i < canvasWidth; i++) {
-			for (var j = 0; j < canvasHeight; j++) {
-				ctx.fillStyle = miniCanvasData[Math.floor(i / fWidth)][Math.floor(j / fHeight)];
-				ctx.fillRect(i, j, 1, 1);
-			}
-		}
-		*/
+		neuralNet.reset();
 
 	}
 
