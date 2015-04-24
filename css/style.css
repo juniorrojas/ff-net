@@ -1,10 +1,14 @@
-div {
+html, body, p {
 	font-family: 'Open Sans', sans-serif;
 	font-size: small;
 }
 
+h1 {
+	text-align: center;
+}
+
 svg {
-	cursor: default;
+	/* cursor: default; */
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -17,21 +21,21 @@ svg:not(.active):not(.ctrl) {
 }
 
 path.link {
-	cursor: default;
+	/* cursor: default; */
 }
 
 svg:not(.active):not(.ctrl) path.link {
-	cursor: pointer;
+	/* cursor: pointer; */
 }
 
 circle.neuron {
 	stroke-width: 1.5px;
-	cursor: pointer;
+	/* cursor: pointer; */
 }
 
 circle.sample {
-	stroke-width: 1.5px;
-	cursor: pointer;
+	stroke-width: 1.2px;
+	/* cursor: pointer; */
 }
 
 canvas {

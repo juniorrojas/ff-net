@@ -18,7 +18,7 @@ cLightBlue = d3.rgb(186, 224, 251);
 cLightRed = d3.rgb(252, 163, 163);
 
 cRed = d3.rgb(226, 86, 86);
-cBlue = d3.rgb(135, 163, 196);
+cBlue = d3.rgb(135, 173, 236);
 
 function colorBlend(a, b, t) {
 	return d3.rgb(
@@ -168,13 +168,17 @@ function init() {
 		}
 	}
 
-	var svg = d3.select('body')
+	var mainDiv = d3.select('body')
+	.append('div')
+	.style('text-align', 'center');
+
+	var svg = mainDiv
 	.append('svg')
 	.attr('width', svgWidth)
 	.attr('height', svgHeight)
 	.style('vertical-align', 'middle');
 
-	var divCanvas = d3.select('body')
+	var divCanvas = mainDiv
 	.append('div')
 	.style('position', 'relative')
 	.style('display', 'inline-block')
@@ -202,8 +206,10 @@ function init() {
 		}
 	}
 
-	var divControls = d3.select('body')
+	var divControls = mainDiv
 	.append('div')
+	.style('text-align', 'left')
+	.style('width', '150px')
 	.style('display', 'inline-block')
 	.style('vertical-align', 'middle')
 	.style('padding-left', '5px');
@@ -214,7 +220,7 @@ function init() {
 	.on('click', randomizeWeights);
 
 	divControls.append('div')
-	.html('Learning rate:');
+	.html('<b>Learning rate:</b>');
 
 	var txtLearningRate = divControls
 	.append('input')
@@ -225,7 +231,7 @@ function init() {
 	});
 
 	divControls.append('div')
-	.html("<br>Regularization:<br>");
+	.html("<br><b>Regularization:</b><br>");
 
 	var txtRegularization = divControls
 	.append('input')
@@ -266,11 +272,11 @@ function init() {
 		var totalLoss = trainInfo.dataLoss + trainInfo.regularizationLoss;
 		var decimalDigits = 5;
 		divInfo.html(
-			'<br>Data loss: ' +
+			'<br><b>Data loss:</b><br>' +
 			roundDigits(trainInfo.dataLoss, decimalDigits) + '<br>' +
-			'Regularization loss: ' +
+			'<b>Regularization loss:</b><br>' +
 			roundDigits(trainInfo.regularizationLoss, decimalDigits) + '<br>' +
-			'Total loss: ' +
+			'<b>Total loss:</b><br>' +
 			roundDigits(totalLoss, decimalDigits) + '<br>');
 
 		if (t >= propagationT) {
@@ -471,5 +477,9 @@ function init() {
 
 </head>
 <body onload="init()">
+	<h1>
+		Neural-JS
+	</h1>
+	<p style="text-align: center">A neural network learning to classify two-dimensional vectors in real-time</p>
 </body>
 </html>
