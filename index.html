@@ -221,7 +221,7 @@ function init() {
 	var divControls = mainDiv
 	.append('div')
 	.style('text-align', 'left')
-	.style('width', '150px')
+	.style('width', '180px')
 	.style('display', 'inline-block')
 	.style('vertical-align', 'middle')
 	.style('padding-left', '25px');
@@ -229,6 +229,7 @@ function init() {
 	var btnRandomizeWeights = divControls
 	.append('button')
 	.html('Randomize weights')
+	.style('text-align', 'center')
 	.on('click', randomizeWeights);
 
 	var $btnRandomizeWeights = $(btnRandomizeWeights[0]);
