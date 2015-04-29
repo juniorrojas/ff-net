@@ -231,17 +231,7 @@ function init() {
 	.style('margin-left', '0px')
 	.style('margin-top', '2px')
 	.style('margin-bottom', '17px');
-
-	/*
-	var txtLearningRate = divControls
-	.append('input')
-	.attr('type', 'text')
-	.attr('value', learningRate)
-	.on('blur', function() {
-		learningRate = this.value;
-	});
-	*/
-
+	
 	divControls.append('div')
 	.html('<b>Regularization</b><br>');
 
@@ -267,16 +257,6 @@ function init() {
 	.style('margin-top', '2px')
 	.style('margin-bottom', '17px');
 
-	/*
-	var txtRegularization = divControls
-	.append('input')
-	.attr('type', 'text')
-	.attr('value', regularization)
-	.on('blur', function() {
-		regularization = this.value;
-	});
-	*/
-
 	var divInfo = divControls
 	.append('div');
 
@@ -292,6 +272,7 @@ function init() {
 
 	var firstPass = true;
 	var firingNeurons = [];
+
 	/*
 	firingNeurons = neuralNet.input;
 	neuralNet.neurons[0].activation = 0.8;
