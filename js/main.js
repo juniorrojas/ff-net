@@ -204,8 +204,8 @@ function init() {
 	.style('text-align', 'center')
 	.on('click', randomizeWeights);
 
-	var $btnRandomizeWeights = $(btnRandomizeWeights[0]);
-	$btnRandomizeWeights.button();
+	// var $btnRandomizeWeights = $(btnRandomizeWeights[0]);
+	// $btnRandomizeWeights.button();
 
 	divControls.append('div')
 	.html('<b>Learning rate</b>');
