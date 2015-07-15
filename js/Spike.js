@@ -1,3 +1,5 @@
+var Vector2 = require("./Vector2");
+
 var Spike;
 (function() {
 Spike = function(link) {
@@ -21,3 +23,5 @@ p.getMagnitude = function() {
 }
 
 })();
+
+module.exports = Spike;

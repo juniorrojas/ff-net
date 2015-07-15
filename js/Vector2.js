@@ -54,3 +54,5 @@ p.toString = function() {
 }
 
 })();
+
+module.exports = Vector2;

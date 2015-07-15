@@ -1,3 +1,7 @@
+var Neuron = require("./Neuron");
+var Link = require("./Link");
+var Spike = require("./Spike");
+
 var NeuralNet;
 
 (function () {
@@ -176,3 +180,5 @@ p.train = function(trainingSet, learningRate, regularization) {
 }
 
 })();
+
+module.exports = NeuralNet;
