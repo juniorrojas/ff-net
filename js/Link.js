@@ -1,4 +1,5 @@
 var Link;
+
 (function () {
 Link = function(n0, nf, weight) {
 	this.init(n0, nf, weight);
@@ -18,3 +19,5 @@ p.init = function(n0, nf, weight) {
 }
 
 })();
+
+module.exports = Link;

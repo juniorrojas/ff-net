@@ -50,3 +50,5 @@ p.reset = function() {
 }
 
 })();
+
+module.exports = Neuron;

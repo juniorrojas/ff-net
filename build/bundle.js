@@ -1,3 +1,360 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var Link;
+
+(function () {
+Link = function(n0, nf, weight) {
+	this.init(n0, nf, weight);
+}
+
+var p = Link.prototype;
+p.n0 = null;
+p.nf = null;
+p.weight = 0;
+p.dw = 0;
+
+p.init = function(n0, nf, weight) {
+	this.n0 = n0;
+	this.nf = nf;
+	this.weight = weight;
+	this.dw = 0;
+}
+
+})();
+
+module.exports = Link;
+
+},{}],2:[function(require,module,exports){
+var Neuron = require("./Neuron");
+var Link = require("./Link");
+var Spike = require("./Spike");
+
+var NeuralNet;
+
+(function () {
+NeuralNet = function() {
+	this.init();
+}
+
+var p = NeuralNet.prototype;
+p.neurons = null;
+p.links = null;
+p.spikes = null;
+p.input = null;
+p.output = null;
+
+p.init = function() {
+	this.neurons = [];
+	this.links = [];
+	this.spikes = [];
+	this.input = [];
+	this.output = [];
+}
+
+p.addNeuron = function(pos, bias) {
+	var neuron = new Neuron(pos, bias);
+	this.neurons.push(neuron);
+	return neuron;
+}
+
+p.addLink = function(n0, nf, weight) {
+	var link = new Link(n0, nf, weight);
+	n0.links.push(link);
+	nf.backLinks.push(link);
+	var spike = new Spike(link);
+	link.spike = spike;
+	this.links.push(link);
+	this.spikes.push(spike);
+	return link;
+}
+
+p.reset = function(input) {
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		neuron.reset();
+	}
+}
+
+p.randomizeWeights = function() {
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		var weight = 2 + Math.random() * 4;
+		if (Math.random() <= 0.5) weight *= -1;
+		link.weight = weight;
+	}
+}
+
+p.computeOutput = function(input) {
+	var spikingNeurons = [];
+
+	for (var i = 0; i < this.input.length; i++) {
+		var neuron = this.input[i];
+		neuron.activation = input[i];
+		for (var j = 0; j < neuron.links.length; j++) {
+			var nf = neuron.links[j].nf;
+			if (spikingNeurons.indexOf(nf) == -1) {
+				spikingNeurons.push(nf);
+			}
+		}
+	}
+
+	while (spikingNeurons.length > 0) {
+		var newSpikingNeurons = [];
+		for (var i = 0; i < spikingNeurons.length; i++) {
+			var neuron = spikingNeurons[i];
+			neuron.update();
+			for (var j = 0; j < neuron.links.length; j++) {
+				var nf = neuron.links[j].nf;
+				if (newSpikingNeurons.indexOf(nf) == -1){
+					newSpikingNeurons.push(nf);
+				}
+			}
+		}
+		spikingNeurons = newSpikingNeurons;
+	}
+
+	var output = [];
+	for (var i = 0; i< this.output.length; i++) {
+		output.push(this.output[i].activation);
+	}
+
+	return output;
+}
+
+p.train = function(trainingSet, learningRate, regularization) {
+	var dataLoss = 0;
+	var regularizationLoss = 0;
+
+	for (var k = trainingSet.length - 1; k >= 0; k--) {
+		var sample = trainingSet[k];
+		var output = this.computeOutput(sample.x);
+		var d = sample.y - output[0];
+		// data loss = 0.5 * d^2
+		dataLoss += 0.5 * d * d;
+		var neuron = this.output[0];
+		neuron.da = -d; // a = output[0]
+		neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));
+
+		neuron.db = 1 * neuron.dz;
+		for (var l = 0; l < neuron.backLinks.length; l++) {
+			var link = neuron.backLinks[l];
+			link.dw = link.n0.activation * neuron.dz;
+			// regularization loss = 0.5 * regularization * w^2
+			link.dw += regularization * link.weight;
+			regularizationLoss += regularization * link.weight * link.weight;
+		}
+
+		var backNeurons = [];
+		for (var i = 0; i < neuron.backLinks.length; i++) {
+			var n0 = neuron.backLinks[i].n0;
+			if (backNeurons.indexOf(n0) == -1) backNeurons.push(n0);
+		}
+
+		while (backNeurons.length > 0) {
+			var newBackNeurons = [];
+
+			for (var i = 0; i < backNeurons.length; i++) {
+				var neuron = backNeurons[i];
+
+				neuron.da = 0;
+				for (var l = 0; l < neuron.links.length; l++) {
+					var link = neuron.links[l];
+					neuron.da += link.weight * link.dw;
+				}
+
+				neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));;
+				neuron.db = 1 * neuron.dz;
+				for (var l = 0; l < neuron.backLinks.length; l++) {
+					var link = neuron.backLinks[l];
+					var n0 = link.n0;
+					link.dw = link.n0.activation * neuron.dz;
+					// regularization loss = 0.5 * regularization * w^2
+					link.dw += regularization * link.weight;
+					regularizationLoss += regularization * link.weight * link.weight;
+
+					if (newBackNeurons.indexOf(n0) == -1) newBackNeurons.push(n0);
+				}
+			}
+
+			backNeurons = newBackNeurons;
+		}
+
+		// at this point we have computed the gradient,
+		// we have to update the weights and biases
+		for (var i = 0; i < this.links.length; i++) {
+			var link = this.links[i];
+			link.weight -= learningRate * link.dw;
+		}
+
+		for (var i = 0; i < this.neurons.length; i++) {
+			var neuron = this.neurons[i];
+			neuron.bias -= learningRate * neuron.db;
+		}
+
+		for (var i = 0; i < this.input.length; i++) {
+			// input neurons have always 0 bias
+			var neuron = this.input[i];
+			neuron.bias = 0;
+		}
+
+		this.reset();
+	}
+
+	return {
+		dataLoss: dataLoss,
+		regularizationLoss: regularizationLoss
+	};
+}
+
+})();
+
+module.exports = NeuralNet;
+
+},{"./Link":1,"./Neuron":3,"./Spike":4}],3:[function(require,module,exports){
+var Neuron;
+
+(function() {
+Neuron = function(pos, bias) {
+	this.init(pos, bias);
+}
+
+var p = Neuron.prototype;
+
+p.pos = null;
+p.links = null;
+p.backLinks = null;
+p.preactivation = 0;
+p.activation = 0;
+p.bias = 0;
+p.da = 0; // d activation
+p.dz = 0; // d preactivation
+p.db = 0; // d bias
+
+p.init = function(pos, bias) {
+	this.links = [];
+	this.backLinks = [];
+	this.pos = pos;
+	this.bias = bias;
+	this.preactivation = 0;
+	this.activation = Neuron.sigmoid(this.bias);
+	this.error = 0;
+	this.da = 0;
+	this.dz = 0;
+	this.db = 0;
+}
+
+Neuron.sigmoid = function(x) {
+	return 1 / (1 + Math.exp(-x));
+}
+
+p.update = function() {
+	this.preactivation = 0;
+	this.preactivation += this.bias;
+	for (var i = 0; i < this.backLinks.length; i++) {
+		var link = this.backLinks[i];
+		this.preactivation += link.weight * link.n0.activation;
+	}
+	this.activation = Neuron.sigmoid(this.preactivation);
+}
+
+p.reset = function() {
+	this.preactivation = 0;
+	this.activation = Neuron.sigmoid(this.bias);
+}
+
+})();
+
+module.exports = Neuron;
+
+},{}],4:[function(require,module,exports){
+var Vector2 = require("./Vector2");
+
+var Spike;
+(function() {
+Spike = function(link) {
+	this.init(link);
+}
+
+var p = Spike.prototype;
+
+p.pos = null;
+p.link = null;
+p.radius = 0;
+
+p.init = function(link) {
+	this.link = link;
+	this.pos = new Vector2(0, 0);
+	this.radius = 0;
+}
+
+p.getMagnitude = function() {
+	return this.link.n0.activation * this.link.weight;
+}
+
+})();
+
+module.exports = Spike;
+
+},{"./Vector2":5}],5:[function(require,module,exports){
+var Vector2;
+
+(function() {
+
+Vector2 = function(x, y) {
+	this.init(x, y);
+}
+
+var p = Vector2.prototype;
+
+p.x = 0;
+p.y = 0;
+
+p.init = function(x, y) {
+	this.x = x;
+	this.y = y;
+}
+
+p.add = function(v) {
+	return new Vector2(this.x + v.x, this.y + v.y);
+}
+
+p.subtract = function(v) {
+	return new Vector2(this.x - v.x, this.y - v.y);
+}
+
+p.magnitude = function() {
+	return Math.sqrt(this.x * this.x + this.y * this.y);
+}
+
+p.times = function(n) {
+	return new Vector2(this.x * n, this.y * n);
+}
+
+p.normalize = function() {
+	var magnitude = this.magnitude();
+	return this.times(1 / magnitude);
+}
+
+p.dot = function(v) {
+	return this.x * v.x + this.y * v.y;
+}
+
+p.crossZ = function(v) {
+	return - v.x * this.y + this.x * v.y;
+}
+
+p.equals = function(v) {
+	return v.x == this.x && v.y == this.y;
+}
+
+p.toString = function() {
+	return "(x: " + this.x + ", y: " + this.y + ")";
+}
+
+})();
+
+module.exports = Vector2;
+
+},{}],6:[function(require,module,exports){
 var NeuralNet = require("./NeuralNet");
 var Vector2 = require("./Vector2");
 
@@ -492,3 +849,5 @@ init = function() {
 	}
 
 }
+
+},{"./NeuralNet":2,"./Vector2":5}]},{},[6]);
