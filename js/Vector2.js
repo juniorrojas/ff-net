@@ -46,7 +46,7 @@ p.crossZ = function(v) {
 }
 
 p.equals = function(v) {
-	return v.x = this.x && v.y == this.y;
+	return v.x == this.x && v.y == this.y;
 }
 
 p.toString = function() {
