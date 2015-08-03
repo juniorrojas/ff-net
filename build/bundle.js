@@ -1,16 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Link;
 
-(function () {
 Link = function(n0, nf, weight) {
 	this.init(n0, nf, weight);
 }
 
 var p = Link.prototype;
-p.n0 = null;
-p.nf = null;
-p.weight = 0;
-p.dw = 0;
 
 p.init = function(n0, nf, weight) {
 	this.n0 = n0;
@@ -18,8 +13,6 @@ p.init = function(n0, nf, weight) {
 	this.weight = weight;
 	this.dw = 0;
 }
-
-})();
 
 module.exports = Link;
 
@@ -30,17 +23,11 @@ var Spike = require("./Spike");
 
 var NeuralNet;
 
-(function () {
 NeuralNet = function() {
 	this.init();
 }
 
 var p = NeuralNet.prototype;
-p.neurons = null;
-p.links = null;
-p.spikes = null;
-p.input = null;
-p.output = null;
 
 p.init = function() {
 	this.neurons = [];
@@ -205,29 +192,16 @@ p.train = function(trainingSet, learningRate, regularization) {
 	};
 }
 
-})();
-
 module.exports = NeuralNet;
 
 },{"./Link":1,"./Neuron":3,"./Spike":4}],3:[function(require,module,exports){
 var Neuron;
 
-(function() {
 Neuron = function(pos, bias) {
 	this.init(pos, bias);
 }
 
 var p = Neuron.prototype;
-
-p.pos = null;
-p.links = null;
-p.backLinks = null;
-p.preactivation = 0;
-p.activation = 0;
-p.bias = 0;
-p.da = 0; // d activation
-p.dz = 0; // d preactivation
-p.db = 0; // d bias
 
 p.init = function(pos, bias) {
 	this.links = [];
@@ -237,9 +211,9 @@ p.init = function(pos, bias) {
 	this.preactivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
 	this.error = 0;
-	this.da = 0;
-	this.dz = 0;
-	this.db = 0;
+	this.da = 0; // d activation
+	this.dz = 0; // d preactivation
+	this.db = 0; // d bias
 }
 
 Neuron.sigmoid = function(x) {
@@ -261,24 +235,18 @@ p.reset = function() {
 	this.activation = Neuron.sigmoid(this.bias);
 }
 
-})();
-
 module.exports = Neuron;
 
 },{}],4:[function(require,module,exports){
 var Vector2 = require("./Vector2");
 
 var Spike;
-(function() {
+
 Spike = function(link) {
 	this.init(link);
 }
 
 var p = Spike.prototype;
-
-p.pos = null;
-p.link = null;
-p.radius = 0;
 
 p.init = function(link) {
 	this.link = link;
@@ -290,23 +258,16 @@ p.getMagnitude = function() {
 	return this.link.n0.activation * this.link.weight;
 }
 
-})();
-
 module.exports = Spike;
 
 },{"./Vector2":5}],5:[function(require,module,exports){
 var Vector2;
-
-(function() {
 
 Vector2 = function(x, y) {
 	this.init(x, y);
 }
 
 var p = Vector2.prototype;
-
-p.x = 0;
-p.y = 0;
 
 p.init = function(x, y) {
 	this.x = x;
@@ -349,8 +310,6 @@ p.equals = function(v) {
 p.toString = function() {
 	return "(x: " + this.x + ", y: " + this.y + ")";
 }
-
-})();
 
 module.exports = Vector2;
 

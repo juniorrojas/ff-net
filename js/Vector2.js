@@ -1,15 +1,10 @@
 var Vector2;
 
-(function() {
-
 Vector2 = function(x, y) {
 	this.init(x, y);
 }
 
 var p = Vector2.prototype;
-
-p.x = 0;
-p.y = 0;
 
 p.init = function(x, y) {
 	this.x = x;
@@ -52,7 +47,5 @@ p.equals = function(v) {
 p.toString = function() {
 	return "(x: " + this.x + ", y: " + this.y + ")";
 }
-
-})();
 
 module.exports = Vector2;

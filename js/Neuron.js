@@ -1,21 +1,10 @@
 var Neuron;
 
-(function() {
 Neuron = function(pos, bias) {
 	this.init(pos, bias);
 }
 
 var p = Neuron.prototype;
-
-p.pos = null;
-p.links = null;
-p.backLinks = null;
-p.preactivation = 0;
-p.activation = 0;
-p.bias = 0;
-p.da = 0; // d activation
-p.dz = 0; // d preactivation
-p.db = 0; // d bias
 
 p.init = function(pos, bias) {
 	this.links = [];
@@ -25,9 +14,9 @@ p.init = function(pos, bias) {
 	this.preactivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
 	this.error = 0;
-	this.da = 0;
-	this.dz = 0;
-	this.db = 0;
+	this.da = 0; // d activation
+	this.dz = 0; // d preactivation
+	this.db = 0; // d bias
 }
 
 Neuron.sigmoid = function(x) {
@@ -48,7 +37,5 @@ p.reset = function() {
 	this.preactivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
 }
-
-})();
 
 module.exports = Neuron;

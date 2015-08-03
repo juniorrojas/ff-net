@@ -4,17 +4,11 @@ var Spike = require("./Spike");
 
 var NeuralNet;
 
-(function () {
 NeuralNet = function() {
 	this.init();
 }
 
 var p = NeuralNet.prototype;
-p.neurons = null;
-p.links = null;
-p.spikes = null;
-p.input = null;
-p.output = null;
 
 p.init = function() {
 	this.neurons = [];
@@ -178,7 +172,5 @@ p.train = function(trainingSet, learningRate, regularization) {
 		regularizationLoss: regularizationLoss
 	};
 }
-
-})();
 
 module.exports = NeuralNet;
