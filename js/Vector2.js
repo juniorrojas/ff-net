@@ -1,15 +1,11 @@
 var Vector2;
 
 Vector2 = function(x, y) {
-	this.init(x, y);
-}
-
-var p = Vector2.prototype;
-
-p.init = function(x, y) {
 	this.x = x;
 	this.y = y;
 }
+
+var p = Vector2.prototype;
 
 p.add = function(v) {
 	return new Vector2(this.x + v.x, this.y + v.y);

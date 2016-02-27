@@ -1,12 +1,4 @@
-var Neuron;
-
-Neuron = function(pos, bias) {
-	this.init(pos, bias);
-}
-
-var p = Neuron.prototype;
-
-p.init = function(pos, bias) {
+var Neuron = function(pos, bias) {
 	this.links = [];
 	this.backLinks = [];
 	this.pos = pos;
@@ -18,6 +10,8 @@ p.init = function(pos, bias) {
 	this.dz = 0; // d preactivation
 	this.db = 0; // d bias
 }
+
+var p = Neuron.prototype;
 
 Neuron.sigmoid = function(x) {
 	return 1 / (1 + Math.exp(-x));

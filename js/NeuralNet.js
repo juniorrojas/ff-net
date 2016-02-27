@@ -5,18 +5,14 @@ var Spike = require("./Spike");
 var NeuralNet;
 
 NeuralNet = function() {
-	this.init();
-}
-
-var p = NeuralNet.prototype;
-
-p.init = function() {
 	this.neurons = [];
 	this.links = [];
 	this.spikes = [];
 	this.input = [];
 	this.output = [];
 }
+
+var p = NeuralNet.prototype;
 
 p.addNeuron = function(pos, bias) {
 	var neuron = new Neuron(pos, bias);
