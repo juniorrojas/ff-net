@@ -7,4 +7,14 @@ var Link = function(n0, nf, weight) {
 
 var p = Link.prototype;
 
+p.setParameters = function(params) {
+	this.weight = params.weight;
+}
+
+p.getParameters = function() {
+	return {
+		weight: this.weight
+	};
+}
+
 module.exports = Link;

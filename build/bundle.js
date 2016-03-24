@@ -1,17 +1,21 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var Link;
-
-Link = function(n0, nf, weight) {
-	this.init(n0, nf, weight);
-}
-
-var p = Link.prototype;
-
-p.init = function(n0, nf, weight) {
+var Link = function(n0, nf, weight) {
 	this.n0 = n0;
 	this.nf = nf;
 	this.weight = weight;
 	this.dw = 0;
+}
+
+var p = Link.prototype;
+
+p.setParameters = function(params) {
+	this.weight = params.weight;
+}
+
+p.getParameters = function() {
+	return {
+		weight: this.weight
+	};
 }
 
 module.exports = Link;
@@ -24,18 +28,14 @@ var Spike = require("./Spike");
 var NeuralNet;
 
 NeuralNet = function() {
-	this.init();
-}
-
-var p = NeuralNet.prototype;
-
-p.init = function() {
 	this.neurons = [];
 	this.links = [];
 	this.spikes = [];
 	this.input = [];
 	this.output = [];
 }
+
+var p = NeuralNet.prototype;
 
 p.addNeuron = function(pos, bias) {
 	var neuron = new Neuron(pos, bias);
@@ -68,6 +68,35 @@ p.randomizeWeights = function() {
 		if (Math.random() <= 0.5) weight *= -1;
 		link.weight = weight;
 	}
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		var bias = 1.5 - Math.random() * 3;
+		neuron.bias = bias;
+	}
+}
+
+p.setParameters = function(parameters) {
+	for (var i = 0; i < parameters.neurons.length; i++) {
+		this.neurons[i].setParameters(parameters.neurons[i]);
+	}
+	for (var i = 0; i < parameters.links.length; i++) {
+		this.links[i].setParameters(parameters.links[i]);
+	}
+}
+
+p.getParameters = function() {
+	var paramNeurons = [];
+	for (var i = 0; i < this.neurons.length; i++) {
+		paramNeurons.push(this.neurons[i].getParameters());
+	}
+	var paramLinks = [];
+	for (var i = 0; i < this.links.length; i++) {
+		paramLinks.push(this.links[i].getParameters());
+	}
+	return {
+		neurons: paramNeurons,
+		links: paramLinks
+	};
 }
 
 p.computeOutput = function(input) {
@@ -195,15 +224,7 @@ p.train = function(trainingSet, learningRate, regularization) {
 module.exports = NeuralNet;
 
 },{"./Link":1,"./Neuron":3,"./Spike":4}],3:[function(require,module,exports){
-var Neuron;
-
-Neuron = function(pos, bias) {
-	this.init(pos, bias);
-}
-
-var p = Neuron.prototype;
-
-p.init = function(pos, bias) {
+var Neuron = function(pos, bias) {
 	this.links = [];
 	this.backLinks = [];
 	this.pos = pos;
@@ -215,6 +236,8 @@ p.init = function(pos, bias) {
 	this.dz = 0; // d preactivation
 	this.db = 0; // d bias
 }
+
+var p = Neuron.prototype;
 
 Neuron.sigmoid = function(x) {
 	return 1 / (1 + Math.exp(-x));
@@ -235,6 +258,16 @@ p.reset = function() {
 	this.activation = Neuron.sigmoid(this.bias);
 }
 
+p.setParameters = function(params) {
+	this.bias = params.bias;
+}
+
+p.getParameters = function() {
+	return {
+		bias: this.bias
+	};
+}
+
 module.exports = Neuron;
 
 },{}],4:[function(require,module,exports){
@@ -243,16 +276,12 @@ var Vector2 = require("./Vector2");
 var Spike;
 
 Spike = function(link) {
-	this.init(link);
-}
-
-var p = Spike.prototype;
-
-p.init = function(link) {
 	this.link = link;
 	this.pos = new Vector2(0, 0);
 	this.radius = 0;
 }
+
+var p = Spike.prototype;
 
 p.getMagnitude = function() {
 	return this.link.n0.activation * this.link.weight;
@@ -264,15 +293,11 @@ module.exports = Spike;
 var Vector2;
 
 Vector2 = function(x, y) {
-	this.init(x, y);
-}
-
-var p = Vector2.prototype;
-
-p.init = function(x, y) {
 	this.x = x;
 	this.y = y;
 }
+
+var p = Vector2.prototype;
 
 p.add = function(v) {
 	return new Vector2(this.x + v.x, this.y + v.y);
@@ -425,7 +450,7 @@ init = function() {
 	var fWidth = canvasWidth / canvasWidthMini;
 	var fHeight = canvasHeight / canvasHeightMini;
 
-	var neuralNet = new NeuralNet();
+	neuralNet = new NeuralNet();
 
 	var neuronsPerLayer = [2, 5, 5, 2, 1];
 
@@ -440,11 +465,8 @@ init = function() {
 		for (var j = 0; j < neuronsPerLayer[i]; j++) {
 			var y = svgHeight / 2 + (j - (neuronsPerLayer[i] - 1) / 2) * dy;
 			var pos = new Vector2(x, y);
-			var bias;
-			if (i == 0) bias = 0;
-			else bias = 1.5 - Math.random() * 3;
 
-			var neuron = neuralNet.addNeuron(pos, bias);
+			var neuron = neuralNet.addNeuron(pos, 0);
 
 			layers[i].push(neuron);
 
@@ -470,6 +492,33 @@ init = function() {
 			}
 		}
 	}
+	
+	var initialParameters = {
+		"neurons":[
+			{"bias": 0}, {"bias": 0}, {"bias": 0.14926214704417798}, {"bias": -1.5760565067172967},
+			{"bias": -0.0070790515773630994}, {"bias": -0.9610370821643252}, {"bias": -0.4631415695352903},
+			{"bias": -0.4930638653997511}, {"bias": -1.2292654208180753}, {"bias": 1.233787276253548},
+			{"bias": -2.054973071108484}, {"bias": -1.3979682183549529}, {"bias": 0.6288132165377796},
+			{"bias": -0.9965512697250088}, {"bias": 3.500734405313219}],
+		"links":[
+			{"weight": 2.2559318523672673}, {"weight": 3.7705902078344162}, {"weight": -5.673868837964195},
+			{"weight": -2.552116396138559}, {"weight": -4.765897189158554}, {"weight": 2.522847383501193},
+			{"weight": -2.9902303588384505}, {"weight": 2.749623598598969}, {"weight": -2.0657459601688077},
+			{"weight": 2.311040191441733}, {"weight": -2.8083933750840506}, {"weight": 2.368208438212055},
+			{"weight": 2.792010178964303}, {"weight": 2.1204797088106764}, {"weight": 3.0855603411983634},
+			{"weight": -2.1619760012233913}, {"weight": 2.7735676578848043}, {"weight": -4.795321974592097},
+			{"weight": -3.1618858651724424}, {"weight": 2.642537468325151}, {"weight": 5.111269168104936},
+			{"weight": 1.8060793114773712}, {"weight": 1.2874475479043777}, {"weight": 3.715659708889894},
+			{"weight": -5.479057778095251}, {"weight": 4.279970838297447}, {"weight": -3.8573191202934085},
+			{"weight": -4.346636276004062}, {"weight": 1.8026421918582567}, {"weight": 3.9687935202147346},
+			{"weight": -3.5216391228147197}, {"weight": 4.599458665307638}, {"weight": -4.752572287153145},
+			{"weight": -3.810827524569661}, {"weight": 3.0650028924296953}, {"weight": -4.300364295192499},
+			{"weight": -2.9036061692080217}, {"weight": 4.132576329093505}, {"weight": -3.817976850598705},
+			{"weight": 4.606542085589321}, {"weight": 2.8220313920923323}, {"weight": 2.3423002019828885},
+			{"weight": 2.098573708791525}, {"weight": 4.4760505444141625}, {"weight": 3.95752484391276},
+			{"weight": -0.7265226578414495}, {"weight": -4.316679309853457}]
+	};
+	neuralNet.setParameters(initialParameters);
 
 	var mainDiv = d3.select('body')
 	.append('div')
@@ -704,6 +753,9 @@ init = function() {
 
 	function randomizeWeights() {
 		neuralNet.randomizeWeights();
+		// bias of 2 inputs must be 0
+		neuralNet.neurons[0].bias = 0;
+		neuralNet.neurons[1].bias = 0;
 	}
 
 	function restart() {

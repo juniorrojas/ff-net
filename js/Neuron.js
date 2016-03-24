@@ -32,4 +32,14 @@ p.reset = function() {
 	this.activation = Neuron.sigmoid(this.bias);
 }
 
+p.setParameters = function(params) {
+	this.bias = params.bias;
+}
+
+p.getParameters = function() {
+	return {
+		bias: this.bias
+	};
+}
+
 module.exports = Neuron;

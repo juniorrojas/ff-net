@@ -45,6 +45,35 @@ p.randomizeWeights = function() {
 		if (Math.random() <= 0.5) weight *= -1;
 		link.weight = weight;
 	}
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		var bias = 1.5 - Math.random() * 3;
+		neuron.bias = bias;
+	}
+}
+
+p.setParameters = function(parameters) {
+	for (var i = 0; i < parameters.neurons.length; i++) {
+		this.neurons[i].setParameters(parameters.neurons[i]);
+	}
+	for (var i = 0; i < parameters.links.length; i++) {
+		this.links[i].setParameters(parameters.links[i]);
+	}
+}
+
+p.getParameters = function() {
+	var paramNeurons = [];
+	for (var i = 0; i < this.neurons.length; i++) {
+		paramNeurons.push(this.neurons[i].getParameters());
+	}
+	var paramLinks = [];
+	for (var i = 0; i < this.links.length; i++) {
+		paramLinks.push(this.links[i].getParameters());
+	}
+	return {
+		neurons: paramNeurons,
+		links: paramLinks
+	};
 }
 
 p.computeOutput = function(input) {
