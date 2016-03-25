@@ -363,7 +363,7 @@ roundDigits = function(n, decimalDigits) {
 }
 
 init = function() {
-	var trainingSet = [
+	trainingSet = [
 		{x: [0.08, 0.24], y: 1},
 		{x: [0.2, 0.27], y: 1},
 		{x: [0.05, 0.30], y: 1},
@@ -429,26 +429,23 @@ init = function() {
 		{x: [0.4, 0.9], y: 1},
 	];
 
-	var svgWidth = 340;
-	var svgHeight = 250;
-	var canvasWidth = 250;
-	var canvasHeight = 250;
-	var canvasWidthMini = 50;
-	var canvasHeightMini = 50;
-	var neuronRadius = 12;
-	var maxSpikeRadius = 7;
-	var preactivationTop = 10;
-	var minOutputPaint = 0.5 - 0.5;
-	var maxOutputPaint = 0.5 + 0.5;
+	svgWidth = 340;
+	svgHeight = 250;
+	canvasWidth = 250;
+	canvasHeight = 250;
+	canvasWidthMini = 50;
+	canvasHeightMini = 50;
+	neuronRadius = 12;
+	maxSpikeRadius = 7;
+	preactivationTop = 10;
+	minOutputPaint = 0.5 - 0.5;
+	maxOutputPaint = 0.5 + 0.5;
 
-	var fWidth = canvasWidth / canvasWidthMini;
-	var fHeight = canvasHeight / canvasHeightMini;
+	fWidth = canvasWidth / canvasWidthMini;
+	fHeight = canvasHeight / canvasHeightMini;
 
-	var learningRate = 0.3;
-	var regularization = 0.00001;
-
-	var fWidth = canvasWidth / canvasWidthMini;
-	var fHeight = canvasHeight / canvasHeightMini;
+	learningRate = 0.3;
+	regularization = 0.00001;
 
 	neuralNet = new NeuralNet();
 
@@ -492,7 +489,7 @@ init = function() {
 			}
 		}
 	}
-	
+
 	var initialParameters = {
 		"neurons":[
 			{"bias": 0}, {"bias": 0}, {"bias": 0.14926214704417798}, {"bias": -1.5760565067172967},
@@ -540,7 +537,7 @@ init = function() {
 	.attr('width', canvasWidth)
 	.attr('height', canvasHeight);
 
-	var ctx = canvas.node().getContext('2d');
+	ctx = canvas.node().getContext('2d');
 
 	var canvasSvg = divCanvas.append('svg')
 	.attr('width', canvasWidth)
@@ -550,7 +547,7 @@ init = function() {
 	.style('top', '0px')
 	.style('z-index', '2');
 
-	var miniCanvasData = [];
+	miniCanvasData = [];
 	for (var i = 0; i < canvasWidthMini; i++) {
 		miniCanvasData.push([]);
 		for (var j = 0; j < canvasHeightMini; j++) {
@@ -625,21 +622,20 @@ init = function() {
 	.style('margin-top', '2px')
 	.style('margin-bottom', '17px');
 
-	var divInfo = divControls
-	.append('div');
+	divInfo = divControls.append('div');
 
-	var d3Link = svg.append('svg:g').selectAll('path');
-	var d3Spike = svg.append('svg:g').selectAll('g');
-	var d3Neuron = svg.append('svg:g').selectAll('g');
-	var d3Sample = canvasSvg.append('svg:g').selectAll('g');
+	d3Link = svg.append('svg:g').selectAll('path');
+	d3Spike = svg.append('svg:g').selectAll('g');
+	d3Neuron = svg.append('svg:g').selectAll('g');
+	d3Sample = canvasSvg.append('svg:g').selectAll('g');
 
-	var t = 0;
-	var propagationT = 200;
+	t = 0;
+	propagationT = 200;
 
 	restart();
 
-	var firstPass = true;
-	var firingNeurons = [];
+	firstPass = true;
+	firingNeurons = [];
 
 	/*
 	firingNeurons = neuralNet.input;
@@ -649,216 +645,215 @@ init = function() {
 
 	neuralNet.reset();
 	setInterval(update, 1 / 30);
+}
 
-	function update() {
-		var trainInfo = neuralNet.train(trainingSet, learningRate, regularization);
-		updateCanvas();
+update = function() {
+	var trainInfo = neuralNet.train(trainingSet, learningRate, regularization);
+	updateCanvas();
 
-		var totalLoss = trainInfo.dataLoss + trainInfo.regularizationLoss;
-		var decimalDigits = 5;
+	var totalLoss = trainInfo.dataLoss + trainInfo.regularizationLoss;
+	var decimalDigits = 5;
 
-		divInfo.html(
-		'<b>Data loss:</b><br>' +
-		roundDigits(trainInfo.dataLoss, decimalDigits) + '<br>' +
-		'<b>Regularization loss:</b><br>' +
-		roundDigits(trainInfo.regularizationLoss, decimalDigits) + '<br>' +
-		'<b>Total loss:</b><br>' +
-		roundDigits(totalLoss, decimalDigits) + '<br>');
+	divInfo.html(
+	'<b>Data loss:</b><br>' +
+	roundDigits(trainInfo.dataLoss, decimalDigits) + '<br>' +
+	'<b>Regularization loss:</b><br>' +
+	roundDigits(trainInfo.regularizationLoss, decimalDigits) + '<br>' +
+	'<b>Total loss:</b><br>' +
+	roundDigits(totalLoss, decimalDigits) + '<br>');
 
-		if (t >= propagationT) {
-			t = propagationT;
-			var newFiringNeurons = [];
-			for (var i = 0; i < firingNeurons.length; i++) {
-				var neuron = firingNeurons[i];
-				for (var j = 0; j < neuron.links.length; j++) {
-					var link = neuron.links[j];
-					if (newFiringNeurons.indexOf(link.nf) == -1) {
-						newFiringNeurons.push(link.nf);
-					}
+	if (t >= propagationT) {
+		t = propagationT;
+		var newFiringNeurons = [];
+		for (var i = 0; i < firingNeurons.length; i++) {
+			var neuron = firingNeurons[i];
+			for (var j = 0; j < neuron.links.length; j++) {
+				var link = neuron.links[j];
+				if (newFiringNeurons.indexOf(link.nf) == -1) {
+					newFiringNeurons.push(link.nf);
 				}
 			}
-			firingNeurons = newFiringNeurons;
-			t = 0;
-		} else
-		if (t == 0) {
-			if (firstPass) {
-				firstPass = false;
-			} else {
-				for (var i = 0; i < firingNeurons.length; i++) {
-					var neuron = firingNeurons[i];
-					neuron.update();
-				}
-			}
-
-			for (var i = 0; i < firingNeurons.length; i++) {
-				var neuron = firingNeurons[i];
-				for (var j = 0; j < firingNeurons[i].links.length; j++) {
-					var spike = neuron.links[j].spike;
-					spike.radius = maxSpikeRadius * Math.min(1, Math.abs(spike.getMagnitude()) / preactivationTop);
-				}
-			}
-
-			t++;
+		}
+		firingNeurons = newFiringNeurons;
+		t = 0;
+	} else
+	if (t == 0) {
+		if (firstPass) {
+			firstPass = false;
 		} else {
-			t++;
+			for (var i = 0; i < firingNeurons.length; i++) {
+				var neuron = firingNeurons[i];
+				neuron.update();
+			}
 		}
 
 		for (var i = 0; i < firingNeurons.length; i++) {
+			var neuron = firingNeurons[i];
 			for (var j = 0; j < firingNeurons[i].links.length; j++) {
-				var spike = firingNeurons[i].links[j].spike;
-				var link = spike.link;
-
-				var v = link.nf.pos.subtract(link.n0.pos).normalize();
-				var p0 = link.n0.pos.add(v.times(neuronRadius - spike.radius));
-				var pf = link.nf.pos.subtract(v.times(neuronRadius - spike.radius));
-				v = pf.subtract(p0);
-				spike.pos = p0.add(v.times(t / propagationT));
+				var spike = neuron.links[j].spike;
+				spike.radius = maxSpikeRadius * Math.min(1, Math.abs(spike.getMagnitude()) / preactivationTop);
 			}
 		}
 
-		// draw directed edges with proper padding from node centers
-		d3Link.attr('d', function(d) {
-			var deltaX = d.nf.pos.x - d.n0.pos.x,
-				deltaY = d.nf.pos.y - d.n0.pos.y,
-				dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
-				normX = deltaX / dist,
-				normY = deltaY / dist,
-				sourcePadding = d.left ? neuronRadius - 5 : neuronRadius,
-				targetPadding = d.right ? neuronRadius - 5: neuronRadius,
-				sourceX = d.n0.pos.x + (sourcePadding * normX),
-				sourceY = d.n0.pos.y + (sourcePadding * normY),
-				targetX = d.nf.pos.x - (targetPadding * normX),
-				targetY = d.nf.pos.y - (targetPadding * normY);
-			return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
-		});
-
-		d3Neuron.attr('transform', function(d) {
-			return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
-		})
-		.selectAll('circle').style('fill', function(d) {
-			var v = Math.abs(d.activation);
-			return colorBlend(cBlue, cRed, v);
-		});
-
-		d3Link
-		.style('stroke-width', function(d) {
-			return maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
-		});
-
-		d3Spike.attr('transform', function(d) {
-			return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
-		});
-		d3Spike.selectAll('circle').attr('r', function(d) { return d.radius; });
+		t++;
+	} else {
+		t++;
 	}
 
-	function randomizeWeights() {
-		neuralNet.randomizeWeights();
-		// bias of 2 inputs must be 0
-		neuralNet.neurons[0].bias = 0;
-		neuralNet.neurons[1].bias = 0;
-	}
+	for (var i = 0; i < firingNeurons.length; i++) {
+		for (var j = 0; j < firingNeurons[i].links.length; j++) {
+			var spike = firingNeurons[i].links[j].spike;
+			var link = spike.link;
 
-	function restart() {
-		var g;
-
-		d3Link = d3Link.data(neuralNet.links);
-
-		d3Link.enter().append('svg:path')
-		.attr('class', 'link')
-		.style('stroke-width', function(d) {
-			return 1; // maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
-		})
-		.style('stroke', function(d) {
-			if (d.weight > 0) {
-				return cBlue;
-			} else {
-				return cRed;
-			}
-		})
-		.style('stroke-opacity', function(d) { return 0.4; });
-
-		d3Link.exit().remove();
-
-		d3Neuron = d3Neuron.data(neuralNet.neurons);
-		g = d3Neuron.enter().append('svg:g');
-
-		g.append('svg:circle')
-		.attr('class', 'neuron')
-		.attr('r', neuronRadius)
-		.style('stroke', function(d) { return d3.rgb(0, 0, 0); });
-
-		d3Neuron.exit().remove();
-
-		d3Spike = d3Spike.data(neuralNet.spikes);
-		g = d3Spike.enter().append('svg:g');
-
-		g.append('svg:circle')
-		.attr('class', 'spike')
-		.attr('fill', function(d) {
-			if (d.link.weight > 0) {
-				return cBlue;
-			} else {
-				return cRed;
-			}
-		});
-
-		d3Spike.exit().remove();
-
-		d3Sample = d3Sample.data(trainingSet);
-		g = d3Sample.enter().append('svg:g');
-
-		g.append('svg:circle')
-		.attr('class', 'sample')
-		.attr('r', 3)
-		.style('stroke', function(d) { return d3.rgb(0, 0, 0) })
-		.style('fill', function(d) {
-			if (d.y == 1) return cBlue;
-			else return cRed;
-		});
-
-		d3Sample.attr('transform', function(d) {
-			return 'translate(' + d.x[0] * canvasWidth + ',' + d.x[1] * canvasHeight + ')';
-		});
-
-		d3Sample.exit().remove();
-
-		updateCanvas();
-
-	}
-
-	function updateCanvas() {
-		var d;
-		for (var i = 0; i < canvasWidthMini; i++) {
-			for (var j = 0; j < canvasHeightMini; j++) {
-				var output = neuralNet.computeOutput([i / canvasWidthMini, j / canvasHeightMini]);
-				var v = output[0];
-				if (v > maxOutputPaint) d = cLightBlue;
-				else if (v < minOutputPaint) d = cLightRed;
-				else {
-					v = (v - minOutputPaint) / (maxOutputPaint - minOutputPaint);
-					d = colorBlend(cLightBlue, cLightRed, v);
-				}
-
-				miniCanvasData[i][j] = d;
-			}
+			var v = link.nf.pos.subtract(link.n0.pos).normalize();
+			var p0 = link.n0.pos.add(v.times(neuronRadius - spike.radius));
+			var pf = link.nf.pos.subtract(v.times(neuronRadius - spike.radius));
+			v = pf.subtract(p0);
+			spike.pos = p0.add(v.times(t / propagationT));
 		}
-
-		var imgData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-		var imgDataLen = imgData.data.length;
-		for (var i = 0; i < imgDataLen / 4; i++) {
-			var y = Math.floor(i / canvasWidth);
-			var x = i % canvasWidth;
-			var d = miniCanvasData[Math.floor(x / fWidth)][Math.floor(y / fHeight)];
-			imgData.data[4 * i] = d.r;
-			imgData.data[4 * i + 1] = d.g;
-			imgData.data[4 * i + 2] = d.b;
-			imgData.data[4 * i + 3] = 255;
-		}
-		ctx.putImageData(imgData, 0, 0);
-
-		neuralNet.reset();
 	}
 
+	// draw directed edges with proper padding from node centers
+	d3Link.attr('d', function(d) {
+		var deltaX = d.nf.pos.x - d.n0.pos.x,
+			deltaY = d.nf.pos.y - d.n0.pos.y,
+			dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+			normX = deltaX / dist,
+			normY = deltaY / dist,
+			sourcePadding = d.left ? neuronRadius - 5 : neuronRadius,
+			targetPadding = d.right ? neuronRadius - 5: neuronRadius,
+			sourceX = d.n0.pos.x + (sourcePadding * normX),
+			sourceY = d.n0.pos.y + (sourcePadding * normY),
+			targetX = d.nf.pos.x - (targetPadding * normX),
+			targetY = d.nf.pos.y - (targetPadding * normY);
+		return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
+	});
+
+	d3Neuron.attr('transform', function(d) {
+		return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
+	})
+	.selectAll('circle').style('fill', function(d) {
+		var v = Math.abs(d.activation);
+		return colorBlend(cBlue, cRed, v);
+	});
+
+	d3Link
+	.style('stroke-width', function(d) {
+		return maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
+	});
+
+	d3Spike.attr('transform', function(d) {
+		return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
+	});
+	d3Spike.selectAll('circle').attr('r', function(d) { return d.radius; });
+}
+
+randomizeWeights = function() {
+	neuralNet.randomizeWeights();
+	// bias of 2 inputs must be 0
+	neuralNet.neurons[0].bias = 0;
+	neuralNet.neurons[1].bias = 0;
+}
+
+restart = function() {
+	var g;
+
+	d3Link = d3Link.data(neuralNet.links);
+
+	d3Link.enter().append('svg:path')
+	.attr('class', 'link')
+	.style('stroke-width', function(d) {
+		return 1; // maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
+	})
+	.style('stroke', function(d) {
+		if (d.weight > 0) {
+			return cBlue;
+		} else {
+			return cRed;
+		}
+	})
+	.style('stroke-opacity', function(d) { return 0.4; });
+
+	d3Link.exit().remove();
+
+	d3Neuron = d3Neuron.data(neuralNet.neurons);
+	g = d3Neuron.enter().append('svg:g');
+
+	g.append('svg:circle')
+	.attr('class', 'neuron')
+	.attr('r', neuronRadius)
+	.style('stroke', function(d) { return d3.rgb(0, 0, 0); });
+
+	d3Neuron.exit().remove();
+
+	d3Spike = d3Spike.data(neuralNet.spikes);
+	g = d3Spike.enter().append('svg:g');
+
+	g.append('svg:circle')
+	.attr('class', 'spike')
+	.attr('fill', function(d) {
+		if (d.link.weight > 0) {
+			return cBlue;
+		} else {
+			return cRed;
+		}
+	});
+
+	d3Spike.exit().remove();
+
+	d3Sample = d3Sample.data(trainingSet);
+	g = d3Sample.enter().append('svg:g');
+
+	g.append('svg:circle')
+	.attr('class', 'sample')
+	.attr('r', 3)
+	.style('stroke', function(d) { return d3.rgb(0, 0, 0) })
+	.style('fill', function(d) {
+		if (d.y == 1) return cBlue;
+		else return cRed;
+	});
+
+	d3Sample.attr('transform', function(d) {
+		return 'translate(' + d.x[0] * canvasWidth + ',' + d.x[1] * canvasHeight + ')';
+	});
+
+	d3Sample.exit().remove();
+
+	updateCanvas();
+
+}
+
+updateCanvas = function() {
+	var d;
+	for (var i = 0; i < canvasWidthMini; i++) {
+		for (var j = 0; j < canvasHeightMini; j++) {
+			var output = neuralNet.computeOutput([i / canvasWidthMini, j / canvasHeightMini]);
+			var v = output[0];
+			if (v > maxOutputPaint) d = cLightBlue;
+			else if (v < minOutputPaint) d = cLightRed;
+			else {
+				v = (v - minOutputPaint) / (maxOutputPaint - minOutputPaint);
+				d = colorBlend(cLightBlue, cLightRed, v);
+			}
+
+			miniCanvasData[i][j] = d;
+		}
+	}
+
+	var imgData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+	var imgDataLen = imgData.data.length;
+	for (var i = 0; i < imgDataLen / 4; i++) {
+		var y = Math.floor(i / canvasWidth);
+		var x = i % canvasWidth;
+		var d = miniCanvasData[Math.floor(x / fWidth)][Math.floor(y / fHeight)];
+		imgData.data[4 * i] = d.r;
+		imgData.data[4 * i + 1] = d.g;
+		imgData.data[4 * i + 2] = d.b;
+		imgData.data[4 * i + 3] = 255;
+	}
+	ctx.putImageData(imgData, 0, 0);
+
+	neuralNet.reset();
 }
 
 },{"./NeuralNet":2,"./Vector2":5}]},{},[6]);
