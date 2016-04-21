@@ -176,35 +176,35 @@ init = function() {
 	};
 	neuralNet.setParameters(initialParameters);
 
-	var mainDiv = d3.select('body')
-	.append('div')
-	.style('text-align', 'center');
+	var mainDiv = d3.select("body")
+	.append("div")
+	.style("text-align", "center");
 
 	var svg = mainDiv
-	.append('svg')
-	.attr('width', svgWidth)
-	.attr('height', svgHeight)
-	.style('vertical-align', 'middle');
+	.append("svg")
+	.attr("width", svgWidth)
+	.attr("height", svgHeight)
+	.style("vertical-align", "middle");
 
 	var divCanvas = mainDiv
-	.append('div')
-	.style('position', 'relative')
-	.style('display', 'inline-block')
-	.style('vertical-align', 'middle');
+	.append("div")
+	.style("position", "relative")
+	.style("display", "inline-block")
+	.style("vertical-align", "middle");
 
-	var canvas = divCanvas.append('canvas')
-	.attr('width', canvasWidth)
-	.attr('height', canvasHeight);
+	var canvas = divCanvas.append("canvas")
+	.attr("width", canvasWidth)
+	.attr("height", canvasHeight);
 
-	ctx = canvas.node().getContext('2d');
+	ctx = canvas.node().getContext("2d");
 
-	var canvasSvg = divCanvas.append('svg')
-	.attr('width', canvasWidth)
-	.attr('height', canvasHeight)
-	.style('position', 'absolute')
-	.style('left', '0px')
-	.style('top', '0px')
-	.style('z-index', '2');
+	var canvasSvg = divCanvas.append("svg")
+	.attr("width", canvasWidth)
+	.attr("height", canvasHeight)
+	.style("position", "absolute")
+	.style("left", "0px")
+	.style("top", "0px")
+	.style("z-index", "2");
 
 	miniCanvasData = [];
 	for (var i = 0; i < canvasWidthMini; i++) {
@@ -215,31 +215,31 @@ init = function() {
 	}
 
 	var divControls = mainDiv
-	.append('div')
-	.style('text-align', 'left')
-	.style('width', '180px')
-	.style('display', 'inline-block')
-	.style('vertical-align', 'middle')
-	.style('padding-left', '25px');
+	.append("div")
+	.style("text-align", "left")
+	.style("width", "180px")
+	.style("display", "inline-block")
+	.style("vertical-align", "middle")
+	.style("padding-left", "25px");
 
 	var btnRandomizeWeights = divControls
-	.append('button')
-	.html('Randomize weights')
-	.style('text-align', 'center')
-	.on('click', randomizeWeights);
+	.append("button")
+	.html("Randomize weights")
+	.style("text-align", "center")
+	.on("click", randomizeWeights);
 
 	// var $btnRandomizeWeights = $(btnRandomizeWeights[0]);
 	// $btnRandomizeWeights.button();
 
-	divControls.append('div')
-	.html('<b>Learning rate</b>');
+	divControls.append("div")
+	.html("<b>Learning rate</b>");
 
 	var txtLearningRate = divControls
-	.append('span')
+	.append("span")
 	.text(learningRate);
 
 	var sldLearningRate = divControls
-	.append('div');
+	.append("div");
 
 	sldLearningRate.call(d3.slider()
 		.axis(d3.svg.axis().ticks(6))
@@ -247,24 +247,24 @@ init = function() {
 		.max(1)
 		.step(0.01)
 		.value(learningRate)
-		.on('slide', function(event, value) {
+		.on("slide", function(event, value) {
 			learningRate = value;
 			txtLearningRate.text(roundDigits(learningRate, 2).toString());
 		})
 	)
-	.style('margin-left', '0px')
-	.style('margin-top', '2px')
-	.style('margin-bottom', '17px');
+	.style("margin-left", "0px")
+	.style("margin-top", "2px")
+	.style("margin-bottom", "17px");
 
-	divControls.append('div')
-	.html('<b>Regularization</b><br>');
+	divControls.append("div")
+	.html("<b>Regularization</b><br>");
 
 	var txtRegularization = divControls
-	.append('span')
+	.append("span")
 	.text(regularization);
 
 	var sldRegularization = divControls
-	.append('div');
+	.append("div");
 
 	sldRegularization.call(d3.slider()
 		.axis(d3.svg.axis().ticks(3))
@@ -272,21 +272,21 @@ init = function() {
 		.max(0.0001)
 		.step(0.0000001)
 		.value(regularization)
-		.on('slide', function(event, value) {
+		.on("slide", function(event, value) {
 			regularization = value;
 			txtRegularization.text(roundDigits(regularization, 5).toString());
 		})
 	)
-	.style('margin-left', '0px')
-	.style('margin-top', '2px')
-	.style('margin-bottom', '17px');
+	.style("margin-left", "0px")
+	.style("margin-top", "2px")
+	.style("margin-bottom", "17px");
 
-	divInfo = divControls.append('div');
+	divInfo = divControls.append("div");
 
-	d3Link = svg.append('svg:g').selectAll('path');
-	d3Spike = svg.append('svg:g').selectAll('g');
-	d3Neuron = svg.append('svg:g').selectAll('g');
-	d3Sample = canvasSvg.append('svg:g').selectAll('g');
+	d3Link = svg.append("svg:g").selectAll("path");
+	d3Spike = svg.append("svg:g").selectAll("g");
+	d3Neuron = svg.append("svg:g").selectAll("g");
+	d3Sample = canvasSvg.append("svg:g").selectAll("g");
 
 	t = 0;
 	propagationT = 200;
@@ -314,12 +314,12 @@ update = function() {
 	var decimalDigits = 5;
 
 	divInfo.html(
-	'<b>Data loss:</b><br>' +
-	roundDigits(trainInfo.dataLoss, decimalDigits) + '<br>' +
-	'<b>Regularization loss:</b><br>' +
-	roundDigits(trainInfo.regularizationLoss, decimalDigits) + '<br>' +
-	'<b>Total loss:</b><br>' +
-	roundDigits(totalLoss, decimalDigits) + '<br>');
+	"<b>Data loss:</b><br>" +
+	roundDigits(trainInfo.dataLoss, decimalDigits) + "<br>" +
+	"<b>Regularization loss:</b><br>" +
+	roundDigits(trainInfo.regularizationLoss, decimalDigits) + "<br>" +
+	"<b>Total loss:</b><br>" +
+	roundDigits(totalLoss, decimalDigits) + "<br>");
 
 	if (t >= propagationT) {
 		t = propagationT;
@@ -373,7 +373,7 @@ update = function() {
 	}
 
 	// draw directed edges with proper padding from node centers
-	d3Link.attr('d', function(d) {
+	d3Link.attr("d", function(d) {
 		var deltaX = d.nf.pos.x - d.n0.pos.x,
 			deltaY = d.nf.pos.y - d.n0.pos.y,
 			dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
@@ -385,26 +385,26 @@ update = function() {
 			sourceY = d.n0.pos.y + (sourcePadding * normY),
 			targetX = d.nf.pos.x - (targetPadding * normX),
 			targetY = d.nf.pos.y - (targetPadding * normY);
-		return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
+		return "M" + sourceX + "," + sourceY + "L" + targetX + "," + targetY;
 	});
 
-	d3Neuron.attr('transform', function(d) {
-		return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
+	d3Neuron.attr("transform", function(d) {
+		return "translate(" + d.pos.x + "," + d.pos.y + ")";
 	})
-	.selectAll('circle').style('fill', function(d) {
+	.selectAll("circle").style("fill", function(d) {
 		var v = Math.abs(d.activation);
 		return colorBlend(cBlue, cRed, v);
 	});
 
 	d3Link
-	.style('stroke-width', function(d) {
+	.style("stroke-width", function(d) {
 		return maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
 	});
 
-	d3Spike.attr('transform', function(d) {
-		return 'translate(' + d.pos.x + ',' + d.pos.y + ')';
+	d3Spike.attr("transform", function(d) {
+		return "translate(" + d.pos.x + "," + d.pos.y + ")";
 	});
-	d3Spike.selectAll('circle').attr('r', function(d) { return d.radius; });
+	d3Spike.selectAll("circle").attr("r", function(d) { return d.radius; });
 }
 
 randomizeWeights = function() {
@@ -419,38 +419,38 @@ restart = function() {
 
 	d3Link = d3Link.data(neuralNet.links);
 
-	d3Link.enter().append('svg:path')
-	.attr('class', 'link')
-	.style('stroke-width', function(d) {
+	d3Link.enter().append("svg:path")
+	.attr("class", "link")
+	.style("stroke-width", function(d) {
 		return 1; // maxSpikeRadius * 2 * Math.min(1, Math.abs(d.weight) / preactivationTop);
 	})
-	.style('stroke', function(d) {
+	.style("stroke", function(d) {
 		if (d.weight > 0) {
 			return cBlue;
 		} else {
 			return cRed;
 		}
 	})
-	.style('stroke-opacity', function(d) { return 0.4; });
+	.style("stroke-opacity", function(d) { return 0.4; });
 
 	d3Link.exit().remove();
 
 	d3Neuron = d3Neuron.data(neuralNet.neurons);
-	g = d3Neuron.enter().append('svg:g');
+	g = d3Neuron.enter().append("svg:g");
 
-	g.append('svg:circle')
-	.attr('class', 'neuron')
-	.attr('r', neuronRadius)
-	.style('stroke', function(d) { return d3.rgb(0, 0, 0); });
+	g.append("svg:circle")
+	.attr("class", "neuron")
+	.attr("r", neuronRadius)
+	.style("stroke", function(d) { return d3.rgb(0, 0, 0); });
 
 	d3Neuron.exit().remove();
 
 	d3Spike = d3Spike.data(neuralNet.spikes);
-	g = d3Spike.enter().append('svg:g');
+	g = d3Spike.enter().append("svg:g");
 
-	g.append('svg:circle')
-	.attr('class', 'spike')
-	.attr('fill', function(d) {
+	g.append("svg:circle")
+	.attr("class", "spike")
+	.attr("fill", function(d) {
 		if (d.link.weight > 0) {
 			return cBlue;
 		} else {
@@ -461,19 +461,19 @@ restart = function() {
 	d3Spike.exit().remove();
 
 	d3Sample = d3Sample.data(trainingSet);
-	g = d3Sample.enter().append('svg:g');
+	g = d3Sample.enter().append("svg:g");
 
-	g.append('svg:circle')
-	.attr('class', 'sample')
-	.attr('r', 3)
-	.style('stroke', function(d) { return d3.rgb(0, 0, 0) })
-	.style('fill', function(d) {
+	g.append("svg:circle")
+	.attr("class", "sample")
+	.attr("r", 3)
+	.style("stroke", function(d) { return d3.rgb(0, 0, 0) })
+	.style("fill", function(d) {
 		if (d.y == 1) return cBlue;
 		else return cRed;
 	});
 
-	d3Sample.attr('transform', function(d) {
-		return 'translate(' + d.x[0] * canvasWidth + ',' + d.x[1] * canvasHeight + ')';
+	d3Sample.attr("transform", function(d) {
+		return "translate(" + d.x[0] * canvasWidth + "," + d.x[1] * canvasHeight + ")";
 	});
 
 	d3Sample.exit().remove();
