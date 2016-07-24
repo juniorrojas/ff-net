@@ -10,8 +10,7 @@
 
 		<script type="text/javascript" src="lib/d3/d3.min.js"></script>
 		<script type="text/javascript" src="lib/d3/d3.slider/d3.slider.js"></script>
-		<script type="text/javascript" src="build/bundle.js"></script>
-		<script type="text/javascript">
+		<script>
 			if (
 				document.location.hostname.search("juniorrojas.com") !== -1 ||
 				document.location.hostname.search("juniorrojas.github.io") !== -1
@@ -25,8 +24,9 @@
 			}
 		</script>
 	</head>
-	<body onload="init()">
+	<body>
 		<h1>ff-net</h1>
 		<p style="text-align: center">A feedforward neural network learning to classify two-dimensional vectors in real time</p>
+		<script src="build/main.js"></script>
 	</body>
 </html>

@@ -21,7 +21,21 @@ roundDigits = function(n, decimalDigits) {
 	return Math.round(n * factor) / factor;
 }
 
-init = function() {
+var svg1 = require("./svg");
+
+function init() {
+	var svgContainer = svg1.createElement("svg");
+	document.body.appendChild(svgContainer);
+
+	var neuralNet = new NeuralNet();
+	svgContainer.appendChild(neuralNet.svgElement);
+
+	neuralNet.addNeuron();
+	neuralNet.addNeuron();
+	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[1], 1);
+
+	return;
+
 	trainingSet = [
 		{x: [0.08, 0.24], y: 1},
 		{x: [0.2, 0.27], y: 1},
@@ -514,3 +528,5 @@ updateCanvas = function() {
 
 	neuralNet.reset();
 }
+
+init();

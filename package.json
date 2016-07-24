@@ -1,0 +1,5 @@
+{
+	"scripts": {
+		"watchify": "watchify js/main.js -o build/main.js"
+	}
+}

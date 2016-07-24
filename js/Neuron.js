@@ -1,3 +1,5 @@
+var svg = require("./svg");
+
 var Neuron = function(pos, bias) {
 	this.links = [];
 	this.backLinks = [];
@@ -9,6 +11,9 @@ var Neuron = function(pos, bias) {
 	this.da = 0; // d activation
 	this.dz = 0; // d preactivation
 	this.db = 0; // d bias
+
+	var svgElement = this.svgElement = svg.createElement("circle");
+	svgElement.setAttribute("r", 10);
 }
 
 var p = Neuron.prototype;

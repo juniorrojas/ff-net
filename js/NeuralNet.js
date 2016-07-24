@@ -1,3 +1,4 @@
+var svg = require("./svg");
 var Neuron = require("./Neuron");
 var Link = require("./Link");
 var Spike = require("./Spike");
@@ -10,6 +11,8 @@ NeuralNet = function() {
 	this.spikes = [];
 	this.input = [];
 	this.output = [];
+
+	this.svgElement = svg.createElement("g");
 }
 
 var p = NeuralNet.prototype;
@@ -17,6 +20,9 @@ var p = NeuralNet.prototype;
 p.addNeuron = function(pos, bias) {
 	var neuron = new Neuron(pos, bias);
 	this.neurons.push(neuron);
+
+	this.svgElement.appendChild(neuron.svgElement);
+
 	return neuron;
 }
 
@@ -28,6 +34,9 @@ p.addLink = function(n0, nf, weight) {
 	link.spike = spike;
 	this.links.push(link);
 	this.spikes.push(spike);
+
+	this.svgElement.appendChild(link.svgElement);
+
 	return link;
 }
 
