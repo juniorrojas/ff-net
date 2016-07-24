@@ -2,6 +2,7 @@ var svg = require("./svg");
 var Neuron = require("./Neuron");
 var Link = require("./Link");
 var Spike = require("./Spike");
+var Layer = require("./Layer");
 
 var NeuralNet;
 
@@ -9,6 +10,7 @@ NeuralNet = function() {
 	this.neurons = [];
 	this.links = [];
 	this.spikes = [];
+	this.layers = [];
 	this.input = [];
 	this.output = [];
 
@@ -16,6 +18,13 @@ NeuralNet = function() {
 }
 
 var p = NeuralNet.prototype;
+
+p.addLayer = function() {
+	var layer = new Layer(this);
+	this.layers.push(layer);
+	this.svgElement.appendChild(layer.svgElement);
+	return layer;
+}
 
 p.addNeuron = function(pos, bias) {
 	var neuron = new Neuron(pos, bias);

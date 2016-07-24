@@ -1,5 +1,38 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var svg = require("./svg");
+var Neuron = require("./Neuron");
+
+var Layer = function(neuralNet) {
+	this.neuralNet = neuralNet;
+	this.neurons = [];
+	this.svgElement = svg.createElement("g");
+}
+
+var p = Layer.prototype;
+
+p.addNeuron = function() {
+	var neuron = new Neuron(this);
+	this.neurons.push(neuron);
+	this.svgElement.appendChild(neuron.svgElement);
+	neuron.redraw();
+}
+
+p.getNeuronAt = function(i) {
+	return this.neurons[i];
+}
+
+p.getNeuronCount = function() {
+	return this.neurons.length;
+}
+
+p.getIndex = function() {
+	return this.neuralNet.layers.indexOf(this);
+}
+
+module.exports = Layer;
+
+},{"./Neuron":4,"./svg":8}],2:[function(require,module,exports){
+var svg = require("./svg");
 
 var Link = function(n0, nf, weight) {
 	this.n0 = n0;
@@ -15,7 +48,13 @@ var p = Link.prototype;
 
 p.redraw = function() {
 	var path = this.svgElement;
-	path.setAttribute("d", "M10 10 L 40 40");
+	var p0 = this.n0.getPosition();
+	var pf = this.nf.getPosition();
+	path.setAttribute(
+		"d",
+		"M" + p0.x + " " + p0.y + " " +
+		"L" + pf.x + " " + pf.y)
+	;
 	path.setAttribute("stroke", "black");
 	path.setAttribute("stroke-width", 2);
 }
@@ -32,11 +71,12 @@ p.getParameters = function() {
 
 module.exports = Link;
 
-},{"./svg":7}],2:[function(require,module,exports){
+},{"./svg":8}],3:[function(require,module,exports){
 var svg = require("./svg");
 var Neuron = require("./Neuron");
 var Link = require("./Link");
 var Spike = require("./Spike");
+var Layer = require("./Layer");
 
 var NeuralNet;
 
@@ -44,6 +84,7 @@ NeuralNet = function() {
 	this.neurons = [];
 	this.links = [];
 	this.spikes = [];
+	this.layers = [];
 	this.input = [];
 	this.output = [];
 
@@ -51,6 +92,13 @@ NeuralNet = function() {
 }
 
 var p = NeuralNet.prototype;
+
+p.addLayer = function() {
+	var layer = new Layer(this);
+	this.layers.push(layer);
+	this.svgElement.appendChild(layer.svgElement);
+	return layer;
+}
 
 p.addNeuron = function(pos, bias) {
 	var neuron = new Neuron(pos, bias);
@@ -244,10 +292,12 @@ p.train = function(trainingSet, learningRate, regularization) {
 
 module.exports = NeuralNet;
 
-},{"./Link":1,"./Neuron":3,"./Spike":4,"./svg":7}],3:[function(require,module,exports){
+},{"./Layer":1,"./Link":2,"./Neuron":4,"./Spike":5,"./svg":8}],4:[function(require,module,exports){
 var svg = require("./svg");
+var Vector2 = require("./Vector2");
 
-var Neuron = function(pos, bias) {
+var Neuron = function(layer, pos, bias) {
+	this.layer = layer;
 	this.links = [];
 	this.backLinks = [];
 	this.pos = pos;
@@ -267,6 +317,23 @@ var p = Neuron.prototype;
 
 Neuron.sigmoid = function(x) {
 	return 1 / (1 + Math.exp(-x));
+}
+
+p.redraw = function() {
+	var circle = this.svgElement;
+	var position = this.getPosition();
+	circle.setAttribute("cx", position.x);
+	circle.setAttribute("cy", position.y);
+}
+
+p.getIndex = function() {
+	return this.layer.neurons.indexOf(this);
+}
+
+p.getPosition = function() {
+	var x = this.layer.getIndex() * 50;
+	var y = this.getIndex() * 50;
+	return new Vector2(x, y);
 }
 
 p.update = function() {
@@ -296,7 +363,7 @@ p.getParameters = function() {
 
 module.exports = Neuron;
 
-},{"./svg":7}],4:[function(require,module,exports){
+},{"./Vector2":6,"./svg":8}],5:[function(require,module,exports){
 var Vector2 = require("./Vector2");
 
 var Spike;
@@ -315,7 +382,7 @@ p.getMagnitude = function() {
 
 module.exports = Spike;
 
-},{"./Vector2":5}],5:[function(require,module,exports){
+},{"./Vector2":6}],6:[function(require,module,exports){
 var Vector2;
 
 Vector2 = function(x, y) {
@@ -364,7 +431,7 @@ p.toString = function() {
 
 module.exports = Vector2;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var NeuralNet = require("./NeuralNet");
 var Vector2 = require("./Vector2");
 
@@ -397,9 +464,19 @@ function init() {
 	var neuralNet = new NeuralNet();
 	svgContainer.appendChild(neuralNet.svgElement);
 
-	neuralNet.addNeuron();
-	neuralNet.addNeuron();
-	neuralNet.addLink(neuralNet.neurons[0], neuralNet.neurons[1], 1);
+	var layer1 = neuralNet.addLayer();
+	layer1.addNeuron();
+	layer1.addNeuron();
+
+	var layer2 = neuralNet.addLayer();
+	layer2.addNeuron();
+	layer2.addNeuron();
+	layer2.addNeuron();
+	layer2.addNeuron();
+
+	neuralNet.addLink(layer1.getNeuronAt(0), layer2.getNeuronAt(0));
+	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(3));
+	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(1));
 
 	return;
 
@@ -898,7 +975,7 @@ updateCanvas = function() {
 
 init();
 
-},{"./NeuralNet":2,"./Vector2":5,"./svg":7}],7:[function(require,module,exports){
+},{"./NeuralNet":3,"./Vector2":6,"./svg":8}],8:[function(require,module,exports){
 var svg = {};
 
 svg.createElement = function(element) {
@@ -907,4 +984,4 @@ svg.createElement = function(element) {
 
 module.exports = svg;
 
-},{}]},{},[6]);
+},{}]},{},[7]);

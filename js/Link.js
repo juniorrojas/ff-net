@@ -14,7 +14,13 @@ var p = Link.prototype;
 
 p.redraw = function() {
 	var path = this.svgElement;
-	path.setAttribute("d", "M10 10 L 40 40");
+	var p0 = this.n0.getPosition();
+	var pf = this.nf.getPosition();
+	path.setAttribute(
+		"d",
+		"M" + p0.x + " " + p0.y + " " +
+		"L" + pf.x + " " + pf.y)
+	;
 	path.setAttribute("stroke", "black");
 	path.setAttribute("stroke-width", 2);
 }

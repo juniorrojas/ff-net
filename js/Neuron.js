@@ -1,6 +1,8 @@
 var svg = require("./svg");
+var Vector2 = require("./Vector2");
 
-var Neuron = function(pos, bias) {
+var Neuron = function(layer, pos, bias) {
+	this.layer = layer;
 	this.links = [];
 	this.backLinks = [];
 	this.pos = pos;
@@ -20,6 +22,23 @@ var p = Neuron.prototype;
 
 Neuron.sigmoid = function(x) {
 	return 1 / (1 + Math.exp(-x));
+}
+
+p.redraw = function() {
+	var circle = this.svgElement;
+	var position = this.getPosition();
+	circle.setAttribute("cx", position.x);
+	circle.setAttribute("cy", position.y);
+}
+
+p.getIndex = function() {
+	return this.layer.neurons.indexOf(this);
+}
+
+p.getPosition = function() {
+	var x = this.layer.getIndex() * 50;
+	var y = this.getIndex() * 50;
+	return new Vector2(x, y);
 }
 
 p.update = function() {
