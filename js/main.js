@@ -21,10 +21,11 @@ roundDigits = function(n, decimalDigits) {
 	return Math.round(n * factor) / factor;
 }
 
-var svg1 = require("./svg");
+var svg = require("./svg");
 
 function init() {
-	var svgContainer = svg1.createElement("svg");
+	var svgContainer = svg.createElement("svg");
+	svgContainer.style.height = "400px";
 	document.body.appendChild(svgContainer);
 
 	var neuralNet = new NeuralNet();
@@ -39,10 +40,29 @@ function init() {
 	layer2.addNeuron();
 	layer2.addNeuron();
 	layer2.addNeuron();
+	layer2.addNeuron();
+	
+	var layer3 = neuralNet.addLayer();
+	layer3.addNeuron();
+	layer3.addNeuron();
+	layer3.addNeuron();
+	layer3.addNeuron();
+	layer3.addNeuron();
+	
+	var layer4 = neuralNet.addLayer();
+	layer4.addNeuron();
+	layer4.addNeuron();
+	
+	var layer5 = neuralNet.addLayer();
+	layer5.addNeuron();
 
 	neuralNet.addLink(layer1.getNeuronAt(0), layer2.getNeuronAt(0));
 	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(3));
 	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(1));
+	
+	neuralNet.addLink(layer1.getNeuronAt(0), layer3.getNeuronAt(0));
+	
+	neuralNet.redraw();
 
 	return;
 
@@ -204,11 +224,13 @@ function init() {
 	.append("div")
 	.style("text-align", "center");
 
+	/*
 	var svg = mainDiv
 	.append("svg")
 	.attr("width", svgWidth)
 	.attr("height", svgHeight)
 	.style("vertical-align", "middle");
+	*/
 
 	var divCanvas = mainDiv
 	.append("div")

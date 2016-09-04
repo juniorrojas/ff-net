@@ -1,11 +1,10 @@
 var svg = require("./svg");
 var Vector2 = require("./Vector2");
 
-var Neuron = function(layer, pos, bias) {
+var Neuron = function(layer, bias) {
 	this.layer = layer;
 	this.links = [];
 	this.backLinks = [];
-	this.pos = pos;
 	this.bias = bias;
 	this.preactivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
@@ -36,8 +35,18 @@ p.getIndex = function() {
 }
 
 p.getPosition = function() {
+	var neuronCount = this.layer.neurons.length;
+	var cy = 120;
+	
 	var x = this.layer.getIndex() * 50;
-	var y = this.getIndex() * 50;
+	
+	var y;
+	if (neuronCount == 0) {
+		y = cy;
+	} else {
+		y = cy + (this.getIndex() - neuronCount / 2) * 40;
+	}
+	
 	return new Vector2(x, y);
 }
 

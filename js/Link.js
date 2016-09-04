@@ -1,9 +1,11 @@
 var svg = require("./svg");
 
-var Link = function(n0, nf, weight) {
+var Link = function(net, n0, nf, weight) {
+	this.net = net;
 	this.n0 = n0;
 	this.nf = nf;
-	this.weight = weight;
+	if (weight == null) this.weight = 1;
+	else this.weight = weight;
 	this.dw = 0;
 
 	this.svgElement = svg.createElement("path");

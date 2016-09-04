@@ -10,11 +10,18 @@ var Layer = function(neuralNet) {
 
 var p = Layer.prototype;
 
-p.addNeuron = function() {
-	var neuron = new Neuron(this);
+p.redraw = function() {
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		neuron.redraw();
+	}
+}
+
+p.addNeuron = function(bias) {
+	if (bias == null) bias = 0.5;
+	var neuron = new Neuron(this, bias);
 	this.neurons.push(neuron);
 	this.svgElement.appendChild(neuron.svgElement);
-	neuron.redraw();
 }
 
 p.getNeuronAt = function(i) {
@@ -34,10 +41,12 @@ module.exports = Layer;
 },{"./Neuron":4,"./svg":8}],2:[function(require,module,exports){
 var svg = require("./svg");
 
-var Link = function(n0, nf, weight) {
+var Link = function(net, n0, nf, weight) {
+	this.net = net;
 	this.n0 = n0;
 	this.nf = nf;
-	this.weight = weight;
+	if (weight == null) this.weight = 1;
+	else this.weight = weight;
 	this.dw = 0;
 
 	this.svgElement = svg.createElement("path");
@@ -78,10 +87,7 @@ var Link = require("./Link");
 var Spike = require("./Spike");
 var Layer = require("./Layer");
 
-var NeuralNet;
-
-NeuralNet = function() {
-	this.neurons = [];
+var NeuralNet = function() {
 	this.links = [];
 	this.spikes = [];
 	this.layers = [];
@@ -100,17 +106,8 @@ p.addLayer = function() {
 	return layer;
 }
 
-p.addNeuron = function(pos, bias) {
-	var neuron = new Neuron(pos, bias);
-	this.neurons.push(neuron);
-
-	this.svgElement.appendChild(neuron.svgElement);
-
-	return neuron;
-}
-
 p.addLink = function(n0, nf, weight) {
-	var link = new Link(n0, nf, weight);
+	var link = new Link(this, n0, nf, weight);
 	n0.links.push(link);
 	nf.backLinks.push(link);
 	var spike = new Spike(link);
@@ -123,10 +120,17 @@ p.addLink = function(n0, nf, weight) {
 	return link;
 }
 
+p.redraw = function() {
+	for (var i = 0; i < this.layers.length; i++) {
+		var layer = this.layers[i];
+		layer.redraw();
+	}
+}
+
 p.reset = function(input) {
-	for (var i = 0; i < this.neurons.length; i++) {
-		var neuron = this.neurons[i];
-		neuron.reset();
+	for (var i = 0; i < this.layers.length; i++) {
+		var layer = this.layers[i];
+		layer.reset();
 	}
 }
 
@@ -296,11 +300,10 @@ module.exports = NeuralNet;
 var svg = require("./svg");
 var Vector2 = require("./Vector2");
 
-var Neuron = function(layer, pos, bias) {
+var Neuron = function(layer, bias) {
 	this.layer = layer;
 	this.links = [];
 	this.backLinks = [];
-	this.pos = pos;
 	this.bias = bias;
 	this.preactivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
@@ -331,8 +334,18 @@ p.getIndex = function() {
 }
 
 p.getPosition = function() {
+	var neuronCount = this.layer.neurons.length;
+	var cy = 120;
+	
 	var x = this.layer.getIndex() * 50;
-	var y = this.getIndex() * 50;
+	
+	var y;
+	if (neuronCount == 0) {
+		y = cy;
+	} else {
+		y = cy + (this.getIndex() - neuronCount / 2) * 40;
+	}
+	
 	return new Vector2(x, y);
 }
 
@@ -455,10 +468,11 @@ roundDigits = function(n, decimalDigits) {
 	return Math.round(n * factor) / factor;
 }
 
-var svg1 = require("./svg");
+var svg = require("./svg");
 
 function init() {
-	var svgContainer = svg1.createElement("svg");
+	var svgContainer = svg.createElement("svg");
+	svgContainer.style.height = "400px";
 	document.body.appendChild(svgContainer);
 
 	var neuralNet = new NeuralNet();
@@ -473,10 +487,29 @@ function init() {
 	layer2.addNeuron();
 	layer2.addNeuron();
 	layer2.addNeuron();
+	layer2.addNeuron();
+	
+	var layer3 = neuralNet.addLayer();
+	layer3.addNeuron();
+	layer3.addNeuron();
+	layer3.addNeuron();
+	layer3.addNeuron();
+	layer3.addNeuron();
+	
+	var layer4 = neuralNet.addLayer();
+	layer4.addNeuron();
+	layer4.addNeuron();
+	
+	var layer5 = neuralNet.addLayer();
+	layer5.addNeuron();
 
 	neuralNet.addLink(layer1.getNeuronAt(0), layer2.getNeuronAt(0));
 	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(3));
 	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(1));
+	
+	neuralNet.addLink(layer1.getNeuronAt(0), layer3.getNeuronAt(0));
+	
+	neuralNet.redraw();
 
 	return;
 
@@ -638,11 +671,13 @@ function init() {
 	.append("div")
 	.style("text-align", "center");
 
+	/*
 	var svg = mainDiv
 	.append("svg")
 	.attr("width", svgWidth)
 	.attr("height", svgHeight)
 	.style("vertical-align", "middle");
+	*/
 
 	var divCanvas = mainDiv
 	.append("div")

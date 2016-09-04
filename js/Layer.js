@@ -9,11 +9,18 @@ var Layer = function(neuralNet) {
 
 var p = Layer.prototype;
 
-p.addNeuron = function() {
-	var neuron = new Neuron(this);
+p.redraw = function() {
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		neuron.redraw();
+	}
+}
+
+p.addNeuron = function(bias) {
+	if (bias == null) bias = 0.5;
+	var neuron = new Neuron(this, bias);
 	this.neurons.push(neuron);
 	this.svgElement.appendChild(neuron.svgElement);
-	neuron.redraw();
 }
 
 p.getNeuronAt = function(i) {
