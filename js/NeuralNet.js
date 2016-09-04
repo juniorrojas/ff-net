@@ -16,11 +16,31 @@ var NeuralNet = function() {
 
 var p = NeuralNet.prototype;
 
-p.addLayer = function() {
+p.addLayer = function(neuronCount) {
+	if (neuronCount == null) neuronCount = 0;	
+	
 	var layer = new Layer(this);
 	this.layers.push(layer);
 	this.svgElement.appendChild(layer.svgElement);
+	
+	for (var i = 0; i < neuronCount; i++) {
+		layer.addNeuron();
+	}
+	
 	return layer;
+}
+
+p.addFullyConnectedLayer = function(neuronCount) {
+	var l0 = this.layers[this.layers.length - 1];
+	this.addLayer(neuronCount);
+	var lf = this.layers[this.layers.length - 1];
+	for (var i = 0; i < l0.neurons.length; i++) {
+		var n0 = l0.neurons[i];
+		for (var j = 0; j < lf.neurons.length; j++) {
+			var nf = lf.neurons[j];
+			this.addLink(n0, nf);
+		}
+	}
 }
 
 p.addLink = function(n0, nf, weight) {

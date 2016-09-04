@@ -31,34 +31,11 @@ function init() {
 	var neuralNet = new NeuralNet();
 	svgContainer.appendChild(neuralNet.svgElement);
 
-	var layer1 = neuralNet.addLayer();
-	layer1.addNeuron();
-	layer1.addNeuron();
-
-	var layer2 = neuralNet.addLayer();
-	layer2.addNeuron();
-	layer2.addNeuron();
-	layer2.addNeuron();
-	layer2.addNeuron();
-	layer2.addNeuron();
-	
-	var layer3 = neuralNet.addLayer();
-	layer3.addNeuron();
-	layer3.addNeuron();
-	layer3.addNeuron();
-	layer3.addNeuron();
-	layer3.addNeuron();
-	
-	var layer4 = neuralNet.addLayer();
-	layer4.addNeuron();
-	layer4.addNeuron();
-	
-	var layer5 = neuralNet.addLayer();
-	layer5.addNeuron();
-
-	neuralNet.addLink(layer1.getNeuronAt(0), layer2.getNeuronAt(0));
-	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(3));
-	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(1));
+	neuralNet.addLayer(2);
+	neuralNet.addFullyConnectedLayer(5);
+	neuralNet.addFullyConnectedLayer(5);
+	neuralNet.addFullyConnectedLayer(2);
+	neuralNet.addFullyConnectedLayer(1);
 	
 	neuralNet.redraw();
 
