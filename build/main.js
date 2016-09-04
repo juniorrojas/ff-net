@@ -45,6 +45,11 @@ var Link = function(net, n0, nf, weight) {
 	this.net = net;
 	this.n0 = n0;
 	this.nf = nf;
+	
+	if (this.n0.layer.getIndex() + 1 != this.nf.layer.getIndex()) {
+		throw "Cannot connect neurons from non-consecutive layers";
+	}
+	
 	if (weight == null) this.weight = 1;
 	else this.weight = weight;
 	this.dw = 0;
@@ -506,8 +511,6 @@ function init() {
 	neuralNet.addLink(layer1.getNeuronAt(0), layer2.getNeuronAt(0));
 	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(3));
 	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(1));
-	
-	neuralNet.addLink(layer1.getNeuronAt(0), layer3.getNeuronAt(0));
 	
 	neuralNet.redraw();
 

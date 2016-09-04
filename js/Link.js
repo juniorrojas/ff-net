@@ -4,6 +4,11 @@ var Link = function(net, n0, nf, weight) {
 	this.net = net;
 	this.n0 = n0;
 	this.nf = nf;
+	
+	if (this.n0.layer.getIndex() + 1 != this.nf.layer.getIndex()) {
+		throw "Cannot connect neurons from non-consecutive layers";
+	}
+	
 	if (weight == null) this.weight = 1;
 	else this.weight = weight;
 	this.dw = 0;

@@ -60,8 +60,6 @@ function init() {
 	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(3));
 	neuralNet.addLink(layer1.getNeuronAt(1), layer2.getNeuronAt(1));
 	
-	neuralNet.addLink(layer1.getNeuronAt(0), layer3.getNeuronAt(0));
-	
 	neuralNet.redraw();
 
 	return;
