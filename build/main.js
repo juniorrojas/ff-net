@@ -1,4 +1,44 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// r, g, b, a are numbers between 0 and 1
+var Color = function(r, g, b, a) {
+	if (a == null) a = 1;
+	this.r = r;
+	this.g = g;
+	this.b = b;
+	this.a = a;
+}
+
+Color.WHITE = new Color(1, 1, 1);
+Color.BLACK = new Color(0, 0, 0);
+
+Color.RED = new Color(226 / 255, 86 / 255, 86 / 255);
+Color.BLUE = new Color(135 / 255, 173 / 255, 236 / 255);
+
+Color.LIGHT_BLUE = new Color(186 / 255, 224 / 255, 251 / 255);
+Color.LIGHT_RED = new Color(252 / 255, 163 / 255, 163 / 255);
+
+var p = Color.prototype;
+
+// t = 1 means replace this with color c
+p.blend = function(c, t) {
+	return new Color(
+		this.r * (1 - t) + c.r * t,
+		this.g * (1 - t) + c.g * t,
+		this.b * (1 - t) + c.b * t
+	);
+}
+
+p.toString = function() {
+	return "rgba(" +
+		Math.floor(255 * this.r) + ", " +
+		Math.floor(255 * this.g) + ", " +
+		Math.floor(255 * this.b) + ", " +
+		this.a
+		+ ")";
+}
+
+module.exports = Color;
+},{}],2:[function(require,module,exports){
 var svg = require("./svg");
 var Neuron = require("./Neuron");
 
@@ -38,7 +78,7 @@ p.getIndex = function() {
 
 module.exports = Layer;
 
-},{"./Neuron":4,"./svg":8}],2:[function(require,module,exports){
+},{"./Neuron":5,"./svg":9}],3:[function(require,module,exports){
 var svg = require("./svg");
 
 var Link = function(net, n0, nf, weight) {
@@ -85,7 +125,7 @@ p.getParameters = function() {
 
 module.exports = Link;
 
-},{"./svg":8}],3:[function(require,module,exports){
+},{"./svg":9}],4:[function(require,module,exports){
 var svg = require("./svg");
 var Neuron = require("./Neuron");
 var Link = require("./Link");
@@ -321,9 +361,10 @@ p.train = function(trainingSet, learningRate, regularization) {
 
 module.exports = NeuralNet;
 
-},{"./Layer":1,"./Link":2,"./Neuron":4,"./Spike":5,"./svg":8}],4:[function(require,module,exports){
+},{"./Layer":2,"./Link":3,"./Neuron":5,"./Spike":6,"./svg":9}],5:[function(require,module,exports){
 var svg = require("./svg");
 var Vector2 = require("./Vector2");
+var Color = require("./Color");
 
 var Neuron = function(layer, bias) {
 	this.layer = layer;
@@ -352,6 +393,10 @@ p.redraw = function() {
 	var position = this.getPosition();
 	circle.setAttribute("cx", position.x);
 	circle.setAttribute("cy", position.y);
+	var tColor = this.activation;
+	circle.setAttribute("fill", Color.RED.blend(Color.BLUE, tColor).toString());
+	circle.setAttribute("stroke", Color.BLACK.toString());
+	circle.setAttribute("stroke-width", "2px");
 }
 
 p.getIndex = function() {
@@ -401,7 +446,7 @@ p.getParameters = function() {
 
 module.exports = Neuron;
 
-},{"./Vector2":6,"./svg":8}],5:[function(require,module,exports){
+},{"./Color":1,"./Vector2":7,"./svg":9}],6:[function(require,module,exports){
 var Vector2 = require("./Vector2");
 
 var Spike;
@@ -420,7 +465,7 @@ p.getMagnitude = function() {
 
 module.exports = Spike;
 
-},{"./Vector2":6}],6:[function(require,module,exports){
+},{"./Vector2":7}],7:[function(require,module,exports){
 var Vector2;
 
 Vector2 = function(x, y) {
@@ -469,7 +514,7 @@ p.toString = function() {
 
 module.exports = Vector2;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var NeuralNet = require("./NeuralNet");
 var Vector2 = require("./Vector2");
 
@@ -1010,7 +1055,7 @@ updateCanvas = function() {
 
 init();
 
-},{"./NeuralNet":3,"./Vector2":6,"./svg":8}],8:[function(require,module,exports){
+},{"./NeuralNet":4,"./Vector2":7,"./svg":9}],9:[function(require,module,exports){
 var svg = {};
 
 svg.createElement = function(element) {
@@ -1019,4 +1064,4 @@ svg.createElement = function(element) {
 
 module.exports = svg;
 
-},{}]},{},[7]);
+},{}]},{},[8]);
