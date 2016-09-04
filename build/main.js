@@ -140,6 +140,12 @@ var NeuralNet = function() {
 	this.output = [];
 
 	this.svgElement = svg.createElement("g");
+	
+	this.svgLinks = svg.createElement("g");
+	this.svgElement.appendChild(this.svgLinks);
+	
+	this.svgNeurons = svg.createElement("g");
+	this.svgElement.appendChild(this.svgNeurons);
 }
 
 var p = NeuralNet.prototype;
@@ -149,7 +155,7 @@ p.addLayer = function(neuronCount) {
 	
 	var layer = new Layer(this);
 	this.layers.push(layer);
-	this.svgElement.appendChild(layer.svgElement);
+	this.svgNeurons.appendChild(layer.svgElement);
 	
 	for (var i = 0; i < neuronCount; i++) {
 		layer.addNeuron();
@@ -180,7 +186,7 @@ p.addLink = function(n0, nf, weight) {
 	this.links.push(link);
 	this.spikes.push(spike);
 
-	this.svgElement.appendChild(link.svgElement);
+	this.svgLinks.appendChild(link.svgElement);
 
 	return link;
 }
