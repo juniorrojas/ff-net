@@ -7,8 +7,6 @@ var NeuralNet = function() {
 	this.neurons = [];
 	this.links = [];
 	this.layers = [];
-	this.input = [];
-	this.output = [];
 
 	this.svgElement = svg.createElement("g");
 	
@@ -114,11 +112,14 @@ p.getParameters = function() {
 	};
 }
 
-p.computeOutput = function(input) {
+p.forward = function(input) {
 	var spikingNeurons = [];
 
-	for (var i = 0; i < this.input.length; i++) {
-		var neuron = this.input[i];
+	var inputLayer = this.layers[0];
+	var outputLayer = this.layers[this.layers.length - 1];
+	
+	for (var i = 0; i < inputLayer.neurons.length; i++) {
+		var neuron = inputLayer.neurons[i];
 		neuron.activation = input[i];
 		for (var j = 0; j < neuron.links.length; j++) {
 			var nf = neuron.links[j].nf;
@@ -144,8 +145,8 @@ p.computeOutput = function(input) {
 	}
 
 	var output = [];
-	for (var i = 0; i< this.output.length; i++) {
-		output.push(this.output[i].activation);
+	for (var i = 0; i < outputLayer.neurons.length; i++) {
+		output.push(outputLayer.neurons[i].activation);
 	}
 
 	return output;
@@ -157,11 +158,11 @@ p.train = function(trainingSet, learningRate, regularization) {
 
 	for (var k = trainingSet.length - 1; k >= 0; k--) {
 		var sample = trainingSet[k];
-		var output = this.computeOutput(sample.x);
+		var output = this.forward(sample.x);
 		var d = sample.y - output[0];
 		// data loss = 0.5 * d^2
 		dataLoss += 0.5 * d * d;
-		var neuron = this.output[0];
+		var neuron = this.layers[this.layers.length - 1].neurons[0];
 		neuron.da = -d; // a = output[0]
 		neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));
 
@@ -221,9 +222,10 @@ p.train = function(trainingSet, learningRate, regularization) {
 			neuron.bias -= learningRate * neuron.db;
 		}
 
-		for (var i = 0; i < this.input.length; i++) {
+		var inputLayer = this.layers[this.layers.length - 1];
+		for (var i = 0; i < inputLayer.neurons.length; i++) {
 			// input neurons have always 0 bias
-			var neuron = this.input[i];
+			var neuron = inputLayer.neurons[i];
 			neuron.bias = 0;
 		}
 

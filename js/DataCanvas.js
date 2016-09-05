@@ -38,9 +38,7 @@ p.redraw = function(classify) {
 	for (var i = 0; i < width; i++) {
 		for (var j = 0; j < height; j++) {
 			var label = classify(i / width, j / height);
-			var color;
-			if (label == 0) color = Color.LIGHT_RED;
-			else color = Color.LIGHT_BLUE;
+			var color = Color.LIGHT_RED.blend(Color.LIGHT_BLUE, label);
 			this.pixelColors[i][j] = color;
 		}
 	}

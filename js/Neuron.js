@@ -28,10 +28,16 @@ p.redraw = function() {
 	var position = this.getPosition();
 	circle.setAttribute("cx", position.x);
 	circle.setAttribute("cy", position.y);
+	
 	var maxVisibleBias = 5;
-	var tFillColor = (this.bias + maxVisibleBias) * 0.5 / maxVisibleBias;
+	var bias = this.bias;
+	var tFillColor;
+	if (bias < -maxVisibleBias) bias = -maxVisibleBias;
+	else if (bias > maxVisibleBias) bias = maxVisibleBias;
+	tFillColor = (bias + maxVisibleBias) * 0.5 / maxVisibleBias;
 	var fillColor = Color.RED.blend(Color.BLUE, tFillColor);
 	var strokeColor = fillColor.blend(Color.BLACK, 0.3);
+	
 	circle.setAttribute("fill", fillColor.toString());
 	circle.setAttribute("stroke", strokeColor.toString());
 	circle.setAttribute("stroke-width", 2);

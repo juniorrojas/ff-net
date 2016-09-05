@@ -16,6 +16,13 @@ p.redraw = function() {
 	}
 }
 
+p.reset = function() {
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		neuron.reset();
+	}
+}
+
 p.addNeuron = function(bias) {
 	if (bias == null) bias = 0.5;
 	var neuron = new Neuron(this, bias);
