@@ -30,9 +30,11 @@ p.redraw = function() {
 	circle.setAttribute("cx", position.x);
 	circle.setAttribute("cy", position.y);
 	var tColor = this.activation;
-	circle.setAttribute("fill", Color.RED.blend(Color.BLUE, tColor).toString());
-	circle.setAttribute("stroke", Color.BLACK.toString());
-	circle.setAttribute("stroke-width", "2px");
+	var fillColor = Color.RED.blend(Color.BLUE, tColor);
+	var strokeColor = fillColor.blend(Color.BLACK, 0.3);
+	circle.setAttribute("fill", fillColor.toString());
+	circle.setAttribute("stroke", strokeColor.toString());
+	circle.setAttribute("stroke-width", 2);
 }
 
 p.getIndex = function() {
