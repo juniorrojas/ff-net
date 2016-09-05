@@ -17,7 +17,7 @@ p.redraw = function() {
 	var fillColor;
 	if (this.label == 0) fillColor = Color.RED;
 	else fillColor = Color.BLUE;
-	var strokeColor = fillColor.blend(Color.BLACK, 0.3);
+	var strokeColor = fillColor.blend(Color.BLACK, 0.6);
 	
 	ctx.beginPath();
 	ctx.fillStyle = fillColor.toString();

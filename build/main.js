@@ -49,6 +49,16 @@ var DataCanvas = function() {
 	canvas.height = 400;
 	canvas.style.border = "1px solid black";
 	this.ctx = canvas.getContext("2d");
+	
+	this.width = 50;
+	this.height = 50;
+	this.pixelColors = [];
+	for (var i = 0; i < this.width; i++) {
+		this.pixelColors.push([]);
+		for (var j = 0; j < this.height; j++) {
+			this.pixelColors[i].push(0);
+		}
+	}
 }
 
 var p = DataCanvas.prototype;
@@ -57,12 +67,42 @@ p.addDataPoint = function(x, y, label) {
 	this.dataPoints.push(new DataPoint(this, x, y, label));
 }
 
-p.redraw = function() {
+p.redraw = function(classify) {
 	var ctx = this.ctx;
 	var canvas = this.domElement;
-	var width = canvas.width;
-	var height = canvas.height;
-	ctx.clearRect(0, 0, width, height);
+	var canvasWidth = canvas.width;
+	var canvasHeight = canvas.height;
+	
+	var width = this.width;
+	var height = this.height;
+	
+	for (var i = 0; i < width; i++) {
+		for (var j = 0; j < height; j++) {
+			var label = classify(i / width, j / height);
+			var color;
+			if (label == 0) color = Color.LIGHT_RED;
+			else color = Color.LIGHT_BLUE;
+			this.pixelColors[i][j] = color;
+		}
+	}
+
+	var fWidth = canvasWidth / width;
+	var fHeight = canvasHeight / height;
+	var canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+	for (var i = 0; i < canvasImageData.data.length / 4; i++) {
+		var y = Math.floor(i / canvasWidth);
+		var x = i % canvasWidth;
+		var ii = Math.floor(x / fWidth);
+		var jj = Math.floor(y / fHeight);
+		var color = this.pixelColors[ii][jj];
+		canvasImageData.data[4 * i] = Math.round(color.r * 255);
+		canvasImageData.data[4 * i + 1] = Math.round(color.g * 255);
+		canvasImageData.data[4 * i + 2] = Math.round(color.b * 255);
+		canvasImageData.data[4 * i + 3] = 255;
+	}
+	ctx.putImageData(canvasImageData, 0, 0);
+	
 	for (var i = 0; i < this.dataPoints.length; i++) {
 		var dataPoint = this.dataPoints[i];
 		dataPoint.redraw();
@@ -90,7 +130,7 @@ p.redraw = function() {
 	var fillColor;
 	if (this.label == 0) fillColor = Color.RED;
 	else fillColor = Color.BLUE;
-	var strokeColor = fillColor.blend(Color.BLACK, 0.3);
+	var strokeColor = fillColor.blend(Color.BLACK, 0.6);
 	
 	ctx.beginPath();
 	ctx.fillStyle = fillColor.toString();
@@ -617,11 +657,16 @@ function init() {
 	neuralNet.redraw();
 	
 	var dataCanvas = new DataCanvas();
+	document.body.appendChild(dataCanvas.domElement);
+	
 	dataCanvas.addDataPoint(0.2, 0.5, 0);
 	dataCanvas.addDataPoint(0.1, 0.3, 0);
 	dataCanvas.addDataPoint(0.4, 0.7, 1);
-	dataCanvas.redraw();
-	document.body.appendChild(dataCanvas.domElement);
+	
+	dataCanvas.redraw(function(x, y) {
+		if (x > y) return 1;
+		else return 0;
+	});
 
 	return;
 

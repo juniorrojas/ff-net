@@ -41,11 +41,16 @@ function init() {
 	neuralNet.redraw();
 	
 	var dataCanvas = new DataCanvas();
+	document.body.appendChild(dataCanvas.domElement);
+	
 	dataCanvas.addDataPoint(0.2, 0.5, 0);
 	dataCanvas.addDataPoint(0.1, 0.3, 0);
 	dataCanvas.addDataPoint(0.4, 0.7, 1);
-	dataCanvas.redraw();
-	document.body.appendChild(dataCanvas.domElement);
+	
+	dataCanvas.redraw(function(x, y) {
+		if (x > y) return 1;
+		else return 0;
+	});
 
 	return;
 
