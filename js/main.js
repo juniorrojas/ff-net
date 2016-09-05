@@ -1,6 +1,6 @@
 var NeuralNet = require("./NeuralNet");
 var DataCanvas = require("./DataCanvas");
-var Vector2 = require("./Vector2");
+var data = require("./data");
 
 var cLightBlue = d3.rgb(186, 224, 251);
 var cLightRed = d3.rgb(252, 163, 163);
@@ -38,9 +38,11 @@ function init() {
 	neuralNet.addFullyConnectedLayer(2);
 	neuralNet.addFullyConnectedLayer(1);
 	
+	neuralNet.setParameters(data.initialParameters);
+	
 	neuralNet.redraw();
 	
-	var dataCanvas = new DataCanvas();
+	var dataCanvas = DataCanvas.newFromData(data.trainingSet);
 	document.body.appendChild(dataCanvas.domElement);
 	
 	dataCanvas.addDataPoint(0.2, 0.5, 0);
@@ -54,7 +56,7 @@ function init() {
 
 	return;
 
-	trainingSet = [
+	var trainingSet = [
 		{x: [0.08, 0.24], y: 1},
 		{x: [0.2, 0.27], y: 1},
 		{x: [0.05, 0.30], y: 1},

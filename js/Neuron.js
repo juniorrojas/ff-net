@@ -1,5 +1,4 @@
 var svg = require("./svg");
-var Vector2 = require("./Vector2");
 var Color = require("./Color");
 
 var Neuron = function(layer, bias) {
@@ -29,8 +28,9 @@ p.redraw = function() {
 	var position = this.getPosition();
 	circle.setAttribute("cx", position.x);
 	circle.setAttribute("cy", position.y);
-	var tColor = this.activation;
-	var fillColor = Color.RED.blend(Color.BLUE, tColor);
+	var maxVisibleBias = 5;
+	var tFillColor = (this.bias + maxVisibleBias) * 0.5 / maxVisibleBias;
+	var fillColor = Color.RED.blend(Color.BLUE, tFillColor);
 	var strokeColor = fillColor.blend(Color.BLACK, 0.3);
 	circle.setAttribute("fill", fillColor.toString());
 	circle.setAttribute("stroke", strokeColor.toString());
@@ -54,7 +54,10 @@ p.getPosition = function() {
 		y = cy + (this.getIndex() - neuronCount / 2) * 40;
 	}
 	
-	return new Vector2(x, y);
+	return {
+		x: x,
+		y: y
+	};
 }
 
 p.update = function() {

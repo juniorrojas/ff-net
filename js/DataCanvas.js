@@ -68,4 +68,13 @@ p.redraw = function(classify) {
 	}
 }
 
+DataCanvas.newFromData = function(data) {
+	var dataCanvas = new DataCanvas();
+	for (var i = 0; i < data.length; i++) {
+		var item = data[i];
+		dataCanvas.addDataPoint(item.x[0], item.x[1], item.y);
+	}
+	return dataCanvas;
+}
+
 module.exports = DataCanvas;

@@ -4,6 +4,7 @@ var Link = require("./Link");
 var Layer = require("./Layer");
 
 var NeuralNet = function() {
+	this.neurons = [];
 	this.links = [];
 	this.layers = [];
 	this.input = [];
@@ -28,7 +29,8 @@ p.addLayer = function(neuronCount) {
 	this.svgNeurons.appendChild(layer.svgElement);
 	
 	for (var i = 0; i < neuronCount; i++) {
-		layer.addNeuron();
+		var neuron = layer.addNeuron();
+		this.neurons.push(neuron);
 	}
 	
 	return layer;

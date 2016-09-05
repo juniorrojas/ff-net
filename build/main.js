@@ -109,6 +109,15 @@ p.redraw = function(classify) {
 	}
 }
 
+DataCanvas.newFromData = function(data) {
+	var dataCanvas = new DataCanvas();
+	for (var i = 0; i < data.length; i++) {
+		var item = data[i];
+		dataCanvas.addDataPoint(item.x[0], item.x[1], item.y);
+	}
+	return dataCanvas;
+}
+
 module.exports = DataCanvas;
 },{"./Color":1,"./DataPoint":3}],3:[function(require,module,exports){
 var Color = require("./Color");
@@ -169,6 +178,7 @@ p.addNeuron = function(bias) {
 	var neuron = new Neuron(this, bias);
 	this.neurons.push(neuron);
 	this.svgElement.appendChild(neuron.svgElement);
+	return neuron;
 }
 
 p.getNeuronAt = function(i) {
@@ -245,6 +255,7 @@ var Link = require("./Link");
 var Layer = require("./Layer");
 
 var NeuralNet = function() {
+	this.neurons = [];
 	this.links = [];
 	this.layers = [];
 	this.input = [];
@@ -269,7 +280,8 @@ p.addLayer = function(neuronCount) {
 	this.svgNeurons.appendChild(layer.svgElement);
 	
 	for (var i = 0; i < neuronCount; i++) {
-		layer.addNeuron();
+		var neuron = layer.addNeuron();
+		this.neurons.push(neuron);
 	}
 	
 	return layer;
@@ -479,7 +491,6 @@ module.exports = NeuralNet;
 
 },{"./Layer":4,"./Link":5,"./Neuron":7,"./svg":10}],7:[function(require,module,exports){
 var svg = require("./svg");
-var Vector2 = require("./Vector2");
 var Color = require("./Color");
 
 var Neuron = function(layer, bias) {
@@ -509,8 +520,9 @@ p.redraw = function() {
 	var position = this.getPosition();
 	circle.setAttribute("cx", position.x);
 	circle.setAttribute("cy", position.y);
-	var tColor = this.activation;
-	var fillColor = Color.RED.blend(Color.BLUE, tColor);
+	var maxVisibleBias = 5;
+	var tFillColor = (this.bias + maxVisibleBias) * 0.5 / maxVisibleBias;
+	var fillColor = Color.RED.blend(Color.BLUE, tFillColor);
 	var strokeColor = fillColor.blend(Color.BLACK, 0.3);
 	circle.setAttribute("fill", fillColor.toString());
 	circle.setAttribute("stroke", strokeColor.toString());
@@ -534,7 +546,10 @@ p.getPosition = function() {
 		y = cy + (this.getIndex() - neuronCount / 2) * 40;
 	}
 	
-	return new Vector2(x, y);
+	return {
+		x: x,
+		y: y
+	};
 }
 
 p.update = function() {
@@ -564,59 +579,96 @@ p.getParameters = function() {
 
 module.exports = Neuron;
 
-},{"./Color":1,"./Vector2":8,"./svg":10}],8:[function(require,module,exports){
-var Vector2;
+},{"./Color":1,"./svg":10}],8:[function(require,module,exports){
+var data = {};
 
-Vector2 = function(x, y) {
-	this.x = x;
-	this.y = y;
-}
+data.trainingSet = [
+	{x: [0.08, 0.24], y: 1},
+	{x: [0.2, 0.27], y: 1},
+	{x: [0.05, 0.30], y: 1},
+	{x: [0.1, 0.1], y: 1},
+	{x: [0.4, 0.4], y: 0},
+	{x: [0.6, 0.4], y: 0},
+	{x: [0.65, 0.7], y: 0},
+	{x: [0.7, 0.3], y: 0},
+	{x: [0.35, 0.65], y: 0},
+	{x: [0.3, 0.5], y: 0},
+	{x: [0.7, 0.5], y: 0},
+	{x: [0.75, 0.55], y: 0},
+	{x: [0.7, 0.6], y: 0},
+	{x: [0.65, 0.34], y: 0},
+	{x: [0.8, 0.65], y: 0},
+	{x: [0.5, 0.7], y: 0},
+	{x: [0.5, 0.66], y: 0},
+	{x: [0.56, 0.66], y: 0},
+	{x: [0.46, 0.36], y: 0},
+	{x: [0.46, 0.26], y: 0},
+	{x: [0.36, 0.26], y: 0},
+	{x: [0.26, 0.36], y: 0},
+	{x: [0.56, 0.28], y: 0},
+	{x: [0.33, 0.54], y: 0},
+	{x: [0.23, 0.52], y: 0},
+	{x: [0.26, 0.16], y: 1},
+	{x: [0.06, 0.46], y: 1},
+	{x: [0.13, 0.66], y: 1},
+	{x: [0.2, 0.8], y: 1},
+	{x: [0.5, 0.5], y: 1},
+	{x: [0.45, 0.5], y: 1},
+	{x: [0.5, 0.45], y: 1},
+	{x: [0.45, 0.45], y: 1},
+	{x: [0.55, 0.55], y: 1},
+	{x: [0.5, 0.55], y: 1},
+	{x: [0.2, 0.8], y: 1},
+	{x: [0.5, 0.2], y: 1},
+	{x: [0.4, 0.1], y: 1},
+	{x: [0.6, 0.1], y: 1},
+	{x: [0.75, 0.15], y: 1},
+	{x: [0.75, 0.15], y: 1},
+	{x: [0.88, 0.22], y: 1},
+	{x: [0.9, 0.35], y: 1},
+	{x: [0.90, 0.49], y: 1},
+	{x: [0.88, 0.62], y: 1},
+	{x: [0.9, 0.9], y: 1},
+	{x: [0.9, 0.8], y: 1},
+	{x: [0.75, 0.85], y: 1},
+	{x: [0.55, 0.92], y: 1},
+	{x: [0.6, 0.95], y: 1},
+	{x: [0.06, 0.57], y: 1},
+	{x: [0.09, 0.8], y: 1},
+	{x: [0.4, 0.9], y: 1},
+];
 
-var p = Vector2.prototype;
+data.initialParameters = {
+	"neurons":[
+		{"bias": 0}, {"bias": 0}, {"bias": 0.14926214704417798}, {"bias": -1.5760565067172967},
+		{"bias": -0.0070790515773630994}, {"bias": -0.9610370821643252}, {"bias": -0.4631415695352903},
+		{"bias": -0.4930638653997511}, {"bias": -1.2292654208180753}, {"bias": 1.233787276253548},
+		{"bias": -2.054973071108484}, {"bias": -1.3979682183549529}, {"bias": 0.6288132165377796},
+		{"bias": -0.9965512697250088}, {"bias": 3.500734405313219}],
+	"links":[
+		{"weight": 2.2559318523672673}, {"weight": 3.7705902078344162}, {"weight": -5.673868837964195},
+		{"weight": -2.552116396138559}, {"weight": -4.765897189158554}, {"weight": 2.522847383501193},
+		{"weight": -2.9902303588384505}, {"weight": 2.749623598598969}, {"weight": -2.0657459601688077},
+		{"weight": 2.311040191441733}, {"weight": -2.8083933750840506}, {"weight": 2.368208438212055},
+		{"weight": 2.792010178964303}, {"weight": 2.1204797088106764}, {"weight": 3.0855603411983634},
+		{"weight": -2.1619760012233913}, {"weight": 2.7735676578848043}, {"weight": -4.795321974592097},
+		{"weight": -3.1618858651724424}, {"weight": 2.642537468325151}, {"weight": 5.111269168104936},
+		{"weight": 1.8060793114773712}, {"weight": 1.2874475479043777}, {"weight": 3.715659708889894},
+		{"weight": -5.479057778095251}, {"weight": 4.279970838297447}, {"weight": -3.8573191202934085},
+		{"weight": -4.346636276004062}, {"weight": 1.8026421918582567}, {"weight": 3.9687935202147346},
+		{"weight": -3.5216391228147197}, {"weight": 4.599458665307638}, {"weight": -4.752572287153145},
+		{"weight": -3.810827524569661}, {"weight": 3.0650028924296953}, {"weight": -4.300364295192499},
+		{"weight": -2.9036061692080217}, {"weight": 4.132576329093505}, {"weight": -3.817976850598705},
+		{"weight": 4.606542085589321}, {"weight": 2.8220313920923323}, {"weight": 2.3423002019828885},
+		{"weight": 2.098573708791525}, {"weight": 4.4760505444141625}, {"weight": 3.95752484391276},
+		{"weight": -0.7265226578414495}, {"weight": -4.316679309853457}]
+};
 
-p.add = function(v) {
-	return new Vector2(this.x + v.x, this.y + v.y);
-}
-
-p.subtract = function(v) {
-	return new Vector2(this.x - v.x, this.y - v.y);
-}
-
-p.magnitude = function() {
-	return Math.sqrt(this.x * this.x + this.y * this.y);
-}
-
-p.times = function(n) {
-	return new Vector2(this.x * n, this.y * n);
-}
-
-p.normalize = function() {
-	var magnitude = this.magnitude();
-	return this.times(1 / magnitude);
-}
-
-p.dot = function(v) {
-	return this.x * v.x + this.y * v.y;
-}
-
-p.crossZ = function(v) {
-	return - v.x * this.y + this.x * v.y;
-}
-
-p.equals = function(v) {
-	return v.x == this.x && v.y == this.y;
-}
-
-p.toString = function() {
-	return "(x: " + this.x + ", y: " + this.y + ")";
-}
-
-module.exports = Vector2;
-
+module.exports = data;
 },{}],9:[function(require,module,exports){
 var NeuralNet = require("./NeuralNet");
 var DataCanvas = require("./DataCanvas");
-var Vector2 = require("./Vector2");
+var data = require("./data");
 
 var cLightBlue = d3.rgb(186, 224, 251);
 var cLightRed = d3.rgb(252, 163, 163);
@@ -654,9 +706,11 @@ function init() {
 	neuralNet.addFullyConnectedLayer(2);
 	neuralNet.addFullyConnectedLayer(1);
 	
+	neuralNet.setParameters(data.initialParameters);
+	
 	neuralNet.redraw();
 	
-	var dataCanvas = new DataCanvas();
+	var dataCanvas = DataCanvas.newFromData(data.trainingSet);
 	document.body.appendChild(dataCanvas.domElement);
 	
 	dataCanvas.addDataPoint(0.2, 0.5, 0);
@@ -670,7 +724,7 @@ function init() {
 
 	return;
 
-	trainingSet = [
+	var trainingSet = [
 		{x: [0.08, 0.24], y: 1},
 		{x: [0.2, 0.27], y: 1},
 		{x: [0.05, 0.30], y: 1},
@@ -1167,7 +1221,7 @@ updateCanvas = function() {
 
 init();
 
-},{"./DataCanvas":2,"./NeuralNet":6,"./Vector2":8,"./svg":10}],10:[function(require,module,exports){
+},{"./DataCanvas":2,"./NeuralNet":6,"./data":8,"./svg":10}],10:[function(require,module,exports){
 var svg = {};
 
 svg.createElement = function(element) {
