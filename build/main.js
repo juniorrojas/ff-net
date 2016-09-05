@@ -78,8 +78,9 @@ p.getIndex = function() {
 
 module.exports = Layer;
 
-},{"./Neuron":5,"./svg":9}],3:[function(require,module,exports){
+},{"./Neuron":5,"./svg":8}],3:[function(require,module,exports){
 var svg = require("./svg");
+var Color = require("./Color");
 
 var Link = function(net, n0, nf, weight) {
 	this.net = net;
@@ -107,10 +108,15 @@ p.redraw = function() {
 	path.setAttribute(
 		"d",
 		"M" + p0.x + " " + p0.y + " " +
-		"L" + pf.x + " " + pf.y)
-	;
-	path.setAttribute("stroke", "black");
-	path.setAttribute("stroke-width", 2);
+		"L" + pf.x + " " + pf.y
+	);
+	var width = 14 * Math.min(1, Math.abs(this.weight) / 10);
+	path.setAttribute("stroke-width", width);
+	var color;
+	if (this.weight < 0) color = Color.RED;
+	else color = Color.BLUE;
+	path.setAttribute("stroke-opacity", 0.4);
+	path.setAttribute("stroke", color);
 }
 
 p.setParameters = function(params) {
@@ -125,16 +131,14 @@ p.getParameters = function() {
 
 module.exports = Link;
 
-},{"./svg":9}],4:[function(require,module,exports){
+},{"./Color":1,"./svg":8}],4:[function(require,module,exports){
 var svg = require("./svg");
 var Neuron = require("./Neuron");
 var Link = require("./Link");
-var Spike = require("./Spike");
 var Layer = require("./Layer");
 
 var NeuralNet = function() {
 	this.links = [];
-	this.spikes = [];
 	this.layers = [];
 	this.input = [];
 	this.output = [];
@@ -181,13 +185,8 @@ p.addLink = function(n0, nf, weight) {
 	var link = new Link(this, n0, nf, weight);
 	n0.links.push(link);
 	nf.backLinks.push(link);
-	var spike = new Spike(link);
-	link.spike = spike;
 	this.links.push(link);
-	this.spikes.push(spike);
-
 	this.svgLinks.appendChild(link.svgElement);
-
 	return link;
 }
 
@@ -195,6 +194,10 @@ p.redraw = function() {
 	for (var i = 0; i < this.layers.length; i++) {
 		var layer = this.layers[i];
 		layer.redraw();
+	}
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		link.redraw();
 	}
 }
 
@@ -367,7 +370,7 @@ p.train = function(trainingSet, learningRate, regularization) {
 
 module.exports = NeuralNet;
 
-},{"./Layer":2,"./Link":3,"./Neuron":5,"./Spike":6,"./svg":9}],5:[function(require,module,exports){
+},{"./Layer":2,"./Link":3,"./Neuron":5,"./svg":8}],5:[function(require,module,exports){
 var svg = require("./svg");
 var Vector2 = require("./Vector2");
 var Color = require("./Color");
@@ -452,26 +455,7 @@ p.getParameters = function() {
 
 module.exports = Neuron;
 
-},{"./Color":1,"./Vector2":7,"./svg":9}],6:[function(require,module,exports){
-var Vector2 = require("./Vector2");
-
-var Spike;
-
-Spike = function(link) {
-	this.link = link;
-	this.pos = new Vector2(0, 0);
-	this.radius = 0;
-}
-
-var p = Spike.prototype;
-
-p.getMagnitude = function() {
-	return this.link.n0.activation * this.link.weight;
-}
-
-module.exports = Spike;
-
-},{"./Vector2":7}],7:[function(require,module,exports){
+},{"./Color":1,"./Vector2":6,"./svg":8}],6:[function(require,module,exports){
 var Vector2;
 
 Vector2 = function(x, y) {
@@ -520,7 +504,7 @@ p.toString = function() {
 
 module.exports = Vector2;
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var NeuralNet = require("./NeuralNet");
 var Vector2 = require("./Vector2");
 
@@ -1061,7 +1045,7 @@ updateCanvas = function() {
 
 init();
 
-},{"./NeuralNet":4,"./Vector2":7,"./svg":9}],9:[function(require,module,exports){
+},{"./NeuralNet":4,"./Vector2":6,"./svg":8}],8:[function(require,module,exports){
 var svg = {};
 
 svg.createElement = function(element) {
@@ -1070,4 +1054,4 @@ svg.createElement = function(element) {
 
 module.exports = svg;
 
-},{}]},{},[8]);
+},{}]},{},[7]);

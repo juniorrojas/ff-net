@@ -1,4 +1,5 @@
 var svg = require("./svg");
+var Color = require("./Color");
 
 var Link = function(net, n0, nf, weight) {
 	this.net = net;
@@ -26,10 +27,15 @@ p.redraw = function() {
 	path.setAttribute(
 		"d",
 		"M" + p0.x + " " + p0.y + " " +
-		"L" + pf.x + " " + pf.y)
-	;
-	path.setAttribute("stroke", "black");
-	path.setAttribute("stroke-width", 2);
+		"L" + pf.x + " " + pf.y
+	);
+	var width = 14 * Math.min(1, Math.abs(this.weight) / 10);
+	path.setAttribute("stroke-width", width);
+	var color;
+	if (this.weight < 0) color = Color.RED;
+	else color = Color.BLUE;
+	path.setAttribute("stroke-opacity", 0.4);
+	path.setAttribute("stroke", color);
 }
 
 p.setParameters = function(params) {
