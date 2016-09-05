@@ -39,6 +39,73 @@ p.toString = function() {
 
 module.exports = Color;
 },{}],2:[function(require,module,exports){
+var Color = require("./Color");
+var DataPoint = require("./DataPoint");
+
+var DataCanvas = function() {
+	this.dataPoints = [];
+	var canvas = this.domElement = document.createElement("canvas");
+	canvas.width = 400;
+	canvas.height = 400;
+	canvas.style.border = "1px solid black";
+	this.ctx = canvas.getContext("2d");
+}
+
+var p = DataCanvas.prototype;
+
+p.addDataPoint = function(x, y, label) {
+	this.dataPoints.push(new DataPoint(this, x, y, label));
+}
+
+p.redraw = function() {
+	var ctx = this.ctx;
+	var canvas = this.domElement;
+	var width = canvas.width;
+	var height = canvas.height;
+	ctx.clearRect(0, 0, width, height);
+	for (var i = 0; i < this.dataPoints.length; i++) {
+		var dataPoint = this.dataPoints[i];
+		dataPoint.redraw();
+	}
+}
+
+module.exports = DataCanvas;
+},{"./Color":1,"./DataPoint":3}],3:[function(require,module,exports){
+var Color = require("./Color");
+
+var DataPoint = function(canvas, x, y, label) {
+	this.canvas = canvas;
+	this.x = x;
+	this.y = y;
+	this.label = label;
+}
+
+var p = DataPoint.prototype;
+
+p.redraw = function() {
+	var ctx = this.canvas.ctx;
+	var width = this.canvas.domElement.width;
+	var height = this.canvas.domElement.height;
+	
+	var fillColor;
+	if (this.label == 0) fillColor = Color.RED;
+	else fillColor = Color.BLUE;
+	var strokeColor = fillColor.blend(Color.BLACK, 0.3);
+	
+	ctx.beginPath();
+	ctx.fillStyle = fillColor.toString();
+	ctx.strokeStyle = strokeColor.toString();
+	ctx.arc(
+		this.x * width, this.y * height,
+		10,
+		0, 2 * Math.PI
+	);
+	ctx.fill();
+	ctx.stroke();
+}
+
+module.exports = DataPoint;
+},{"./Color":1}],4:[function(require,module,exports){
 var svg = require("./svg");
 var Neuron = require("./Neuron");
 
@@ -78,7 +145,7 @@ p.getIndex = function() {
 
 module.exports = Layer;
 
-},{"./Neuron":5,"./svg":8}],3:[function(require,module,exports){
+},{"./Neuron":7,"./svg":10}],5:[function(require,module,exports){
 var svg = require("./svg");
 var Color = require("./Color");
 
@@ -131,7 +198,7 @@ p.getParameters = function() {
 
 module.exports = Link;
 
-},{"./Color":1,"./svg":8}],4:[function(require,module,exports){
+},{"./Color":1,"./svg":10}],6:[function(require,module,exports){
 var svg = require("./svg");
 var Neuron = require("./Neuron");
 var Link = require("./Link");
@@ -370,7 +437,7 @@ p.train = function(trainingSet, learningRate, regularization) {
 
 module.exports = NeuralNet;
 
-},{"./Layer":2,"./Link":3,"./Neuron":5,"./svg":8}],5:[function(require,module,exports){
+},{"./Layer":4,"./Link":5,"./Neuron":7,"./svg":10}],7:[function(require,module,exports){
 var svg = require("./svg");
 var Vector2 = require("./Vector2");
 var Color = require("./Color");
@@ -457,7 +524,7 @@ p.getParameters = function() {
 
 module.exports = Neuron;
 
-},{"./Color":1,"./Vector2":6,"./svg":8}],6:[function(require,module,exports){
+},{"./Color":1,"./Vector2":8,"./svg":10}],8:[function(require,module,exports){
 var Vector2;
 
 Vector2 = function(x, y) {
@@ -506,8 +573,9 @@ p.toString = function() {
 
 module.exports = Vector2;
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var NeuralNet = require("./NeuralNet");
+var DataCanvas = require("./DataCanvas");
 var Vector2 = require("./Vector2");
 
 var cLightBlue = d3.rgb(186, 224, 251);
@@ -547,6 +615,13 @@ function init() {
 	neuralNet.addFullyConnectedLayer(1);
 	
 	neuralNet.redraw();
+	
+	var dataCanvas = new DataCanvas();
+	dataCanvas.addDataPoint(0.2, 0.5, 0);
+	dataCanvas.addDataPoint(0.1, 0.3, 0);
+	dataCanvas.addDataPoint(0.4, 0.7, 1);
+	dataCanvas.redraw();
+	document.body.appendChild(dataCanvas.domElement);
 
 	return;
 
@@ -1047,7 +1122,7 @@ updateCanvas = function() {
 
 init();
 
-},{"./NeuralNet":4,"./Vector2":6,"./svg":8}],8:[function(require,module,exports){
+},{"./DataCanvas":2,"./NeuralNet":6,"./Vector2":8,"./svg":10}],10:[function(require,module,exports){
 var svg = {};
 
 svg.createElement = function(element) {
@@ -1056,4 +1131,4 @@ svg.createElement = function(element) {
 
 module.exports = svg;
 
-},{}]},{},[7]);
+},{}]},{},[9]);

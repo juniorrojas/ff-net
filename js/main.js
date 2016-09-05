@@ -1,4 +1,5 @@
 var NeuralNet = require("./NeuralNet");
+var DataCanvas = require("./DataCanvas");
 var Vector2 = require("./Vector2");
 
 var cLightBlue = d3.rgb(186, 224, 251);
@@ -38,6 +39,13 @@ function init() {
 	neuralNet.addFullyConnectedLayer(1);
 	
 	neuralNet.redraw();
+	
+	var dataCanvas = new DataCanvas();
+	dataCanvas.addDataPoint(0.2, 0.5, 0);
+	dataCanvas.addDataPoint(0.1, 0.3, 0);
+	dataCanvas.addDataPoint(0.4, 0.7, 1);
+	dataCanvas.redraw();
+	document.body.appendChild(dataCanvas.domElement);
 
 	return;
 
