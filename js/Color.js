@@ -20,10 +20,21 @@ var p = Color.prototype;
 
 // t = 1 means replace this with color c
 p.blend = function(c, t) {
+	if (Math.abs(t) > 1) throw "t must be a number between -1 and 1";
+	
+	var source, target;
+	if (t >= 0) {
+		source = this;
+		target = c;
+	} else {
+		source = c;
+		target = this;
+	}
+	
 	return new Color(
-		this.r * (1 - t) + c.r * t,
-		this.g * (1 - t) + c.g * t,
-		this.b * (1 - t) + c.b * t
+		source.r * (1 - t) + target.r * t,
+		source.g * (1 - t) + target.g * t,
+		source.b * (1 - t) + target.b * t
 	);
 }
 

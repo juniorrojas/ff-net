@@ -21,10 +21,21 @@ var p = Color.prototype;
 
 // t = 1 means replace this with color c
 p.blend = function(c, t) {
+	if (Math.abs(t) > 1) throw "t must be a number between -1 and 1";
+	
+	var source, target;
+	if (t >= 0) {
+		source = this;
+		target = c;
+	} else {
+		source = c;
+		target = this;
+	}
+	
 	return new Color(
-		this.r * (1 - t) + c.r * t,
-		this.g * (1 - t) + c.g * t,
-		this.b * (1 - t) + c.b * t
+		source.r * (1 - t) + target.r * t,
+		source.g * (1 - t) + target.g * t,
+		source.b * (1 - t) + target.b * t
 	);
 }
 
@@ -278,6 +289,7 @@ p.addNeuron = function(bias) {
 	if (bias == null) bias = 0.5;
 	var neuron = new Neuron(this, bias);
 	this.neurons.push(neuron);
+	this.neuralNet.neurons.push(neuron);
 	this.svgElement.appendChild(neuron.svgElement);
 	return neuron;
 }
@@ -426,7 +438,6 @@ p.addLayer = function(neuronCount) {
 	
 	for (var i = 0; i < neuronCount; i++) {
 		var neuron = layer.addNeuron();
-		this.neurons.push(neuron);
 	}
 	
 	return layer;
@@ -482,7 +493,8 @@ p.randomizeParameters = function() {
 	
 	for (var i = 0; i < this.neurons.length; i++) {
 		var neuron = this.neurons[i];
-		var bias = 1.5 - Math.random() * 3;
+		var bias = 1 + Math.random() * 2;
+		if (Math.random() <= 0.5) bias *= -1;
 		neuron.bias = bias;
 	}
 }
@@ -599,7 +611,7 @@ p.redraw = function() {
 	var tFillColor;
 	if (bias < -maxVisibleBias) bias = -maxVisibleBias;
 	else if (bias > maxVisibleBias) bias = maxVisibleBias;
-	tFillColor = (bias + maxVisibleBias) * 0.5 / maxVisibleBias;
+	tFillColor = (bias / maxVisibleBias + 1) * 0.5;
 	var fillColor = Color.RED.blend(Color.BLUE, tFillColor);
 	var strokeColor = fillColor.blend(Color.BLACK, 0.3);
 	

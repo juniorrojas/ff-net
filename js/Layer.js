@@ -27,6 +27,7 @@ p.addNeuron = function(bias) {
 	if (bias == null) bias = 0.5;
 	var neuron = new Neuron(this, bias);
 	this.neurons.push(neuron);
+	this.neuralNet.neurons.push(neuron);
 	this.svgElement.appendChild(neuron.svgElement);
 	return neuron;
 }

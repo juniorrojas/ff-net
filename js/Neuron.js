@@ -32,7 +32,7 @@ p.redraw = function() {
 	var tFillColor;
 	if (bias < -maxVisibleBias) bias = -maxVisibleBias;
 	else if (bias > maxVisibleBias) bias = maxVisibleBias;
-	tFillColor = (bias + maxVisibleBias) * 0.5 / maxVisibleBias;
+	tFillColor = (bias / maxVisibleBias + 1) * 0.5;
 	var fillColor = Color.RED.blend(Color.BLUE, tFillColor);
 	var strokeColor = fillColor.blend(Color.BLACK, 0.3);
 	

@@ -28,7 +28,6 @@ p.addLayer = function(neuronCount) {
 	
 	for (var i = 0; i < neuronCount; i++) {
 		var neuron = layer.addNeuron();
-		this.neurons.push(neuron);
 	}
 	
 	return layer;
@@ -84,7 +83,8 @@ p.randomizeParameters = function() {
 	
 	for (var i = 0; i < this.neurons.length; i++) {
 		var neuron = this.neurons[i];
-		var bias = 1.5 - Math.random() * 3;
+		var bias = 1 + Math.random() * 2;
+		if (Math.random() <= 0.5) bias *= -1;
 		neuron.bias = bias;
 	}
 }
