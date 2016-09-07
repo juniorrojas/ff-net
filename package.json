@@ -1,5 +1,6 @@
 {
 	"scripts": {
-		"watchify": "watchify js/main.js -o build/main.js"
+		"watchify": "watchify js/main.js -o build/main.js",
+		"autoprefix": "postcss --use autoprefixer css/*.css -d build/"
 	}
 }
