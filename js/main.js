@@ -7,7 +7,6 @@ window.math = require("./math");
 
 window.neuralNet;
 window.dataCanvas;
-window.trainingSet;
 window.controllableParameters;
 window.controlPanel;
 
@@ -19,8 +18,6 @@ function init() {
 		regularization: 0.000009
 	};
 	
-	trainingSet = data.trainingSet;
-	
 	var container = document.createElement("div");
 	container.className = "content-container";
 	document.body.appendChild(container);
@@ -30,10 +27,10 @@ function init() {
 	svgNeuralNet.id = "neural-net";
 	container.appendChild(svgNeuralNet);
 	
-	neuralNet = NeuralNet.newFromData(data.initialParameters);
+	neuralNet = NeuralNet.newFromData(data.neuralNet);
 	svgNeuralNet.appendChild(neuralNet.svgElement);
 	
-	dataCanvas = DataCanvas.newFromData(trainingSet);
+	dataCanvas = DataCanvas.newFromData(data.dataPoints);
 	dataCanvas.domElement.className += " content-container-item";
 	dataCanvas.domElement.id = "data-canvas";
 	container.appendChild(dataCanvas.domElement);
@@ -50,17 +47,17 @@ function update() {
 		var dataError = 0;
 		var regularizationError;
 		
-		for (var j = 0; j < trainingSet.length; j++) {
+		for (var j = 0; j < dataCanvas.dataPoints.length; j++) {
 			neuralNet.reset();
 			
-			var sample = trainingSet[j];
-			neuralNet.layers[0].neurons[0].activation = sample.x[0];
-			neuralNet.layers[0].neurons[1].activation = sample.x[1];
+			var dataPoint = dataCanvas.dataPoints[j];
+			neuralNet.layers[0].neurons[0].activation = dataPoint.x;
+			neuralNet.layers[0].neurons[1].activation = dataPoint.y;
 			neuralNet.forward();
 			
 			var neuron = neuralNet.layers[neuralNet.layers.length - 1].neurons[0];
 			var output = neuron.activation;
-			var d = sample.y - output;
+			var d = dataPoint.label - output;
 			dataError += 0.5 * d * d;
 			neuron.dActivation = -d;
 			
@@ -86,5 +83,13 @@ function update() {
 	
 	requestAnimationFrame(update);
 }
+
+function getData() {
+	return {
+		dataPoints: dataCanvas.toData(),
+		neuralNet: neuralNet.toData()
+	}
+}
+window.getData = getData;
 
 init();

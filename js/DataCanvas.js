@@ -69,9 +69,22 @@ DataCanvas.newFromData = function(data) {
 	var dataCanvas = new DataCanvas();
 	for (var i = 0; i < data.length; i++) {
 		var item = data[i];
-		dataCanvas.addDataPoint(item.x[0], item.x[1], item.y);
+		dataCanvas.addDataPoint(item.x, item.y, item.label);
 	}
 	return dataCanvas;
+}
+
+p.toData = function() {
+	var data = [];
+	for (var i = 0; i < this.dataPoints.length; i++) {
+		var dataPoint = this.dataPoints[i];
+		data.push({
+			x: dataPoint.x,
+			y: dataPoint.y,
+			label: dataPoint.label
+		});
+	}
+	return data;
 }
 
 module.exports = DataCanvas;
