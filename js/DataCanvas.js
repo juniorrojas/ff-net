@@ -4,8 +4,8 @@ var DataPoint = require("./DataPoint");
 var DataCanvas = function() {
 	this.dataPoints = [];
 	var canvas = this.domElement = document.createElement("canvas");
-	canvas.width = 400;
-	canvas.height = 400;
+	canvas.width = 250;
+	canvas.height = 250;
 	canvas.style.border = "1px solid black";
 	this.ctx = canvas.getContext("2d");
 	

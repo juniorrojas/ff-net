@@ -43,4 +43,22 @@ p.getIndex = function() {
 	return this.neuralNet.layers.indexOf(this);
 }
 
+p.toData = function() {
+	var data = {};
+	
+	data.neurons = [];
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		data.neurons.push(neuron.toData());
+	}
+	
+	data.links = [];
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		data.links.push(link.toData());
+	}
+	
+	return data;
+}
+
 module.exports = Layer;

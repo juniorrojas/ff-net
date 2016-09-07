@@ -1,8 +1,8 @@
 var svg = require("./svg");
 var Color = require("./Color");
 
-var Link = function(net, n0, nf, weight) {
-	this.net = net;
+var Link = function(neuralNet, n0, nf, weight) {
+	this.neuralNet = neuralNet;
 	this.n0 = n0;
 	this.nf = nf;
 	
@@ -46,6 +46,19 @@ p.getParameters = function() {
 	return {
 		weight: this.weight
 	};
+}
+
+p.toData = function() {
+	var data = {};
+	data.n0 = [
+		this.n0.layer.getIndex(),
+		this.n0.getIndex()
+	];
+	data.nf = [
+		this.nf.layer.getIndex(),
+		this.nf.getIndex()
+	];
+	return data;
 }
 
 module.exports = Link;

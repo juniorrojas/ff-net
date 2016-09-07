@@ -45,8 +45,8 @@ var DataPoint = require("./DataPoint");
 var DataCanvas = function() {
 	this.dataPoints = [];
 	var canvas = this.domElement = document.createElement("canvas");
-	canvas.width = 400;
-	canvas.height = 400;
+	canvas.width = 250;
+	canvas.height = 250;
 	canvas.style.border = "1px solid black";
 	this.ctx = canvas.getContext("2d");
 	
@@ -198,14 +198,32 @@ p.getIndex = function() {
 	return this.neuralNet.layers.indexOf(this);
 }
 
+p.toData = function() {
+	var data = {};
+	
+	data.neurons = [];
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		data.neurons.push(neuron.toData());
+	}
+	
+	data.links = [];
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		data.links.push(link.toData());
+	}
+	
+	return data;
+}
+
 module.exports = Layer;
 
 },{"./Neuron":7,"./svg":10}],5:[function(require,module,exports){
 var svg = require("./svg");
 var Color = require("./Color");
 
-var Link = function(net, n0, nf, weight) {
-	this.net = net;
+var Link = function(neuralNet, n0, nf, weight) {
+	this.neuralNet = neuralNet;
 	this.n0 = n0;
 	this.nf = nf;
 	
@@ -249,6 +267,19 @@ p.getParameters = function() {
 	return {
 		weight: this.weight
 	};
+}
+
+p.toData = function() {
+	var data = {};
+	data.n0 = [
+		this.n0.layer.getIndex(),
+		this.n0.getIndex()
+	];
+	data.nf = [
+		this.nf.layer.getIndex(),
+		this.nf.getIndex()
+	];
+	return data;
 }
 
 module.exports = Link;
@@ -349,8 +380,19 @@ p.setParameters = function(parameters) {
 		this.neurons[i].setParameters(parameters.neurons[i]);
 	}
 	for (var i = 0; i < parameters.links.length; i++) {
-		this.links[i].setParameters(parameters.links[i]);
+		var link = this.links[i];
+		link.setParameters(parameters.links[i]);
 	}
+}
+
+p.toData = function() {
+	var data = {};
+	data.layers = [];
+	for (var i = 0; i < this.layers.length; i++) {
+		var layer = this.layers[i];
+		data.layers.push(layer.toData());
+	}
+	return data;
 }
 
 p.getParameters = function() {
@@ -410,9 +452,12 @@ p.forward = function(input) {
 
 p.train = function(trainingSet, learningRate, regularization) {
 	var dataLoss = 0;
-	var regularizationLoss = 0;
+	var mut = {
+		regularization: regularization,
+		regularizationLoss: 0
+	};
 
-	for (var k = trainingSet.length - 1; k >= 0; k--) {
+	for (var k = 0; k < trainingSet.length; k++) {
 		var sample = trainingSet[k];
 		var output = this.forward(sample.x);
 		var d = sample.y - output[0];
@@ -420,78 +465,51 @@ p.train = function(trainingSet, learningRate, regularization) {
 		dataLoss += 0.5 * d * d;
 		var neuron = this.layers[this.layers.length - 1].neurons[0];
 		neuron.da = -d; // a = output[0]
-		neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));
-
-		neuron.db = 1 * neuron.dz;
-		for (var l = 0; l < neuron.backLinks.length; l++) {
-			var link = neuron.backLinks[l];
-			link.dw = link.n0.activation * neuron.dz;
-			// regularization loss = 0.5 * regularization * w^2
-			link.dw += regularization * link.weight;
-			regularizationLoss += regularization * link.weight * link.weight;
-		}
-
+		
 		var backNeurons = [];
-		for (var i = 0; i < neuron.backLinks.length; i++) {
-			var n0 = neuron.backLinks[i].n0;
-			if (backNeurons.indexOf(n0) == -1) backNeurons.push(n0);
-		}
-
-		while (backNeurons.length > 0) {
-			var newBackNeurons = [];
-
-			for (var i = 0; i < backNeurons.length; i++) {
-				var neuron = backNeurons[i];
-
-				neuron.da = 0;
-				for (var l = 0; l < neuron.links.length; l++) {
-					var link = neuron.links[l];
-					neuron.da += link.weight * link.dw;
-				}
-
-				neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));;
-				neuron.db = 1 * neuron.dz;
-				for (var l = 0; l < neuron.backLinks.length; l++) {
-					var link = neuron.backLinks[l];
-					var n0 = link.n0;
-					link.dw = link.n0.activation * neuron.dz;
-					// regularization loss = 0.5 * regularization * w^2
-					link.dw += regularization * link.weight;
-					regularizationLoss += regularization * link.weight * link.weight;
-
-					if (newBackNeurons.indexOf(n0) == -1) newBackNeurons.push(n0);
-				}
+		mut.newBackNeurons = [];
+		neuron.backward(mut);
+		backNeurons = mut.newBackNeurons;
+		
+		for (var j = this.layers.length - 2; j >= 0; j--) {
+			var layer = this.layers[j];
+			for (var i = 0; i < layer.neurons.length; i++) {
+				var neuron = layer.neurons[i];
+				neuron.preBackward();
+				neuron.backward(mut);
 			}
-
-			backNeurons = newBackNeurons;
 		}
 
 		// at this point we have computed the gradient,
 		// we have to update the weights and biases
-		for (var i = 0; i < this.links.length; i++) {
-			var link = this.links[i];
-			link.weight -= learningRate * link.dw;
-		}
-
-		for (var i = 0; i < this.neurons.length; i++) {
-			var neuron = this.neurons[i];
-			neuron.bias -= learningRate * neuron.db;
-		}
-
-		var inputLayer = this.layers[this.layers.length - 1];
-		for (var i = 0; i < inputLayer.neurons.length; i++) {
-			// input neurons have always 0 bias
-			var neuron = inputLayer.neurons[i];
-			neuron.bias = 0;
-		}
+		this.applyGradients(learningRate);
 
 		this.reset();
 	}
 
 	return {
 		dataLoss: dataLoss,
-		regularizationLoss: regularizationLoss
+		regularizationLoss: mut.regularizationLoss
 	};
+}
+
+p.applyGradients = function(learningRate) {
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		link.weight -= learningRate * link.dw;
+	}
+
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		neuron.bias -= learningRate * neuron.db;
+	}
+
+	var inputLayer = this.layers[this.layers.length - 1];
+	for (var i = 0; i < inputLayer.neurons.length; i++) {
+		// input neurons have always 0 bias
+		var neuron = inputLayer.neurons[i];
+		neuron.bias = 0;
+	}
 }
 
 module.exports = NeuralNet;
@@ -520,6 +538,30 @@ var p = Neuron.prototype;
 
 Neuron.sigmoid = function(x) {
 	return 1 / (1 + Math.exp(-x));
+}
+
+p.preBackward = function() {
+	this.da = 0;
+	for (var l = 0; l < this.links.length; l++) {
+		var link = this.links[l];
+		this.da += link.weight * link.dw;
+	}
+}
+
+p.backward = function(mut) {
+	var regularization = mut.regularization;
+	
+	this.dz = this.da * Neuron.sigmoid(this.preactivation) * (1 - Neuron.sigmoid(this.preactivation));
+	this.db = this.dz;
+	
+	for (var i = 0; i < this.backLinks.length; i++) {
+		var link = this.backLinks[i];
+		var n0 = link.n0;
+		link.dw = link.n0.activation * this.dz;
+		// regularization loss = 0.5 * regularization * w^2
+		link.dw += regularization * link.weight;
+		mut.regularizationLoss += regularization * link.weight * link.weight;
+	}
 }
 
 p.redraw = function() {
@@ -588,6 +630,12 @@ p.getParameters = function() {
 	return {
 		bias: this.bias
 	};
+}
+
+p.toData = function() {
+	var data = {};
+	data.bias = this.bias;
+	return data;
 }
 
 module.exports = Neuron;
@@ -684,13 +732,17 @@ var DataCanvas = require("./DataCanvas");
 var svg = require("./svg");
 
 var data = require("./data");
-var neuralNet;
+window.neuralNet = null;
 var dataCanvas;
 
 function update() {
 	var learningRate = 0.3;
 	var regularization = 0.00001;
-	neuralNet.train(data.trainingSet, learningRate, regularization);
+	
+	for (var i = 0; i < 10; i++) {
+		neuralNet.train(data.trainingSet, learningRate, regularization);
+	}
+		
 	neuralNet.redraw();
 	dataCanvas.redraw(function(x, y) {
 		var output = neuralNet.forward([x, y]);
@@ -701,17 +753,29 @@ function update() {
 
 function init() {
 	var svgContainer = svg.createElement("svg");
-	svgContainer.style.height = "400px";
+	svgContainer.style.height = "200px";
 	document.body.appendChild(svgContainer);
 
 	neuralNet = new NeuralNet();
 	svgContainer.appendChild(neuralNet.svgElement);
 
 	neuralNet.addLayer(2);
-	neuralNet.addFullyConnectedLayer(5);
-	neuralNet.addFullyConnectedLayer(5);
-	neuralNet.addFullyConnectedLayer(2);
-	neuralNet.addFullyConnectedLayer(1);
+	neuralNet.addLayer(5);
+	neuralNet.addLayer(5);
+	neuralNet.addLayer(2);
+	neuralNet.addLayer(1);
+	
+	for (var i = 0; i < neuralNet.neurons.length; i++) {
+		var neuron = neuralNet.neurons[i];
+		var layerIndex = neuron.layer.getIndex();
+		if (layerIndex < neuralNet.layers.length - 1) {
+			var nextLayer = neuralNet.layers[layerIndex + 1];
+			for (var j = 0; j < nextLayer.neurons.length; j++) {
+				var neuronf = nextLayer.neurons[j];
+				neuralNet.addLink(neuron, neuronf);
+			}
+		}
+	}
 	
 	neuralNet.setParameters(data.initialParameters);
 	

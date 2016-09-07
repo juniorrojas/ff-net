@@ -93,8 +93,19 @@ p.setParameters = function(parameters) {
 		this.neurons[i].setParameters(parameters.neurons[i]);
 	}
 	for (var i = 0; i < parameters.links.length; i++) {
-		this.links[i].setParameters(parameters.links[i]);
+		var link = this.links[i];
+		link.setParameters(parameters.links[i]);
 	}
+}
+
+p.toData = function() {
+	var data = {};
+	data.layers = [];
+	for (var i = 0; i < this.layers.length; i++) {
+		var layer = this.layers[i];
+		data.layers.push(layer.toData());
+	}
+	return data;
 }
 
 p.getParameters = function() {
@@ -154,9 +165,12 @@ p.forward = function(input) {
 
 p.train = function(trainingSet, learningRate, regularization) {
 	var dataLoss = 0;
-	var regularizationLoss = 0;
+	var mut = {
+		regularization: regularization,
+		regularizationLoss: 0
+	};
 
-	for (var k = trainingSet.length - 1; k >= 0; k--) {
+	for (var k = 0; k < trainingSet.length; k++) {
 		var sample = trainingSet[k];
 		var output = this.forward(sample.x);
 		var d = sample.y - output[0];
@@ -164,78 +178,51 @@ p.train = function(trainingSet, learningRate, regularization) {
 		dataLoss += 0.5 * d * d;
 		var neuron = this.layers[this.layers.length - 1].neurons[0];
 		neuron.da = -d; // a = output[0]
-		neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));
-
-		neuron.db = 1 * neuron.dz;
-		for (var l = 0; l < neuron.backLinks.length; l++) {
-			var link = neuron.backLinks[l];
-			link.dw = link.n0.activation * neuron.dz;
-			// regularization loss = 0.5 * regularization * w^2
-			link.dw += regularization * link.weight;
-			regularizationLoss += regularization * link.weight * link.weight;
-		}
-
+		
 		var backNeurons = [];
-		for (var i = 0; i < neuron.backLinks.length; i++) {
-			var n0 = neuron.backLinks[i].n0;
-			if (backNeurons.indexOf(n0) == -1) backNeurons.push(n0);
-		}
-
-		while (backNeurons.length > 0) {
-			var newBackNeurons = [];
-
-			for (var i = 0; i < backNeurons.length; i++) {
-				var neuron = backNeurons[i];
-
-				neuron.da = 0;
-				for (var l = 0; l < neuron.links.length; l++) {
-					var link = neuron.links[l];
-					neuron.da += link.weight * link.dw;
-				}
-
-				neuron.dz = neuron.da * Neuron.sigmoid(neuron.preactivation) * (1 - Neuron.sigmoid(neuron.preactivation));;
-				neuron.db = 1 * neuron.dz;
-				for (var l = 0; l < neuron.backLinks.length; l++) {
-					var link = neuron.backLinks[l];
-					var n0 = link.n0;
-					link.dw = link.n0.activation * neuron.dz;
-					// regularization loss = 0.5 * regularization * w^2
-					link.dw += regularization * link.weight;
-					regularizationLoss += regularization * link.weight * link.weight;
-
-					if (newBackNeurons.indexOf(n0) == -1) newBackNeurons.push(n0);
-				}
+		mut.newBackNeurons = [];
+		neuron.backward(mut);
+		backNeurons = mut.newBackNeurons;
+		
+		for (var j = this.layers.length - 2; j >= 0; j--) {
+			var layer = this.layers[j];
+			for (var i = 0; i < layer.neurons.length; i++) {
+				var neuron = layer.neurons[i];
+				neuron.preBackward();
+				neuron.backward(mut);
 			}
-
-			backNeurons = newBackNeurons;
 		}
 
 		// at this point we have computed the gradient,
 		// we have to update the weights and biases
-		for (var i = 0; i < this.links.length; i++) {
-			var link = this.links[i];
-			link.weight -= learningRate * link.dw;
-		}
-
-		for (var i = 0; i < this.neurons.length; i++) {
-			var neuron = this.neurons[i];
-			neuron.bias -= learningRate * neuron.db;
-		}
-
-		var inputLayer = this.layers[this.layers.length - 1];
-		for (var i = 0; i < inputLayer.neurons.length; i++) {
-			// input neurons have always 0 bias
-			var neuron = inputLayer.neurons[i];
-			neuron.bias = 0;
-		}
+		this.applyGradients(learningRate);
 
 		this.reset();
 	}
 
 	return {
 		dataLoss: dataLoss,
-		regularizationLoss: regularizationLoss
+		regularizationLoss: mut.regularizationLoss
 	};
+}
+
+p.applyGradients = function(learningRate) {
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		link.weight -= learningRate * link.dw;
+	}
+
+	for (var i = 0; i < this.neurons.length; i++) {
+		var neuron = this.neurons[i];
+		neuron.bias -= learningRate * neuron.db;
+	}
+
+	var inputLayer = this.layers[this.layers.length - 1];
+	for (var i = 0; i < inputLayer.neurons.length; i++) {
+		// input neurons have always 0 bias
+		var neuron = inputLayer.neurons[i];
+		neuron.bias = 0;
+	}
 }
 
 module.exports = NeuralNet;

@@ -23,6 +23,30 @@ Neuron.sigmoid = function(x) {
 	return 1 / (1 + Math.exp(-x));
 }
 
+p.preBackward = function() {
+	this.da = 0;
+	for (var l = 0; l < this.links.length; l++) {
+		var link = this.links[l];
+		this.da += link.weight * link.dw;
+	}
+}
+
+p.backward = function(mut) {
+	var regularization = mut.regularization;
+	
+	this.dz = this.da * Neuron.sigmoid(this.preactivation) * (1 - Neuron.sigmoid(this.preactivation));
+	this.db = this.dz;
+	
+	for (var i = 0; i < this.backLinks.length; i++) {
+		var link = this.backLinks[i];
+		var n0 = link.n0;
+		link.dw = link.n0.activation * this.dz;
+		// regularization loss = 0.5 * regularization * w^2
+		link.dw += regularization * link.weight;
+		mut.regularizationLoss += regularization * link.weight * link.weight;
+	}
+}
+
 p.redraw = function() {
 	var circle = this.svgElement;
 	var position = this.getPosition();
@@ -89,6 +113,12 @@ p.getParameters = function() {
 	return {
 		bias: this.bias
 	};
+}
+
+p.toData = function() {
+	var data = {};
+	data.bias = this.bias;
+	return data;
 }
 
 module.exports = Neuron;
