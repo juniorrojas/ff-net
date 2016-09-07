@@ -17,6 +17,8 @@ var DataCanvas = function() {
 			this.pixelColors[i].push(0);
 		}
 	}
+	
+	this.setUpDragBehavior();
 }
 
 var p = DataCanvas.prototype;
@@ -63,6 +65,85 @@ p.redraw = function(classify) {
 		var dataPoint = this.dataPoints[i];
 		dataPoint.redraw();
 	}
+}
+
+p.computeCursor = function(event) {
+	var rect = this.domElement.getBoundingClientRect();
+	var clientX, clientY;
+	if (event.touches == null) {
+		clientX = event.clientX;
+		clientY = event.clientY;
+	} else {
+		clientX = event.touches[0].clientX;
+		clientY = event.touches[0].clientY;
+	}
+	var left = clientX - rect.left;
+	var top = clientY - rect.top;
+	var cursor = {x: left, y: top};
+	event.cursor = cursor;
+}
+
+p.setUpDragBehavior = function() {
+	var canvas = this.domElement;
+	
+	this.dragState = null;
+	
+	this.handleDragBegin = this.handleDragBegin.bind(this);
+	canvas.addEventListener("touchstart", this.handleDragBegin);
+	canvas.addEventListener("mousedown", this.handleDragBegin);
+	
+	this.handleDragProgress = this.handleDragProgress.bind(this);
+	window.addEventListener("mousemove", this.handleDragProgress);
+	window.addEventListener("touchmove", this.handleDragProgress);
+	
+	this.handleDragEnd = this.handleDragEnd.bind(this);
+	window.addEventListener("mouseup", this.handleDragEnd);	
+	window.addEventListener("touchend", this.handleDragEnd);
+	window.addEventListener("touchcancel", this.handleDragEnd);
+}
+
+p.handleDragBegin = function(event) {
+	this.computeCursor(event);
+	
+	for (var i = 0; i < this.dataPoints.length; i++) {
+		var dataPoint = this.dataPoints[i];
+		
+		var dx = event.cursor.x - dataPoint.x * this.domElement.width;
+		var dy = event.cursor.y - dataPoint.y * this.domElement.height;
+		
+		var r = dataPoint.radius;
+		
+		if (dx * dx + dy * dy <= r * r) {
+			this.dragState = {
+				dataPoint: dataPoint,
+				offset: {x: dx, y: dy}
+			};
+			break;
+		}
+	}
+}
+
+p.handleDragProgress = function(event) {
+	if (this.dragState == null) return;
+	this.computeCursor(event);
+	event.preventDefault();
+	
+	var dataPoint = this.dragState.dataPoint;
+	var offset = this.dragState.offset;
+	
+	dataPoint.x = (event.cursor.x - offset.x) / this.domElement.width;
+	dataPoint.y = (event.cursor.y - offset.y) / this.domElement.height;
+	
+	if (dataPoint.x < 0) dataPoint.x = 0;
+	else if (dataPoint.x > 1) dataPoint.x = 1;
+	if (dataPoint.y < 0) dataPoint.y = 0;
+	else if (dataPoint.y > 1) dataPoint.y = 1;
+}
+
+p.handleDragEnd = function(event) {
+	if (this.dragState == null) return;
+	var dataPoint = this.dragState.dataPoint;
+	this.dragState = null;
 }
 
 DataCanvas.newFromData = function(data) {

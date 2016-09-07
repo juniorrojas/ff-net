@@ -5,6 +5,7 @@ var DataPoint = function(canvas, x, y, label) {
 	this.x = x;
 	this.y = y;
 	this.label = label;
+	this.radius = 5;
 }
 
 var p = DataPoint.prototype;
@@ -24,7 +25,7 @@ p.redraw = function() {
 	ctx.strokeStyle = strokeColor.toString();
 	ctx.arc(
 		this.x * width, this.y * height,
-		3,
+		this.radius,
 		0, 2 * Math.PI
 	);
 	ctx.fill();
