@@ -10,14 +10,34 @@ function update() {
 	var learningRate = 0.3;
 	var regularization = 0.00001;
 	
+	var trainingSet = data.trainingSet;
+	
 	for (var i = 0; i < 10; i++) {
-		neuralNet.train(data.trainingSet, learningRate, regularization);
+		for (var j = 0; j < trainingSet.length; j++) {
+			var sample = trainingSet[j];
+			neuralNet.layers[0].neurons[0].activation = sample.x[0];
+			neuralNet.layers[0].neurons[1].activation = sample.x[1];
+			neuralNet.forward();
+			
+			// set reward / error signal
+			var neuron = neuralNet.layers[neuralNet.layers.length - 1].neurons[0];
+			var output = neuron.activation;
+			var d = sample.y - output;
+			// data loss = 0.5 * d^2
+			// dataLoss += 0.5 * d * d;
+			neuron.da = -d; // a = output[0]
+			
+			neuralNet.backward(learningRate, regularization);
+			neuralNet.reset();
+		}
 	}
 		
 	neuralNet.redraw();
 	dataCanvas.redraw(function(x, y) {
-		var output = neuralNet.forward([x, y]);
-		return output;
+		neuralNet.layers[0].neurons[0].activation = x;
+		neuralNet.layers[0].neurons[1].activation = y;
+		neuralNet.forward();
+		return neuralNet.layers[neuralNet.layers.length - 1].neurons[0].activation;
 	});
 	requestAnimationFrame(update);
 }

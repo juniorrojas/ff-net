@@ -90,7 +90,7 @@ p.getPosition = function() {
 	};
 }
 
-p.update = function() {
+p.forward = function() {
 	this.preactivation = 0;
 	this.preactivation += this.bias;
 	for (var i = 0; i < this.backLinks.length; i++) {

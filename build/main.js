@@ -411,81 +411,32 @@ p.getParameters = function() {
 }
 
 p.forward = function(input) {
-	var spikingNeurons = [];
-
-	var inputLayer = this.layers[0];
-	var outputLayer = this.layers[this.layers.length - 1];
-	
-	for (var i = 0; i < inputLayer.neurons.length; i++) {
-		var neuron = inputLayer.neurons[i];
-		neuron.activation = input[i];
-		for (var j = 0; j < neuron.links.length; j++) {
-			var nf = neuron.links[j].nf;
-			if (spikingNeurons.indexOf(nf) == -1) {
-				spikingNeurons.push(nf);
-			}
+	for (var i = 1; i < this.layers.length; i++) {
+		var layer = this.layers[i];
+		for (var j = 0; j < layer.neurons.length; j++) {
+			var neuron = layer.neurons[j];
+			neuron.forward();
 		}
 	}
-
-	while (spikingNeurons.length > 0) {
-		var newSpikingNeurons = [];
-		for (var i = 0; i < spikingNeurons.length; i++) {
-			var neuron = spikingNeurons[i];
-			neuron.update();
-			for (var j = 0; j < neuron.links.length; j++) {
-				var nf = neuron.links[j].nf;
-				if (newSpikingNeurons.indexOf(nf) == -1){
-					newSpikingNeurons.push(nf);
-				}
-			}
-		}
-		spikingNeurons = newSpikingNeurons;
-	}
-
-	var output = [];
-	for (var i = 0; i < outputLayer.neurons.length; i++) {
-		output.push(outputLayer.neurons[i].activation);
-	}
-
-	return output;
 }
 
-p.train = function(trainingSet, learningRate, regularization) {
+p.backward = function(learningRate, regularization) {
 	var dataLoss = 0;
 	var mut = {
 		regularization: regularization,
 		regularizationLoss: 0
 	};
-
-	for (var k = 0; k < trainingSet.length; k++) {
-		var sample = trainingSet[k];
-		var output = this.forward(sample.x);
-		var d = sample.y - output[0];
-		// data loss = 0.5 * d^2
-		dataLoss += 0.5 * d * d;
-		var neuron = this.layers[this.layers.length - 1].neurons[0];
-		neuron.da = -d; // a = output[0]
-		
-		var backNeurons = [];
-		mut.newBackNeurons = [];
-		neuron.backward(mut);
-		backNeurons = mut.newBackNeurons;
-		
-		for (var j = this.layers.length - 2; j >= 0; j--) {
-			var layer = this.layers[j];
-			for (var i = 0; i < layer.neurons.length; i++) {
-				var neuron = layer.neurons[i];
-				neuron.preBackward();
-				neuron.backward(mut);
-			}
+	
+	for (var i = this.layers.length - 1; i >= 0; i--) {
+		var layer = this.layers[i];
+		for (var j = 0; j < layer.neurons.length; j++) {
+			var neuron = layer.neurons[j];
+			if (i != this.layers.length - 1) neuron.preBackward();
+			neuron.backward(mut);
 		}
-
-		// at this point we have computed the gradient,
-		// we have to update the weights and biases
-		this.applyGradients(learningRate);
-
-		this.reset();
 	}
+	
+	this.applyGradients(learningRate);
 
 	return {
 		dataLoss: dataLoss,
@@ -607,7 +558,7 @@ p.getPosition = function() {
 	};
 }
 
-p.update = function() {
+p.forward = function() {
 	this.preactivation = 0;
 	this.preactivation += this.bias;
 	for (var i = 0; i < this.backLinks.length; i++) {
@@ -739,14 +690,34 @@ function update() {
 	var learningRate = 0.3;
 	var regularization = 0.00001;
 	
+	var trainingSet = data.trainingSet;
+	
 	for (var i = 0; i < 10; i++) {
-		neuralNet.train(data.trainingSet, learningRate, regularization);
+		for (var j = 0; j < trainingSet.length; j++) {
+			var sample = trainingSet[j];
+			neuralNet.layers[0].neurons[0].activation = sample.x[0];
+			neuralNet.layers[0].neurons[1].activation = sample.x[1];
+			neuralNet.forward();
+			
+			// set reward / error signal
+			var neuron = neuralNet.layers[neuralNet.layers.length - 1].neurons[0];
+			var output = neuron.activation;
+			var d = sample.y - output;
+			// data loss = 0.5 * d^2
+			// dataLoss += 0.5 * d * d;
+			neuron.da = -d; // a = output[0]
+			
+			neuralNet.backward(learningRate, regularization);
+			neuralNet.reset();
+		}
 	}
 		
 	neuralNet.redraw();
 	dataCanvas.redraw(function(x, y) {
-		var output = neuralNet.forward([x, y]);
-		return output;
+		neuralNet.layers[0].neurons[0].activation = x;
+		neuralNet.layers[0].neurons[1].activation = y;
+		neuralNet.forward();
+		return neuralNet.layers[neuralNet.layers.length - 1].neurons[0].activation;
 	});
 	requestAnimationFrame(update);
 }
