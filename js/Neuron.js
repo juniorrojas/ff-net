@@ -77,8 +77,8 @@ p.forward = function() {
 	this.activation = Neuron.sigmoid(this.preActivation);
 }
 
-p.backward = function(mut) {
-	var regularization = mut.regularization;
+p.backward = function(regularization) {
+	var regularizationError = 0;
 	
 	for (var i = 0; i < this.links.length; i++) {
 		var link = this.links[i];
@@ -90,8 +90,10 @@ p.backward = function(mut) {
 	
 	for (var i = 0; i < this.backLinks.length; i++) {
 		var link = this.backLinks[i];
-		link.backward(mut);
+		regularizationError += link.backward(regularization);
 	}
+	
+	return regularizationError;
 }
 
 p.applyGradient = function(learningRate) {

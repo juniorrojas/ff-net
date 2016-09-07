@@ -38,12 +38,13 @@ p.redraw = function() {
 	path.setAttribute("stroke", color);
 }
 
-p.backward = function(mut) {
-	var regularization = mut.regularization;
+p.backward = function(regularization) {
+	var regularizationError = 0;
 	this.dWeight = this.n0.activation * this.nf.dPreActivation;
 	// regularization loss = 0.5 * regularization * w^2
 	this.dWeight += regularization * this.weight;
-	mut.regularizationLoss += regularization * this.weight * this.weight;
+	regularizationError += regularization * this.weight * this.weight;
+	return regularizationError;
 }
 
 p.applyGradient = function(learningRate) {

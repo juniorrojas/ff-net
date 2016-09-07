@@ -262,12 +262,13 @@ p.redraw = function() {
 	path.setAttribute("stroke", color);
 }
 
-p.backward = function(mut) {
-	var regularization = mut.regularization;
+p.backward = function(regularization) {
+	var regularizationError = 0;
 	this.dWeight = this.n0.activation * this.nf.dPreActivation;
 	// regularization loss = 0.5 * regularization * w^2
 	this.dWeight += regularization * this.weight;
-	mut.regularizationLoss += regularization * this.weight * this.weight;
+	regularizationError += regularization * this.weight * this.weight;
+	return regularizationError;
 }
 
 p.applyGradient = function(learningRate) {
@@ -400,26 +401,19 @@ p.forward = function(input) {
 }
 
 p.backward = function(learningRate, regularization) {
-	var dataLoss = 0;
-	var mut = {
-		regularization: regularization,
-		regularizationLoss: 0
-	};
+	regularizationError = 0;
 	
 	for (var i = this.layers.length - 1; i >= 0; i--) {
 		var layer = this.layers[i];
 		for (var j = 0; j < layer.neurons.length; j++) {
 			var neuron = layer.neurons[j];
-			neuron.backward(mut);
+			regularizationError += neuron.backward(regularization);
 		}
 	}
 	
 	this.applyGradient(learningRate);
-
-	return {
-		dataLoss: dataLoss,
-		regularizationLoss: mut.regularizationLoss
-	};
+	
+	return regularizationError;
 }
 
 p.applyGradient = function(learningRate) {
@@ -553,8 +547,8 @@ p.forward = function() {
 	this.activation = Neuron.sigmoid(this.preActivation);
 }
 
-p.backward = function(mut) {
-	var regularization = mut.regularization;
+p.backward = function(regularization) {
+	var regularizationError = 0;
 	
 	for (var i = 0; i < this.links.length; i++) {
 		var link = this.links[i];
@@ -566,8 +560,10 @@ p.backward = function(mut) {
 	
 	for (var i = 0; i < this.backLinks.length; i++) {
 		var link = this.backLinks[i];
-		link.backward(mut);
+		regularizationError += link.backward(regularization);
 	}
+	
+	return regularizationError;
 }
 
 p.applyGradient = function(learningRate) {

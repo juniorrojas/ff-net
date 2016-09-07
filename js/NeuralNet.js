@@ -99,26 +99,19 @@ p.forward = function(input) {
 }
 
 p.backward = function(learningRate, regularization) {
-	var dataLoss = 0;
-	var mut = {
-		regularization: regularization,
-		regularizationLoss: 0
-	};
+	regularizationError = 0;
 	
 	for (var i = this.layers.length - 1; i >= 0; i--) {
 		var layer = this.layers[i];
 		for (var j = 0; j < layer.neurons.length; j++) {
 			var neuron = layer.neurons[j];
-			neuron.backward(mut);
+			regularizationError += neuron.backward(regularization);
 		}
 	}
 	
 	this.applyGradient(learningRate);
-
-	return {
-		dataLoss: dataLoss,
-		regularizationLoss: mut.regularizationLoss
-	};
+	
+	return regularizationError;
 }
 
 p.applyGradient = function(learningRate) {
