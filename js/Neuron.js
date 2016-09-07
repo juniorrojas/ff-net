@@ -6,11 +6,13 @@ var Neuron = function(layer, bias) {
 	this.links = [];
 	this.backLinks = [];
 	this.bias = bias;
-	this.preactivation = 0;
+	this.preActivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
 	this.dActivation = 0;
 	this.dPreActivation = 0;
 	this.dBias = 0;
+	this.isInput = false;
+	this.isOutput = false;
 
 	var svgElement = this.svgElement = svg.createElement("circle");
 	svgElement.setAttribute("r", 10);
@@ -66,13 +68,13 @@ p.getPosition = function() {
 }
 
 p.forward = function() {
-	this.preactivation = 0;
-	this.preactivation += this.bias;
+	this.preActivation = 0;
+	this.preActivation += this.bias;
 	for (var i = 0; i < this.backLinks.length; i++) {
 		var link = this.backLinks[i];
-		this.preactivation += link.weight * link.n0.activation;
+		this.preActivation += link.weight * link.n0.activation;
 	}
-	this.activation = Neuron.sigmoid(this.preactivation);
+	this.activation = Neuron.sigmoid(this.preActivation);
 }
 
 p.backward = function(mut) {
@@ -83,7 +85,7 @@ p.backward = function(mut) {
 		this.dActivation += link.weight * link.dWeight;
 	}
 	
-	this.dPreActivation = this.dActivation * Neuron.sigmoid(this.preactivation) * (1 - Neuron.sigmoid(this.preactivation));
+	this.dPreActivation = this.dActivation * Neuron.sigmoid(this.preActivation) * (1 - Neuron.sigmoid(this.preActivation));
 	this.dBias = this.dPreActivation;
 	
 	for (var i = 0; i < this.backLinks.length; i++) {
@@ -97,21 +99,15 @@ p.applyGradient = function(learningRate) {
 }
 
 p.reset = function() {
-	this.preactivation = 0;
+	this.preActivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
 	this.dActivation = 0;
 	this.dPreActivation = 0;
 	this.dBias = 0;
 }
 
-p.setParameters = function(params) {
-	this.bias = params.bias;
-}
-
-p.getParameters = function() {
-	return {
-		bias: this.bias
-	};
+Neuron.newFromData = function(layer, data) {
+	layer.addNeuron(data.bias);
 }
 
 p.toData = function() {

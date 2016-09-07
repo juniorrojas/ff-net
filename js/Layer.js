@@ -43,6 +43,15 @@ p.getIndex = function() {
 	return this.neuralNet.layers.indexOf(this);
 }
 
+Layer.newFromData = function(neuralNet, data) {
+	var layer = neuralNet.addLayer();
+	for (var i = 0; i < data.neurons.length; i++) {
+		var neuronData = data.neurons[i];
+		Neuron.newFromData(layer, data);
+	}
+	return layer;
+}
+
 p.toData = function() {
 	var data = {};
 	
@@ -50,12 +59,6 @@ p.toData = function() {
 	for (var i = 0; i < this.neurons.length; i++) {
 		var neuron = this.neurons[i];
 		data.neurons.push(neuron.toData());
-	}
-	
-	data.links = [];
-	for (var i = 0; i < this.links.length; i++) {
-		var link = this.links[i];
-		data.links.push(link.toData());
 	}
 	
 	return data;

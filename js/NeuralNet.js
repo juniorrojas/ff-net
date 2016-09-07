@@ -88,41 +88,6 @@ p.randomizeWeights = function() {
 	}
 }
 
-p.setParameters = function(parameters) {
-	for (var i = 0; i < parameters.neurons.length; i++) {
-		this.neurons[i].setParameters(parameters.neurons[i]);
-	}
-	for (var i = 0; i < parameters.links.length; i++) {
-		var link = this.links[i];
-		link.setParameters(parameters.links[i]);
-	}
-}
-
-p.toData = function() {
-	var data = {};
-	data.layers = [];
-	for (var i = 0; i < this.layers.length; i++) {
-		var layer = this.layers[i];
-		data.layers.push(layer.toData());
-	}
-	return data;
-}
-
-p.getParameters = function() {
-	var paramNeurons = [];
-	for (var i = 0; i < this.neurons.length; i++) {
-		paramNeurons.push(this.neurons[i].getParameters());
-	}
-	var paramLinks = [];
-	for (var i = 0; i < this.links.length; i++) {
-		paramLinks.push(this.links[i].getParameters());
-	}
-	return {
-		neurons: paramNeurons,
-		links: paramLinks
-	};
-}
-
 p.forward = function(input) {
 	for (var i = 1; i < this.layers.length; i++) {
 		var layer = this.layers[i];
@@ -169,6 +134,40 @@ p.applyGradient = function(learningRate) {
 			neuron.applyGradient(learningRate);
 		}
 	}
+}
+
+NeuralNet.newFromData = function(data) {
+	var neuralNet = new NeuralNet();
+	
+	for (var i = 0; i < data.layers.length; i++) {
+		var layerData = data.layers[i];
+		Layer.newFromData(neuralNet, layerData);
+	}
+	
+	for (var i = 0; i < data.links.length; i++) {
+		var linkData = data.links[i];
+		Link.newFromData(neuralNet, linkData);
+	}
+	
+	return neuralNet;
+}
+
+p.toData = function() {
+	var data = {};
+	
+	data.layers = [];
+	for (var i = 0; i < this.layers.length; i++) {
+		var layer = this.layers[i];
+		data.layers.push(layer.toData());
+	}
+	
+	data.links = [];
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		data.links.push(link.toData());
+	}
+	
+	return data;
 }
 
 module.exports = NeuralNet;

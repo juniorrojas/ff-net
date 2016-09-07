@@ -50,14 +50,12 @@ p.applyGradient = function(learningRate) {
 	this.weight -= learningRate * this.dWeight;
 }
 
-p.setParameters = function(params) {
-	this.weight = params.weight;
-}
-
-p.getParameters = function() {
-	return {
-		weight: this.weight
-	};
+Link.newFromData = function(neuralNet, data) {
+	var weight = data.weight;
+	var n0 = neuralNet.layers[data.n0[0]].neurons[data.n0[1]];
+	var nf = neuralNet.layers[data.nf[0]].neurons[data.nf[1]];
+	var link = neuralNet.addLink(n0, nf, weight);
+	return link;
 }
 
 p.toData = function() {
@@ -70,6 +68,7 @@ p.toData = function() {
 		this.nf.layer.getIndex(),
 		this.nf.getIndex()
 	];
+	data.weight = this.weight;
 	return data;
 }
 
