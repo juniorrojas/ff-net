@@ -39,6 +39,47 @@ p.toString = function() {
 
 module.exports = Color;
 },{}],2:[function(require,module,exports){
+var math = require("./math");
+
+var ControlPanel = function() {
+	var div = this.domElement = document.createElement("div");
+	
+	var lbLearningRate = document.createTextNode("learning rate");
+	div.appendChild(lbLearningRate);
+	
+	var slLearningRate = document.createElement("input");
+	slLearningRate.type = "range";
+	div.appendChild(slLearningRate);
+	
+	var lbRegularization = document.createTextNode("regularization");
+	div.appendChild(lbRegularization);
+	
+	var slRegularization = document.createElement("input");
+	slRegularization.type = "range";
+	div.appendChild(slRegularization);
+	
+	var lbDataError = document.createTextNode("data error");
+	div.appendChild(lbDataError);
+	
+	var txtDataError = this.txtDataError =  document.createTextNode("");
+	div.appendChild(txtDataError);
+	
+	var lbRegularizationError = document.createTextNode("regularization error");
+	div.appendChild(lbRegularizationError);
+	
+	var txtRegularizationError = this.txtRegularizationError =  document.createTextNode("");
+	div.appendChild(txtRegularizationError);
+}
+
+var p = ControlPanel.prototype;
+
+p.update = function(data) {
+	this.txtDataError.textContent = math.round(data.dataError, 5);
+	this.txtRegularizationError.textContent = math.round(data.regularizationError, 5);
+}
+
+module.exports = ControlPanel;
+},{"./math":11}],3:[function(require,module,exports){
 var Color = require("./Color");
 var DataPoint = require("./DataPoint");
 
@@ -117,7 +158,7 @@ DataCanvas.newFromData = function(data) {
 }
 
 module.exports = DataCanvas;
-},{"./Color":1,"./DataPoint":3}],3:[function(require,module,exports){
+},{"./Color":1,"./DataPoint":4}],4:[function(require,module,exports){
 var Color = require("./Color");
 
 var DataPoint = function(canvas, x, y, label) {
@@ -152,7 +193,7 @@ p.redraw = function() {
 }
 
 module.exports = DataPoint;
-},{"./Color":1}],4:[function(require,module,exports){
+},{"./Color":1}],5:[function(require,module,exports){
 var svg = require("./svg");
 var Neuron = require("./Neuron");
 
@@ -221,7 +262,7 @@ p.toData = function() {
 
 module.exports = Layer;
 
-},{"./Neuron":7,"./svg":10}],5:[function(require,module,exports){
+},{"./Neuron":8,"./svg":12}],6:[function(require,module,exports){
 var svg = require("./svg");
 var Color = require("./Color");
 
@@ -299,7 +340,7 @@ p.toData = function() {
 
 module.exports = Link;
 
-},{"./Color":1,"./svg":10}],6:[function(require,module,exports){
+},{"./Color":1,"./svg":12}],7:[function(require,module,exports){
 var svg = require("./svg");
 var Neuron = require("./Neuron");
 var Link = require("./Link");
@@ -467,7 +508,7 @@ p.toData = function() {
 
 module.exports = NeuralNet;
 
-},{"./Layer":4,"./Link":5,"./Neuron":7,"./svg":10}],7:[function(require,module,exports){
+},{"./Layer":5,"./Link":6,"./Neuron":8,"./svg":12}],8:[function(require,module,exports){
 var svg = require("./svg");
 var Color = require("./Color");
 
@@ -590,7 +631,7 @@ p.toData = function() {
 
 module.exports = Neuron;
 
-},{"./Color":1,"./svg":10}],8:[function(require,module,exports){
+},{"./Color":1,"./svg":12}],9:[function(require,module,exports){
 var data = {};
 
 data.trainingSet = [
@@ -652,9 +693,10 @@ data.trainingSet = [
 data.initialParameters = {"layers":[{"neurons":[{"bias":0},{"bias":0}]},{"neurons":[{"bias":0.14926214704417798},{"bias":-1.5760565067172967},{"bias":-0.0070790515773630994},{"bias":-0.9610370821643252},{"bias":-0.4631415695352903}]},{"neurons":[{"bias":-0.4930638653997511},{"bias":-1.2292654208180753},{"bias":1.233787276253548},{"bias":-2.054973071108484},{"bias":-1.3979682183549529}]},{"neurons":[{"bias":0.6288132165377796},{"bias":-0.9965512697250088}]},{"neurons":[{"bias":3.500734405313219}]}],"links":[{"n0":[0,0],"nf":[1,0],"weight":2.2559318523672673},{"n0":[0,0],"nf":[1,1],"weight":3.7705902078344162},{"n0":[0,0],"nf":[1,2],"weight":-5.673868837964195},{"n0":[0,0],"nf":[1,3],"weight":-2.552116396138559},{"n0":[0,0],"nf":[1,4],"weight":-4.765897189158554},{"n0":[0,1],"nf":[1,0],"weight":2.522847383501193},{"n0":[0,1],"nf":[1,1],"weight":-2.9902303588384505},{"n0":[0,1],"nf":[1,2],"weight":2.749623598598969},{"n0":[0,1],"nf":[1,3],"weight":-2.0657459601688077},{"n0":[0,1],"nf":[1,4],"weight":2.311040191441733},{"n0":[1,0],"nf":[2,0],"weight":-2.8083933750840506},{"n0":[1,0],"nf":[2,1],"weight":2.368208438212055},{"n0":[1,0],"nf":[2,2],"weight":2.792010178964303},{"n0":[1,0],"nf":[2,3],"weight":2.1204797088106764},{"n0":[1,0],"nf":[2,4],"weight":3.0855603411983634},{"n0":[1,1],"nf":[2,0],"weight":-2.1619760012233913},{"n0":[1,1],"nf":[2,1],"weight":2.7735676578848043},{"n0":[1,1],"nf":[2,2],"weight":-4.795321974592097},{"n0":[1,1],"nf":[2,3],"weight":-3.1618858651724424},{"n0":[1,1],"nf":[2,4],"weight":2.642537468325151},{"n0":[1,2],"nf":[2,0],"weight":5.111269168104936},{"n0":[1,2],"nf":[2,1],"weight":1.8060793114773712},{"n0":[1,2],"nf":[2,2],"weight":1.2874475479043777},{"n0":[1,2],"nf":[2,3],"weight":3.715659708889894},{"n0":[1,2],"nf":[2,4],"weight":-5.479057778095251},{"n0":[1,3],"nf":[2,0],"weight":4.279970838297447},{"n0":[1,3],"nf":[2,1],"weight":-3.8573191202934085},{"n0":[1,3],"nf":[2,2],"weight":-4.346636276004062},{"n0":[1,3],"nf":[2,3],"weight":1.8026421918582567},{"n0":[1,3],"nf":[2,4],"weight":3.9687935202147346},{"n0":[1,4],"nf":[2,0],"weight":-3.5216391228147197},{"n0":[1,4],"nf":[2,1],"weight":4.599458665307638},{"n0":[1,4],"nf":[2,2],"weight":-4.752572287153145},{"n0":[1,4],"nf":[2,3],"weight":-3.810827524569661},{"n0":[1,4],"nf":[2,4],"weight":3.0650028924296953},{"n0":[2,0],"nf":[3,0],"weight":-4.300364295192499},{"n0":[2,0],"nf":[3,1],"weight":-2.9036061692080217},{"n0":[2,1],"nf":[3,0],"weight":4.132576329093505},{"n0":[2,1],"nf":[3,1],"weight":-3.817976850598705},{"n0":[2,2],"nf":[3,0],"weight":4.606542085589321},{"n0":[2,2],"nf":[3,1],"weight":2.8220313920923323},{"n0":[2,3],"nf":[3,0],"weight":2.3423002019828885},{"n0":[2,3],"nf":[3,1],"weight":2.098573708791525},{"n0":[2,4],"nf":[3,0],"weight":4.4760505444141625},{"n0":[2,4],"nf":[3,1],"weight":3.95752484391276},{"n0":[3,0],"nf":[4,0],"weight":-0.7265226578414495},{"n0":[3,1],"nf":[4,0],"weight":-4.316679309853457}]};
 
 module.exports = data;
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var NeuralNet = require("./NeuralNet");
 var DataCanvas = require("./DataCanvas");
+var ControlPanel = require("./ControlPanel");
 var svg = require("./svg");
 
 window.neuralNet;
@@ -662,6 +704,7 @@ window.dataCanvas;
 window.trainingSet;
 window.learningRate;
 window.regularization;
+window.controlPanel;
 
 function init() {
 	var data = require("./data");
@@ -680,11 +723,17 @@ function init() {
 	dataCanvas = DataCanvas.newFromData(trainingSet);
 	document.body.appendChild(dataCanvas.domElement);
 	
+	controlPanel = new ControlPanel();
+	document.body.appendChild(controlPanel.domElement);
+	
 	update();
 }
 
-function update() {	
+function update() {
 	for (var i = 0; i < 10; i++) {
+		var dataError = 0;
+		var regularizationError;
+		
 		for (var j = 0; j < trainingSet.length; j++) {
 			neuralNet.reset();
 			
@@ -696,11 +745,11 @@ function update() {
 			var neuron = neuralNet.layers[neuralNet.layers.length - 1].neurons[0];
 			var output = neuron.activation;
 			var d = sample.y - output;
-			// data loss = 0.5 * d^2
-			// dataLoss += 0.5 * d * d;
+			// data error = 0.5 * d^2
+			dataError += 0.5 * d * d;
 			neuron.dActivation = -d;
 			
-			neuralNet.backward(learningRate, regularization);
+			regularizationError = neuralNet.backward(learningRate, regularization);
 		}
 	}
 		
@@ -711,12 +760,29 @@ function update() {
 		neuralNet.forward();
 		return neuralNet.layers[neuralNet.layers.length - 1].neurons[0].activation;
 	});
+	controlPanel.update({
+		dataError: dataError,
+		regularizationError: regularizationError
+	});
+	
 	requestAnimationFrame(update);
 }
 
 init();
 
-},{"./DataCanvas":2,"./NeuralNet":6,"./data":8,"./svg":10}],10:[function(require,module,exports){
+},{"./ControlPanel":2,"./DataCanvas":3,"./NeuralNet":7,"./data":9,"./svg":12}],11:[function(require,module,exports){
+var math = {};
+
+math.round = function(n, decimalDigits) {
+	var factor = 1;
+	for (var i = 0; i < decimalDigits; i++) {
+		factor *= 10;
+	}
+	return Math.round(n * factor) / factor;
+}
+
+module.exports = math;
+},{}],12:[function(require,module,exports){
 var svg = {};
 
 svg.createElement = function(element) {
@@ -725,4 +791,4 @@ svg.createElement = function(element) {
 
 module.exports = svg;
 
-},{}]},{},[9]);
+},{}]},{},[10]);

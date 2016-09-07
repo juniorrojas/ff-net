@@ -1,5 +1,6 @@
 var NeuralNet = require("./NeuralNet");
 var DataCanvas = require("./DataCanvas");
+var ControlPanel = require("./ControlPanel");
 var svg = require("./svg");
 
 window.neuralNet;
@@ -7,6 +8,7 @@ window.dataCanvas;
 window.trainingSet;
 window.learningRate;
 window.regularization;
+window.controlPanel;
 
 function init() {
 	var data = require("./data");
@@ -25,11 +27,17 @@ function init() {
 	dataCanvas = DataCanvas.newFromData(trainingSet);
 	document.body.appendChild(dataCanvas.domElement);
 	
+	controlPanel = new ControlPanel();
+	document.body.appendChild(controlPanel.domElement);
+	
 	update();
 }
 
-function update() {	
+function update() {
 	for (var i = 0; i < 10; i++) {
+		var dataError = 0;
+		var regularizationError;
+		
 		for (var j = 0; j < trainingSet.length; j++) {
 			neuralNet.reset();
 			
@@ -41,11 +49,11 @@ function update() {
 			var neuron = neuralNet.layers[neuralNet.layers.length - 1].neurons[0];
 			var output = neuron.activation;
 			var d = sample.y - output;
-			// data loss = 0.5 * d^2
-			// dataLoss += 0.5 * d * d;
+			// data error = 0.5 * d^2
+			dataError += 0.5 * d * d;
 			neuron.dActivation = -d;
 			
-			neuralNet.backward(learningRate, regularization);
+			regularizationError = neuralNet.backward(learningRate, regularization);
 		}
 	}
 		
@@ -56,6 +64,11 @@ function update() {
 		neuralNet.forward();
 		return neuralNet.layers[neuralNet.layers.length - 1].neurons[0].activation;
 	});
+	controlPanel.update({
+		dataError: dataError,
+		regularizationError: regularizationError
+	});
+	
 	requestAnimationFrame(update);
 }
 
