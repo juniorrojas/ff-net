@@ -12,7 +12,7 @@ var Link = function(neuralNet, n0, nf, weight) {
 	
 	if (weight == null) this.weight = 1;
 	else this.weight = weight;
-	this.dw = 0;
+	this.dWeight = 0;
 
 	this.svgElement = svg.createElement("path");
 	this.redraw();
@@ -36,6 +36,18 @@ p.redraw = function() {
 	else color = Color.BLUE;
 	path.setAttribute("stroke-opacity", 0.4);
 	path.setAttribute("stroke", color);
+}
+
+p.backward = function(mut) {
+	var regularization = mut.regularization;
+	this.dWeight = this.n0.activation * this.nf.dPreActivation;
+	// regularization loss = 0.5 * regularization * w^2
+	this.dWeight += regularization * this.weight;
+	mut.regularizationLoss += regularization * this.weight * this.weight;
+}
+
+p.applyGradient = function(learningRate) {
+	this.weight -= learningRate * this.dWeight;
 }
 
 p.setParameters = function(params) {

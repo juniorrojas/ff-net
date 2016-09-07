@@ -144,12 +144,11 @@ p.backward = function(learningRate, regularization) {
 		var layer = this.layers[i];
 		for (var j = 0; j < layer.neurons.length; j++) {
 			var neuron = layer.neurons[j];
-			if (i != this.layers.length - 1) neuron.preBackward();
 			neuron.backward(mut);
 		}
 	}
 	
-	this.applyGradients(learningRate);
+	this.applyGradient(learningRate);
 
 	return {
 		dataLoss: dataLoss,
@@ -157,22 +156,18 @@ p.backward = function(learningRate, regularization) {
 	};
 }
 
-p.applyGradients = function(learningRate) {
+p.applyGradient = function(learningRate) {
 	for (var i = 0; i < this.links.length; i++) {
 		var link = this.links[i];
-		link.weight -= learningRate * link.dw;
+		link.applyGradient(learningRate);
 	}
-
-	for (var i = 0; i < this.neurons.length; i++) {
-		var neuron = this.neurons[i];
-		neuron.bias -= learningRate * neuron.db;
-	}
-
-	var inputLayer = this.layers[this.layers.length - 1];
-	for (var i = 0; i < inputLayer.neurons.length; i++) {
-		// input neurons have always 0 bias
-		var neuron = inputLayer.neurons[i];
-		neuron.bias = 0;
+	
+	for (var i = 1; i < this.layers.length; i++) {
+		var layer = this.layers[i];
+		for (var j = 0; j < layer.neurons.length; j++) {
+			var neuron = layer.neurons[j];
+			neuron.applyGradient(learningRate);
+		}
 	}
 }
 

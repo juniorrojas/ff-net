@@ -25,7 +25,7 @@ function update() {
 			var d = sample.y - output;
 			// data loss = 0.5 * d^2
 			// dataLoss += 0.5 * d * d;
-			neuron.da = -d; // a = output[0]
+			neuron.dActivation = -d; // a = output[0]
 			
 			neuralNet.backward(learningRate, regularization);
 			neuralNet.reset();

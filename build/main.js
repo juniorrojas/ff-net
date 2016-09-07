@@ -233,7 +233,7 @@ var Link = function(neuralNet, n0, nf, weight) {
 	
 	if (weight == null) this.weight = 1;
 	else this.weight = weight;
-	this.dw = 0;
+	this.dWeight = 0;
 
 	this.svgElement = svg.createElement("path");
 	this.redraw();
@@ -257,6 +257,18 @@ p.redraw = function() {
 	else color = Color.BLUE;
 	path.setAttribute("stroke-opacity", 0.4);
 	path.setAttribute("stroke", color);
+}
+
+p.backward = function(mut) {
+	var regularization = mut.regularization;
+	this.dWeight = this.n0.activation * this.nf.dPreActivation;
+	// regularization loss = 0.5 * regularization * w^2
+	this.dWeight += regularization * this.weight;
+	mut.regularizationLoss += regularization * this.weight * this.weight;
+}
+
+p.applyGradient = function(learningRate) {
+	this.weight -= learningRate * this.dWeight;
 }
 
 p.setParameters = function(params) {
@@ -431,12 +443,11 @@ p.backward = function(learningRate, regularization) {
 		var layer = this.layers[i];
 		for (var j = 0; j < layer.neurons.length; j++) {
 			var neuron = layer.neurons[j];
-			if (i != this.layers.length - 1) neuron.preBackward();
 			neuron.backward(mut);
 		}
 	}
 	
-	this.applyGradients(learningRate);
+	this.applyGradient(learningRate);
 
 	return {
 		dataLoss: dataLoss,
@@ -444,22 +455,18 @@ p.backward = function(learningRate, regularization) {
 	};
 }
 
-p.applyGradients = function(learningRate) {
+p.applyGradient = function(learningRate) {
 	for (var i = 0; i < this.links.length; i++) {
 		var link = this.links[i];
-		link.weight -= learningRate * link.dw;
+		link.applyGradient(learningRate);
 	}
-
-	for (var i = 0; i < this.neurons.length; i++) {
-		var neuron = this.neurons[i];
-		neuron.bias -= learningRate * neuron.db;
-	}
-
-	var inputLayer = this.layers[this.layers.length - 1];
-	for (var i = 0; i < inputLayer.neurons.length; i++) {
-		// input neurons have always 0 bias
-		var neuron = inputLayer.neurons[i];
-		neuron.bias = 0;
+	
+	for (var i = 1; i < this.layers.length; i++) {
+		var layer = this.layers[i];
+		for (var j = 0; j < layer.neurons.length; j++) {
+			var neuron = layer.neurons[j];
+			neuron.applyGradient(learningRate);
+		}
 	}
 }
 
@@ -476,10 +483,9 @@ var Neuron = function(layer, bias) {
 	this.bias = bias;
 	this.preactivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
-	this.error = 0;
-	this.da = 0; // d activation
-	this.dz = 0; // d preactivation
-	this.db = 0; // d bias
+	this.dActivation = 0;
+	this.dPreActivation = 0;
+	this.dBias = 0;
 
 	var svgElement = this.svgElement = svg.createElement("circle");
 	svgElement.setAttribute("r", 10);
@@ -489,30 +495,6 @@ var p = Neuron.prototype;
 
 Neuron.sigmoid = function(x) {
 	return 1 / (1 + Math.exp(-x));
-}
-
-p.preBackward = function() {
-	this.da = 0;
-	for (var l = 0; l < this.links.length; l++) {
-		var link = this.links[l];
-		this.da += link.weight * link.dw;
-	}
-}
-
-p.backward = function(mut) {
-	var regularization = mut.regularization;
-	
-	this.dz = this.da * Neuron.sigmoid(this.preactivation) * (1 - Neuron.sigmoid(this.preactivation));
-	this.db = this.dz;
-	
-	for (var i = 0; i < this.backLinks.length; i++) {
-		var link = this.backLinks[i];
-		var n0 = link.n0;
-		link.dw = link.n0.activation * this.dz;
-		// regularization loss = 0.5 * regularization * w^2
-		link.dw += regularization * link.weight;
-		mut.regularizationLoss += regularization * link.weight * link.weight;
-	}
 }
 
 p.redraw = function() {
@@ -568,9 +550,33 @@ p.forward = function() {
 	this.activation = Neuron.sigmoid(this.preactivation);
 }
 
+p.backward = function(mut) {
+	var regularization = mut.regularization;
+	
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		this.dActivation += link.weight * link.dWeight;
+	}
+	
+	this.dPreActivation = this.dActivation * Neuron.sigmoid(this.preactivation) * (1 - Neuron.sigmoid(this.preactivation));
+	this.dBias = this.dPreActivation;
+	
+	for (var i = 0; i < this.backLinks.length; i++) {
+		var link = this.backLinks[i];
+		link.backward(mut);
+	}
+}
+
+p.applyGradient = function(learningRate) {
+	this.bias -= learningRate * this.dBias;
+}
+
 p.reset = function() {
 	this.preactivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
+	this.dActivation = 0;
+	this.dPreActivation = 0;
+	this.dBias = 0;
 }
 
 p.setParameters = function(params) {
@@ -705,7 +711,7 @@ function update() {
 			var d = sample.y - output;
 			// data loss = 0.5 * d^2
 			// dataLoss += 0.5 * d * d;
-			neuron.da = -d; // a = output[0]
+			neuron.dActivation = -d; // a = output[0]
 			
 			neuralNet.backward(learningRate, regularization);
 			neuralNet.reset();

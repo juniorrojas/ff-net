@@ -8,10 +8,9 @@ var Neuron = function(layer, bias) {
 	this.bias = bias;
 	this.preactivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
-	this.error = 0;
-	this.da = 0; // d activation
-	this.dz = 0; // d preactivation
-	this.db = 0; // d bias
+	this.dActivation = 0;
+	this.dPreActivation = 0;
+	this.dBias = 0;
 
 	var svgElement = this.svgElement = svg.createElement("circle");
 	svgElement.setAttribute("r", 10);
@@ -21,30 +20,6 @@ var p = Neuron.prototype;
 
 Neuron.sigmoid = function(x) {
 	return 1 / (1 + Math.exp(-x));
-}
-
-p.preBackward = function() {
-	this.da = 0;
-	for (var l = 0; l < this.links.length; l++) {
-		var link = this.links[l];
-		this.da += link.weight * link.dw;
-	}
-}
-
-p.backward = function(mut) {
-	var regularization = mut.regularization;
-	
-	this.dz = this.da * Neuron.sigmoid(this.preactivation) * (1 - Neuron.sigmoid(this.preactivation));
-	this.db = this.dz;
-	
-	for (var i = 0; i < this.backLinks.length; i++) {
-		var link = this.backLinks[i];
-		var n0 = link.n0;
-		link.dw = link.n0.activation * this.dz;
-		// regularization loss = 0.5 * regularization * w^2
-		link.dw += regularization * link.weight;
-		mut.regularizationLoss += regularization * link.weight * link.weight;
-	}
 }
 
 p.redraw = function() {
@@ -100,9 +75,33 @@ p.forward = function() {
 	this.activation = Neuron.sigmoid(this.preactivation);
 }
 
+p.backward = function(mut) {
+	var regularization = mut.regularization;
+	
+	for (var i = 0; i < this.links.length; i++) {
+		var link = this.links[i];
+		this.dActivation += link.weight * link.dWeight;
+	}
+	
+	this.dPreActivation = this.dActivation * Neuron.sigmoid(this.preactivation) * (1 - Neuron.sigmoid(this.preactivation));
+	this.dBias = this.dPreActivation;
+	
+	for (var i = 0; i < this.backLinks.length; i++) {
+		var link = this.backLinks[i];
+		link.backward(mut);
+	}
+}
+
+p.applyGradient = function(learningRate) {
+	this.bias -= learningRate * this.dBias;
+}
+
 p.reset = function() {
 	this.preactivation = 0;
 	this.activation = Neuron.sigmoid(this.bias);
+	this.dActivation = 0;
+	this.dPreActivation = 0;
+	this.dBias = 0;
 }
 
 p.setParameters = function(params) {
