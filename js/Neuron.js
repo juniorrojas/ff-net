@@ -27,7 +27,7 @@ p.redraw = function() {
 	circle.setAttribute("cx", position.x);
 	circle.setAttribute("cy", position.y);
 	
-	var maxVisibleBias = 5;
+	var maxVisibleBias = 3;
 	var bias = this.bias;
 	var tFillColor;
 	if (bias < -maxVisibleBias) bias = -maxVisibleBias;

@@ -29,7 +29,7 @@ function init() {
 	dataCanvas = DataCanvas.newFromData(trainingSet);
 	document.body.appendChild(dataCanvas.domElement);
 	
-	controlPanel = new ControlPanel(controllableParameters);
+	controlPanel = new ControlPanel(neuralNet, controllableParameters);
 	document.body.appendChild(controlPanel.domElement);
 	
 	update();

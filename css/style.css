@@ -40,3 +40,17 @@ canvas {
 	flex-grow: 1;
 	text-align: center;
 }
+
+.control-cell-full {
+	width: 100%;
+	display: flex;
+	flex-grow: 1;
+	text-align: center;
+}
+
+.btn {
+	margin: 0 auto;
+	padding: 5px 5px;
+	background-color: rgb(255, 218, 59);
+	cursor: pointer;
+}

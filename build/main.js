@@ -41,13 +41,22 @@ module.exports = Color;
 },{}],2:[function(require,module,exports){
 var math = require("./math");
 
-var ControlPanel = function(controllableParameters) {
+var ControlPanel = function(neuralNet, controllableParameters) {
 	var div = this.domElement = document.createElement("div");
 	div.className = "control-panel";
 	
 	this.rows = [];
 	this.rowsByLabel = {};
 	var row;
+	
+	row = this.addRow("full");
+	var btnRandomize = document.createElement("div");
+	btnRandomize.innerText = "randomize network parameters";
+	btnRandomize.className = "btn";
+	row.cells[0].appendChild(btnRandomize);
+	btnRandomize.addEventListener("click", function() {
+		neuralNet.randomizeParameters();
+	});
 	
 	row = this.addRow("slider", "learning rate");
 	row.control.value = controllableParameters.learningRate * 100;
@@ -72,11 +81,13 @@ p.addCell = function(row) {
 	cell = document.createElement("div");
 	cell.className = "control-cell";
 	row.appendChild(cell);
+	row.cells.push(cell);
 	return cell;
 }
 
 p.addRow = function(type, label) {
 	var row = document.createElement("div");
+	row.cells = [];
 	row.className = "control-row";
 	this.domElement.appendChild(row);
 	this.rows.push(row);
@@ -84,23 +95,31 @@ p.addRow = function(type, label) {
 	
 	var cell;
 	
-	cell = this.addCell(row);
-	cell.innerText = label;
-	
-	cell = this.addCell(row);
-	var control;
-	switch (type) {
-		case "slider":
-			control = document.createElement("input");
-			control.type = "range";
-			break;
-		case "text":
-			control = cell;
-			break;
+	if (type == "full") {
+		cell = document.createElement("div");
+		cell.className = "control-cell-full";
+		row.appendChild(cell);
+		row.cells.push(cell);
+	} else {
+		cell = this.addCell(row);
+		cell.innerText = label;
+		
+		cell = this.addCell(row);
+		var control;
+		switch (type) {
+			case "slider":
+				control = document.createElement("input");
+				control.type = "range";
+				break;
+			case "text":
+				control = cell;
+				break;
+				break;
+		}
+		if (control != cell && control != null) cell.appendChild(control);
+		
+		row.control = control;
 	}
-	if (control != cell) cell.appendChild(control);
-	
-	row.control = control;
 	
 	return row;
 }
@@ -453,13 +472,14 @@ p.reset = function(input) {
 	}
 }
 
-p.randomizeWeights = function() {
+p.randomizeParameters = function() {
 	for (var i = 0; i < this.links.length; i++) {
 		var link = this.links[i];
 		var weight = 2 + Math.random() * 4;
 		if (Math.random() <= 0.5) weight *= -1;
 		link.weight = weight;
 	}
+	
 	for (var i = 0; i < this.neurons.length; i++) {
 		var neuron = this.neurons[i];
 		var bias = 1.5 - Math.random() * 3;
@@ -574,7 +594,7 @@ p.redraw = function() {
 	circle.setAttribute("cx", position.x);
 	circle.setAttribute("cy", position.y);
 	
-	var maxVisibleBias = 5;
+	var maxVisibleBias = 3;
 	var bias = this.bias;
 	var tFillColor;
 	if (bias < -maxVisibleBias) bias = -maxVisibleBias;
@@ -758,7 +778,7 @@ function init() {
 	dataCanvas = DataCanvas.newFromData(trainingSet);
 	document.body.appendChild(dataCanvas.domElement);
 	
-	controlPanel = new ControlPanel(controllableParameters);
+	controlPanel = new ControlPanel(neuralNet, controllableParameters);
 	document.body.appendChild(controlPanel.domElement);
 	
 	update();
