@@ -20,7 +20,7 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 	row = this.addRow("slider", "learning rate");
 	row.control.min = 1;
 	row.control.max = 80;
-	row.control.value = controllableParameters.learningRate * 100;
+	row.control.value = Math.round(controllableParameters.learningRate * 100);
 	row.control.addEventListener("change", function() {
 		controllableParameters.learningRate = this.value / 100;
 	}.bind(row.control));
@@ -28,14 +28,19 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 	row = this.addRow("slider", "regularization");
 	row.control.min = 0;
 	row.control.max = 100;
-	row.control.value = controllableParameters.regularization * 100000;
+	row.control.value = Math.round(controllableParameters.regularization * 100000);
 	row.control.addEventListener("change", function() {
 		controllableParameters.learningRate = this.value / 100000;
 	}.bind(row.control));
 	
 	row = this.addRow("text", "total error");
+	row.control.className = "formatted-number";
+	
 	row = this.addRow("text", "data error");
+	row.control.className = "formatted-number";
+	
 	row = this.addRow("text", "regularization error");
+	row.control.className = "formatted-number";
 }
 
 var p = ControlPanel.prototype;
@@ -89,11 +94,11 @@ p.addRow = function(type, label) {
 
 p.update = function(data) {
 	this.rowsByLabel["total error"].control.innerText =
-		math.round(data.totalError, 5);
+		math.roundToString(data.totalError, 5);
 	this.rowsByLabel["data error"].control.innerText =
-		math.round(data.dataError, 5);
+		math.roundToString(data.dataError, 5);
 	this.rowsByLabel["regularization error"].control.innerText =
-		math.round(data.regularizationError, 5);
+		math.roundToString(data.regularizationError, 5);
 }
 
 module.exports = ControlPanel;

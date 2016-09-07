@@ -24,7 +24,7 @@ p.redraw = function() {
 	ctx.strokeStyle = strokeColor.toString();
 	ctx.arc(
 		this.x * width, this.y * height,
-		5,
+		3,
 		0, 2 * Math.PI
 	);
 	ctx.fill();

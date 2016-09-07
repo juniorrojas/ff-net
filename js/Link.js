@@ -29,7 +29,8 @@ p.redraw = function() {
 		"M" + p0.x + " " + p0.y + " " +
 		"L" + pf.x + " " + pf.y
 	);
-	var width = 14 * Math.min(1, Math.abs(this.weight) / 10);
+	var maxVisibleWeight = 5;
+	var width = 9 * Math.min(1, Math.abs(this.weight) / maxVisibleWeight);
 	path.setAttribute("stroke-width", width);
 	var color;
 	if (this.weight < 0) color = Color.RED;

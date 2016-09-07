@@ -1,11 +1,23 @@
 var math = {};
 
-math.round = function(n, decimalDigits) {
+math.roundToString = function(n, decimalDigits) {
 	var factor = 1;
 	for (var i = 0; i < decimalDigits; i++) {
 		factor *= 10;
 	}
-	return Math.round(n * factor) / factor;
+	var str = (Math.round(n * factor) / factor).toString();
+	
+	if (decimalDigits == 0) return str;
+	
+	var dotPosition = str.indexOf(".");
+	if (dotPosition === -1) {
+		dotPosition = str.length;
+		str += ".0";
+	}
+	for (var i = str.length - dotPosition - 1; i < decimalDigits; i++) {
+		str += "0";
+	}
+	return str;
 }
 
 math.sigmoid = function(n) {

@@ -72,7 +72,7 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 	row = this.addRow("slider", "learning rate");
 	row.control.min = 1;
 	row.control.max = 80;
-	row.control.value = controllableParameters.learningRate * 100;
+	row.control.value = Math.round(controllableParameters.learningRate * 100);
 	row.control.addEventListener("change", function() {
 		controllableParameters.learningRate = this.value / 100;
 	}.bind(row.control));
@@ -80,14 +80,19 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 	row = this.addRow("slider", "regularization");
 	row.control.min = 0;
 	row.control.max = 100;
-	row.control.value = controllableParameters.regularization * 100000;
+	row.control.value = Math.round(controllableParameters.regularization * 100000);
 	row.control.addEventListener("change", function() {
 		controllableParameters.learningRate = this.value / 100000;
 	}.bind(row.control));
 	
 	row = this.addRow("text", "total error");
+	row.control.className = "formatted-number";
+	
 	row = this.addRow("text", "data error");
+	row.control.className = "formatted-number";
+	
 	row = this.addRow("text", "regularization error");
+	row.control.className = "formatted-number";
 }
 
 var p = ControlPanel.prototype;
@@ -141,11 +146,11 @@ p.addRow = function(type, label) {
 
 p.update = function(data) {
 	this.rowsByLabel["total error"].control.innerText =
-		math.round(data.totalError, 5);
+		math.roundToString(data.totalError, 5);
 	this.rowsByLabel["data error"].control.innerText =
-		math.round(data.dataError, 5);
+		math.roundToString(data.dataError, 5);
 	this.rowsByLabel["regularization error"].control.innerText =
-		math.round(data.regularizationError, 5);
+		math.roundToString(data.regularizationError, 5);
 }
 
 module.exports = ControlPanel;
@@ -158,7 +163,6 @@ var DataCanvas = function() {
 	var canvas = this.domElement = document.createElement("canvas");
 	canvas.width = 250;
 	canvas.height = 250;
-	canvas.style.border = "1px solid black";
 	this.ctx = canvas.getContext("2d");
 	
 	this.width = 50;
@@ -255,7 +259,7 @@ p.redraw = function() {
 	ctx.strokeStyle = strokeColor.toString();
 	ctx.arc(
 		this.x * width, this.y * height,
-		5,
+		3,
 		0, 2 * Math.PI
 	);
 	ctx.fill();
@@ -365,7 +369,8 @@ p.redraw = function() {
 		"M" + p0.x + " " + p0.y + " " +
 		"L" + pf.x + " " + pf.y
 	);
-	var width = 14 * Math.min(1, Math.abs(this.weight) / 10);
+	var maxVisibleWeight = 5;
+	var width = 9 * Math.min(1, Math.abs(this.weight) / maxVisibleWeight);
 	path.setAttribute("stroke-width", width);
 	var color;
 	if (this.weight < 0) color = Color.RED;
@@ -630,15 +635,21 @@ p.getIndex = function() {
 
 p.getPosition = function() {
 	var neuronCount = this.layer.neurons.length;
-	var cy = 120;
+	var layerCount = this.layer.neuralNet.layers.length;
 	
-	var x = this.layer.getIndex() * 50;
+	var cy = 125;
+	var cx = 150;
+	
+	var dx = 60;
+	var dy = 50;
+	
+	var x = cx + (this.layer.getIndex() - (layerCount - 1) / 2) * dx;
 	
 	var y;
 	if (neuronCount == 0) {
 		y = cy;
 	} else {
-		y = cy + (this.getIndex() - neuronCount / 2) * 40;
+		y = cy + (this.getIndex() - (neuronCount - 1) / 2) * dy;
 	}
 	
 	return {
@@ -768,6 +779,8 @@ var DataCanvas = require("./DataCanvas");
 var ControlPanel = require("./ControlPanel");
 var svg = require("./svg");
 
+window.math = require("./math");
+
 window.neuralNet;
 window.dataCanvas;
 window.trainingSet;
@@ -779,23 +792,31 @@ function init() {
 	
 	controllableParameters = {
 		learningRate: 0.3,
-		regularization: 0.00001
+		regularization: 0.000009
 	};
 	
 	trainingSet = data.trainingSet;
 	
+	var container = document.createElement("div");
+	container.className = "content-container";
+	document.body.appendChild(container);
+	
 	var svgNeuralNet = svg.createElement("svg");
-	svgNeuralNet.style.height = "200px";
-	document.body.appendChild(svgNeuralNet);
+	svgNeuralNet.className = "content-container-item";
+	svgNeuralNet.id = "neural-net";
+	container.appendChild(svgNeuralNet);
 	
 	neuralNet = NeuralNet.newFromData(data.initialParameters);
 	svgNeuralNet.appendChild(neuralNet.svgElement);
 	
 	dataCanvas = DataCanvas.newFromData(trainingSet);
-	document.body.appendChild(dataCanvas.domElement);
+	dataCanvas.domElement.className += " content-container-item";
+	dataCanvas.domElement.id = "data-canvas";
+	container.appendChild(dataCanvas.domElement);
 	
 	controlPanel = new ControlPanel(neuralNet, controllableParameters);
-	document.body.appendChild(controlPanel.domElement);
+	controlPanel.domElement.className += " content-container-item";
+	container.appendChild(controlPanel.domElement);
 	
 	update();
 }
@@ -844,15 +865,27 @@ function update() {
 
 init();
 
-},{"./ControlPanel":2,"./DataCanvas":3,"./NeuralNet":7,"./data":9,"./svg":12}],11:[function(require,module,exports){
+},{"./ControlPanel":2,"./DataCanvas":3,"./NeuralNet":7,"./data":9,"./math":11,"./svg":12}],11:[function(require,module,exports){
 var math = {};
 
-math.round = function(n, decimalDigits) {
+math.roundToString = function(n, decimalDigits) {
 	var factor = 1;
 	for (var i = 0; i < decimalDigits; i++) {
 		factor *= 10;
 	}
-	return Math.round(n * factor) / factor;
+	var str = (Math.round(n * factor) / factor).toString();
+	
+	if (decimalDigits == 0) return str;
+	
+	var dotPosition = str.indexOf(".");
+	if (dotPosition === -1) {
+		dotPosition = str.length;
+		str += ".0";
+	}
+	for (var i = str.length - dotPosition - 1; i < decimalDigits; i++) {
+		str += "0";
+	}
+	return str;
 }
 
 math.sigmoid = function(n) {

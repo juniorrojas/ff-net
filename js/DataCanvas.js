@@ -6,7 +6,6 @@ var DataCanvas = function() {
 	var canvas = this.domElement = document.createElement("canvas");
 	canvas.width = 250;
 	canvas.height = 250;
-	canvas.style.border = "1px solid black";
 	this.ctx = canvas.getContext("2d");
 	
 	this.width = 50;

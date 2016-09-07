@@ -47,15 +47,21 @@ p.getIndex = function() {
 
 p.getPosition = function() {
 	var neuronCount = this.layer.neurons.length;
-	var cy = 120;
+	var layerCount = this.layer.neuralNet.layers.length;
 	
-	var x = this.layer.getIndex() * 50;
+	var cy = 125;
+	var cx = 150;
+	
+	var dx = 60;
+	var dy = 50;
+	
+	var x = cx + (this.layer.getIndex() - (layerCount - 1) / 2) * dx;
 	
 	var y;
 	if (neuronCount == 0) {
 		y = cy;
 	} else {
-		y = cy + (this.getIndex() - neuronCount / 2) * 40;
+		y = cy + (this.getIndex() - (neuronCount - 1) / 2) * dy;
 	}
 	
 	return {

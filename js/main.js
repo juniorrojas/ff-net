@@ -3,6 +3,8 @@ var DataCanvas = require("./DataCanvas");
 var ControlPanel = require("./ControlPanel");
 var svg = require("./svg");
 
+window.math = require("./math");
+
 window.neuralNet;
 window.dataCanvas;
 window.trainingSet;
@@ -14,23 +16,31 @@ function init() {
 	
 	controllableParameters = {
 		learningRate: 0.3,
-		regularization: 0.00001
+		regularization: 0.000009
 	};
 	
 	trainingSet = data.trainingSet;
 	
+	var container = document.createElement("div");
+	container.className = "content-container";
+	document.body.appendChild(container);
+	
 	var svgNeuralNet = svg.createElement("svg");
-	svgNeuralNet.style.height = "200px";
-	document.body.appendChild(svgNeuralNet);
+	svgNeuralNet.className = "content-container-item";
+	svgNeuralNet.id = "neural-net";
+	container.appendChild(svgNeuralNet);
 	
 	neuralNet = NeuralNet.newFromData(data.initialParameters);
 	svgNeuralNet.appendChild(neuralNet.svgElement);
 	
 	dataCanvas = DataCanvas.newFromData(trainingSet);
-	document.body.appendChild(dataCanvas.domElement);
+	dataCanvas.domElement.className += " content-container-item";
+	dataCanvas.domElement.id = "data-canvas";
+	container.appendChild(dataCanvas.domElement);
 	
 	controlPanel = new ControlPanel(neuralNet, controllableParameters);
-	document.body.appendChild(controlPanel.domElement);
+	controlPanel.domElement.className += " content-container-item";
+	container.appendChild(controlPanel.domElement);
 	
 	update();
 }
