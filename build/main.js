@@ -510,6 +510,7 @@ module.exports = NeuralNet;
 
 },{"./Layer":5,"./Link":6,"./Neuron":8,"./svg":12}],8:[function(require,module,exports){
 var svg = require("./svg");
+var math = require("./math");
 var Color = require("./Color");
 
 var Neuron = function(layer, bias) {
@@ -518,7 +519,7 @@ var Neuron = function(layer, bias) {
 	this.backLinks = [];
 	this.bias = bias;
 	this.preActivation = 0;
-	this.activation = Neuron.sigmoid(this.bias);
+	this.activation = math.sigmoid(this.bias);
 	this.dActivation = 0;
 	this.dPreActivation = 0;
 	this.dBias = 0;
@@ -530,10 +531,6 @@ var Neuron = function(layer, bias) {
 }
 
 var p = Neuron.prototype;
-
-Neuron.sigmoid = function(x) {
-	return 1 / (1 + Math.exp(-x));
-}
 
 p.redraw = function() {
 	var circle = this.svgElement;
@@ -585,7 +582,7 @@ p.forward = function() {
 		var link = this.backLinks[i];
 		this.preActivation += link.weight * link.n0.activation;
 	}
-	this.activation = Neuron.sigmoid(this.preActivation);
+	this.activation = math.sigmoid(this.preActivation);
 }
 
 p.backward = function(regularization) {
@@ -596,7 +593,7 @@ p.backward = function(regularization) {
 		this.dActivation += link.weight * link.dWeight;
 	}
 	
-	this.dPreActivation = this.dActivation * Neuron.sigmoid(this.preActivation) * (1 - Neuron.sigmoid(this.preActivation));
+	this.dPreActivation = this.dActivation * math.dSigmoid(this.preActivation);
 	this.dBias = this.dPreActivation;
 	
 	for (var i = 0; i < this.backLinks.length; i++) {
@@ -613,7 +610,7 @@ p.applyGradient = function(learningRate) {
 
 p.reset = function() {
 	this.preActivation = 0;
-	this.activation = Neuron.sigmoid(this.bias);
+	this.activation = math.sigmoid(this.bias);
 	this.dActivation = 0;
 	this.dPreActivation = 0;
 	this.dBias = 0;
@@ -631,7 +628,7 @@ p.toData = function() {
 
 module.exports = Neuron;
 
-},{"./Color":1,"./svg":12}],9:[function(require,module,exports){
+},{"./Color":1,"./math":11,"./svg":12}],9:[function(require,module,exports){
 var data = {};
 
 data.trainingSet = [
@@ -779,6 +776,14 @@ math.round = function(n, decimalDigits) {
 		factor *= 10;
 	}
 	return Math.round(n * factor) / factor;
+}
+
+math.sigmoid = function(n) {
+	return 1 / (1 + Math.exp(-n));
+}
+
+math.dSigmoid = function(n) {
+	return math.sigmoid(n) * (1 - math.sigmoid(n));
 }
 
 module.exports = math;
