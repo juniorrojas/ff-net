@@ -18,15 +18,19 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 	});
 	
 	row = this.addRow("slider", "learning rate");
+	row.control.min = 1;
+	row.control.max = 80;
 	row.control.value = controllableParameters.learningRate * 100;
 	row.control.addEventListener("change", function() {
 		controllableParameters.learningRate = this.value / 100;
 	}.bind(row.control));
 	
 	row = this.addRow("slider", "regularization");
-	row.control.value = controllableParameters.regularization * 1000000;
+	row.control.min = 0;
+	row.control.max = 100;
+	row.control.value = controllableParameters.regularization * 100000;
 	row.control.addEventListener("change", function() {
-		controllableParameters.learningRate = this.value / 1000000;
+		controllableParameters.learningRate = this.value / 100000;
 	}.bind(row.control));
 	
 	row = this.addRow("text", "total error");

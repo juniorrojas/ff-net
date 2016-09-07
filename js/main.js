@@ -14,7 +14,7 @@ function init() {
 	
 	controllableParameters = {
 		learningRate: 0.3,
-		regularization: 0.00005
+		regularization: 0.00001
 	};
 	
 	trainingSet = data.trainingSet;
@@ -51,7 +51,6 @@ function update() {
 			var neuron = neuralNet.layers[neuralNet.layers.length - 1].neurons[0];
 			var output = neuron.activation;
 			var d = sample.y - output;
-			// data error = 0.5 * d^2
 			dataError += 0.5 * d * d;
 			neuron.dActivation = -d;
 			
