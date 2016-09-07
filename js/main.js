@@ -6,15 +6,17 @@ var svg = require("./svg");
 window.neuralNet;
 window.dataCanvas;
 window.trainingSet;
-window.learningRate;
-window.regularization;
+window.controllableParameters;
 window.controlPanel;
 
 function init() {
 	var data = require("./data");
 	
-	learningRate = 0.3;
-	regularization = 0.00001;
+	controllableParameters = {
+		learningRate: 0.3,
+		regularization: 0.00005
+	};
+	
 	trainingSet = data.trainingSet;
 	
 	var svgNeuralNet = svg.createElement("svg");
@@ -27,7 +29,7 @@ function init() {
 	dataCanvas = DataCanvas.newFromData(trainingSet);
 	document.body.appendChild(dataCanvas.domElement);
 	
-	controlPanel = new ControlPanel();
+	controlPanel = new ControlPanel(controllableParameters);
 	document.body.appendChild(controlPanel.domElement);
 	
 	update();
@@ -53,7 +55,10 @@ function update() {
 			dataError += 0.5 * d * d;
 			neuron.dActivation = -d;
 			
-			regularizationError = neuralNet.backward(learningRate, regularization);
+			regularizationError = neuralNet.backward(
+				controllableParameters.learningRate,
+				controllableParameters.regularization
+			);
 		}
 	}
 		
@@ -65,6 +70,7 @@ function update() {
 		return neuralNet.layers[neuralNet.layers.length - 1].neurons[0].activation;
 	});
 	controlPanel.update({
+		totalError: dataError + regularizationError,
 		dataError: dataError,
 		regularizationError: regularizationError
 	});

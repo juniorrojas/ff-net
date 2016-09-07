@@ -22,3 +22,21 @@ svg {
 canvas {
 	cursor: default;
 }
+
+.control-panel {
+	display: flex;
+	flex-flow: column;
+}
+
+.control-row {
+	display: flex;
+	flex-flow: row;
+	width: 100%;
+}
+
+.control-cell {
+	width: 50%;
+	display: flex;
+	flex-grow: 1;
+	text-align: center;
+}

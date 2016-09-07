@@ -41,41 +41,77 @@ module.exports = Color;
 },{}],2:[function(require,module,exports){
 var math = require("./math");
 
-var ControlPanel = function() {
+var ControlPanel = function(controllableParameters) {
 	var div = this.domElement = document.createElement("div");
+	div.className = "control-panel";
 	
-	var lbLearningRate = document.createTextNode("learning rate");
-	div.appendChild(lbLearningRate);
+	this.rows = [];
+	this.rowsByLabel = {};
+	var row;
 	
-	var slLearningRate = document.createElement("input");
-	slLearningRate.type = "range";
-	div.appendChild(slLearningRate);
+	row = this.addRow("slider", "learning rate");
+	row.control.value = controllableParameters.learningRate * 100;
+	row.control.addEventListener("change", function() {
+		controllableParameters.learningRate = this.value / 100;
+	}.bind(row.control));
 	
-	var lbRegularization = document.createTextNode("regularization");
-	div.appendChild(lbRegularization);
+	row = this.addRow("slider", "regularization");
+	row.control.value = controllableParameters.regularization * 1000000;
+	row.control.addEventListener("change", function() {
+		controllableParameters.learningRate = this.value / 1000000;
+	}.bind(row.control));
 	
-	var slRegularization = document.createElement("input");
-	slRegularization.type = "range";
-	div.appendChild(slRegularization);
-	
-	var lbDataError = document.createTextNode("data error");
-	div.appendChild(lbDataError);
-	
-	var txtDataError = this.txtDataError =  document.createTextNode("");
-	div.appendChild(txtDataError);
-	
-	var lbRegularizationError = document.createTextNode("regularization error");
-	div.appendChild(lbRegularizationError);
-	
-	var txtRegularizationError = this.txtRegularizationError =  document.createTextNode("");
-	div.appendChild(txtRegularizationError);
+	row = this.addRow("text", "total error");
+	row = this.addRow("text", "data error");
+	row = this.addRow("text", "regularization error");
 }
 
 var p = ControlPanel.prototype;
 
+p.addCell = function(row) {
+	cell = document.createElement("div");
+	cell.className = "control-cell";
+	row.appendChild(cell);
+	return cell;
+}
+
+p.addRow = function(type, label) {
+	var row = document.createElement("div");
+	row.className = "control-row";
+	this.domElement.appendChild(row);
+	this.rows.push(row);
+	this.rowsByLabel[label] = row;
+	
+	var cell;
+	
+	cell = this.addCell(row);
+	cell.innerText = label;
+	
+	cell = this.addCell(row);
+	var control;
+	switch (type) {
+		case "slider":
+			control = document.createElement("input");
+			control.type = "range";
+			break;
+		case "text":
+			control = cell;
+			break;
+	}
+	if (control != cell) cell.appendChild(control);
+	
+	row.control = control;
+	
+	return row;
+}
+
 p.update = function(data) {
-	this.txtDataError.textContent = math.round(data.dataError, 5);
-	this.txtRegularizationError.textContent = math.round(data.regularizationError, 5);
+	this.rowsByLabel["total error"].control.innerText =
+		math.round(data.totalError, 5);
+	this.rowsByLabel["data error"].control.innerText =
+		math.round(data.dataError, 5);
+	this.rowsByLabel["regularization error"].control.innerText =
+		math.round(data.regularizationError, 5);
 }
 
 module.exports = ControlPanel;
@@ -699,15 +735,17 @@ var svg = require("./svg");
 window.neuralNet;
 window.dataCanvas;
 window.trainingSet;
-window.learningRate;
-window.regularization;
+window.controllableParameters;
 window.controlPanel;
 
 function init() {
 	var data = require("./data");
 	
-	learningRate = 0.3;
-	regularization = 0.00001;
+	controllableParameters = {
+		learningRate: 0.3,
+		regularization: 0.00005
+	};
+	
 	trainingSet = data.trainingSet;
 	
 	var svgNeuralNet = svg.createElement("svg");
@@ -720,7 +758,7 @@ function init() {
 	dataCanvas = DataCanvas.newFromData(trainingSet);
 	document.body.appendChild(dataCanvas.domElement);
 	
-	controlPanel = new ControlPanel();
+	controlPanel = new ControlPanel(controllableParameters);
 	document.body.appendChild(controlPanel.domElement);
 	
 	update();
@@ -746,7 +784,10 @@ function update() {
 			dataError += 0.5 * d * d;
 			neuron.dActivation = -d;
 			
-			regularizationError = neuralNet.backward(learningRate, regularization);
+			regularizationError = neuralNet.backward(
+				controllableParameters.learningRate,
+				controllableParameters.regularization
+			);
 		}
 	}
 		
@@ -758,6 +799,7 @@ function update() {
 		return neuralNet.layers[neuralNet.layers.length - 1].neurons[0].activation;
 	});
 	controlPanel.update({
+		totalError: dataError + regularizationError,
 		dataError: dataError,
 		regularizationError: regularizationError
 	});
