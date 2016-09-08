@@ -10,7 +10,7 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 	
 	row = this.addRow("full");
 	var btnRandomize = document.createElement("div");
-	btnRandomize.innerText = "randomize network parameters";
+	btnRandomize.innerHTML = "randomize network parameters";
 	btnRandomize.className = "btn";
 	row.cells[0].appendChild(btnRandomize);
 	btnRandomize.addEventListener("click", function() {
@@ -70,7 +70,7 @@ p.addRow = function(type, label) {
 		row.cells.push(cell);
 	} else {
 		cell = this.addCell(row);
-		cell.innerText = label;
+		cell.innerHTML = label;
 		
 		cell = this.addCell(row);
 		var control;
@@ -93,11 +93,11 @@ p.addRow = function(type, label) {
 }
 
 p.update = function(data) {
-	this.rowsByLabel["total error"].control.innerText =
+	this.rowsByLabel["total error"].control.innerHTML =
 		math.roundToString(data.totalError, 5);
-	this.rowsByLabel["data error"].control.innerText =
+	this.rowsByLabel["data error"].control.innerHTML =
 		math.roundToString(data.dataError, 5);
-	this.rowsByLabel["regularization error"].control.innerText =
+	this.rowsByLabel["regularization error"].control.innerHTML =
 		math.roundToString(data.regularizationError, 5);
 }
 
