@@ -28,9 +28,9 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 	row = this.addRow("slider", "regularization");
 	row.control.min = 0;
 	row.control.max = 100;
-	row.control.value = Math.round(controllableParameters.regularization * 100000);
+	row.control.value = Math.round(controllableParameters.regularization * 1000000);
 	row.control.addEventListener("change", function() {
-		controllableParameters.learningRate = this.value / 100000;
+		controllableParameters.regularization = this.value / 1000000;
 	}.bind(row.control));
 	
 	row = this.addRow("text", "total error");
