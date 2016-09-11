@@ -8,6 +8,9 @@ var watchify = require("watchify");
 var autoprefixer = require("gulp-autoprefixer");
 var cssnano = require("gulp-cssnano");
 
+var jsGlob = "js/main.js";
+var cssGlob = "css/main.css";
+
 function jsBundle(js) {
 	mkdirp("build");
 	js.bundle()
@@ -18,11 +21,11 @@ function jsBundle(js) {
 }
 
 gulp.task("build-js", function() {
-	jsBundle(browserify("./js/main.js"));
+	jsBundle(browserify(jsGlob));
 });
 
 gulp.task("watch-js", function() {
-	var js = browserify("./js/main.js", {
+	var js = browserify(jsGlob, {
 		cache: {},
 		packageCache: {},
 		plugin: [watchify]
@@ -42,12 +45,12 @@ function cssBundle(css) {
 }
 
 gulp.task("build-css", function() {
-	cssBundle(gulp.src("css/main.css"));
+	cssBundle(gulp.src(cssGlob));
 });
 
 gulp.task("watch-css", function() {
 	gulp.watch("css/*.css", function(event) { cssBundle(gulp.src(event.path)); });
-	cssBundle(gulp.src("css/*.css"));
+	cssBundle(gulp.src(cssGlob));
 });
 
 gulp.task("build", ["build-js", "build-css"]);
