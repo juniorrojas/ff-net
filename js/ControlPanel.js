@@ -1,4 +1,5 @@
 var math = require("./math");
+var ErrorPlot = require("./ErrorPlot");
 
 var ControlPanel = function(neuralNet, controllableParameters) {
 	var div = this.domElement = document.createElement("div");
@@ -41,6 +42,10 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 	
 	row = this.addRow("text", "regularization error");
 	row.control.className = "formatted-number";
+	
+	row = this.addRow("full");
+	var errorPlot = this.errorPlot = new ErrorPlot();
+	row.cells[0].appendChild(errorPlot.domElement);
 }
 
 var p = ControlPanel.prototype;
@@ -99,6 +104,7 @@ p.update = function(data) {
 		math.roundToString(data.dataError, 5);
 	this.rowsByLabel["regularization error"].control.innerHTML =
 		math.roundToString(data.regularizationError, 5);
+	this.errorPlot.update(data.dataError, data.regularizationError);
 }
 
 module.exports = ControlPanel;
