@@ -1,13 +1,13 @@
-var ErrorPlot = function() {
-	this.maxDataLength = 500;
-	this.data = [];
-	this.maxTotalError = 0;
-	
+var ErrorPlot = function() {	
 	var canvas = this.domElement = document.createElement("canvas");
 	canvas.id = "error-canvas";
-	canvas.width = this.maxDataLength;
-	canvas.height = 100;
+	// canvas.width = this.maxDataLength;
+	// canvas.height = 100;
 	this.ctx = canvas.getContext("2d");
+	
+	this.maxDataLength = canvas.width;
+	this.data = [];
+	this.maxTotalError = 0;
 }
 
 var p = ErrorPlot.prototype;

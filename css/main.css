@@ -47,18 +47,21 @@ canvas {
 	text-align: center;
 }
 
-.content-container-item {
+.content-container-row {
+	display: block;
+	text-align: center;
+}
+
+.content-container-cell {
 	display: inline-block;
-	margin: 0px 10px 0px 10px;
 }
 
 .control-panel {
 	padding-top: 10px;
 	padding-bottom: 10px;
-	padding-right: 5px;
-	padding-left: 5px;
-	width: 250px;
-	min-width: 200px;
+	padding-right: 0px;
+	padding-left: 0px;
+	width: 100%;
 }
 
 .control-row {
@@ -70,10 +73,11 @@ canvas {
 }
 
 .control-cell-full {
-	text-align: center
+	text-align: center;
 }
 
 .btn {
+	width: 250px;
 	margin: 8px auto;
 	padding: 10px 16px 10px 16px;
 	background-color: rgb(255, 221, 78);
@@ -99,4 +103,16 @@ canvas {
 	width: 250px;
 	height: 250px;
 	min-width: 250px;
+}
+
+#error-canvas {
+	width: 500px;
+	height: 100px;
+}
+
+@media screen and (max-width: 500px) {
+	#error-canvas {
+		width: 250px;
+		height: 50px;
+	}
 }

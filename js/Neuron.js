@@ -49,8 +49,11 @@ p.getPosition = function() {
 	var neuronCount = this.layer.neurons.length;
 	var layerCount = this.layer.neuralNet.layers.length;
 	
-	var cy = 125;
-	var cx = 150;
+	var width = 250;
+	var height = 300;
+	
+	var cy = width / 2;
+	var cx = height / 2;
 	
 	var dx = 60;
 	var dy = 50;

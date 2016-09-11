@@ -22,22 +22,32 @@ function init() {
 	container.className = "content-container";
 	document.body.appendChild(container);
 	
+	var row;
+	
+	row = document.createElement("div");
+	container.appendChild(row);
+	row.className = "content-container-row";
+	
 	var svgNeuralNet = svg.createElement("svg");
-	svgNeuralNet.className = "content-container-item";
+	svgNeuralNet.className = "content-container-cell";
 	svgNeuralNet.id = "neural-net";
-	container.appendChild(svgNeuralNet);
+	row.appendChild(svgNeuralNet);
 	
 	neuralNet = NeuralNet.newFromData(data.neuralNet);
 	svgNeuralNet.appendChild(neuralNet.svgElement);
 	
 	dataCanvas = DataCanvas.newFromData(data.dataPoints);
-	dataCanvas.domElement.className += " content-container-item";
+	dataCanvas.domElement.className += " content-container-cell";
 	dataCanvas.domElement.id = "data-canvas";
-	container.appendChild(dataCanvas.domElement);
+	row.appendChild(dataCanvas.domElement);
+	
+	row = document.createElement("div");
+	container.appendChild(row);
+	row.className = "content-container-row";
 	
 	controlPanel = new ControlPanel(neuralNet, controllableParameters);
-	controlPanel.domElement.className += " content-container-item";
-	container.appendChild(controlPanel.domElement);
+	controlPanel.domElement.className += " content-container-cell";
+	row.appendChild(controlPanel.domElement);
 	
 	update();
 }
