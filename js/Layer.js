@@ -4,7 +4,6 @@ var Neuron = require("./Neuron");
 var Layer = function(neuralNet) {
 	this.neuralNet = neuralNet;
 	this.neurons = [];
-	this.svgElement = svg.createElement("g");
 }
 
 var p = Layer.prototype;
@@ -28,7 +27,7 @@ p.addNeuron = function(bias) {
 	var neuron = new Neuron(this, bias);
 	this.neurons.push(neuron);
 	this.neuralNet.neurons.push(neuron);
-	this.svgElement.appendChild(neuron.svgElement);
+	this.neuralNet.svgNeurons.appendChild(neuron.svgElement);
 	return neuron;
 }
 

@@ -24,7 +24,6 @@ p.addLayer = function(neuronCount) {
 	
 	var layer = new Layer(this);
 	this.layers.push(layer);
-	this.svgNeurons.appendChild(layer.svgElement);
 	
 	for (var i = 0; i < neuronCount; i++) {
 		var neuron = layer.addNeuron();

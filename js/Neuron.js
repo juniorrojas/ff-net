@@ -2,6 +2,9 @@ var svg = require("./svg");
 var math = require("./math");
 var Color = require("./Color");
 
+var radius = 12;
+var strokeWidth = 2;
+
 var Neuron = function(layer, bias) {
 	this.layer = layer;
 	this.links = [];
@@ -16,7 +19,7 @@ var Neuron = function(layer, bias) {
 	this.isOutput = false;
 
 	var svgElement = this.svgElement = svg.createElement("circle");
-	svgElement.setAttribute("r", 10);
+	svgElement.setAttribute("r", radius);
 }
 
 var p = Neuron.prototype;
@@ -38,7 +41,7 @@ p.redraw = function() {
 	
 	circle.setAttribute("fill", fillColor.toString());
 	circle.setAttribute("stroke", strokeColor.toString());
-	circle.setAttribute("stroke-width", 2);
+	circle.setAttribute("stroke-width", strokeWidth);
 }
 
 p.getIndex = function() {
@@ -46,17 +49,21 @@ p.getIndex = function() {
 }
 
 p.getPosition = function() {
+	var neuralNet = this.layer.neuralNet;
 	var neuronCount = this.layer.neurons.length;
-	var layerCount = this.layer.neuralNet.layers.length;
+	var layerCount = neuralNet.layers.length;
+	var maxNeuronCountPerLayer = 5;
 	
-	var width = 250;
-	var height = 300;
+	var container = neuralNet.svgElement.parentNode;
+	if (container == null) return {x: 0, y: 0};
+	var width = container.clientWidth;
+	var height = container.clientHeight;
 	
-	var cy = width / 2;
-	var cx = height / 2;
+	var cy = height / 2;
+	var cx = width / 2;
 	
-	var dx = 60;
-	var dy = 50;
+	var dx = (width - (radius + strokeWidth) * 2) / (layerCount - 1);
+	var dy = (height - (radius + strokeWidth) * 2) / (maxNeuronCountPerLayer - 1);
 	
 	var x = cx + (this.layer.getIndex() - (layerCount - 1) / 2) * dx;
 	
