@@ -86,15 +86,9 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 		controllableParameters.regularization = this.value / 1000000;
 	}.bind(row.control));
 	
-	row = this.addRow("text", "total error");
+	row = this.addRow("text", "error");
 	row.control.className = "formatted-number";
-	
-	row = this.addRow("text", "data error");
-	row.control.className = "formatted-number";
-	
-	row = this.addRow("text", "regularization error");
-	row.control.className = "formatted-number";
-	
+		
 	row = this.addRow("full");
 	var errorPlot = this.errorPlot = new ErrorPlot();
 	row.cells[0].appendChild(errorPlot.domElement);
@@ -150,12 +144,8 @@ p.addRow = function(type, label) {
 }
 
 p.update = function(data) {
-	this.rowsByLabel["total error"].control.innerHTML =
-		math.roundToString(data.totalError, 5);
-	this.rowsByLabel["data error"].control.innerHTML =
-		math.roundToString(data.dataError, 5);
-	this.rowsByLabel["regularization error"].control.innerHTML =
-		math.roundToString(data.regularizationError, 5);
+	this.rowsByLabel["error"].control.innerHTML =
+		math.roundToString(data.totalError, 10);
 	this.errorPlot.update(data.dataError, data.regularizationError);
 }
 
@@ -376,9 +366,9 @@ var ErrorPlot = function() {
 	this.maxTotalError = 0;
 	
 	var canvas = this.domElement = document.createElement("canvas");
+	canvas.id = "error-canvas";
 	canvas.width = this.maxDataLength;
 	canvas.height = 100;
-	canvas.style.border = "1px solid black";
 	this.ctx = canvas.getContext("2d");
 }
 
@@ -428,7 +418,7 @@ p.redraw = function() {
 		var x = i / (this.maxDataLength - 1) * width;
 		var y = height * (1 - totalError / maxTotalError);
 		ctx.beginPath();
-		ctx.strokeStyle = "red";
+		ctx.strokeStyle = "rgb(255, 221, 78)";
 		ctx.moveTo(x, height);
 		ctx.lineTo(x, y);
 		ctx.stroke();

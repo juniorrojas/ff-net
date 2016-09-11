@@ -26,9 +26,9 @@ h2 {
 svg {
 	cursor: default;
 	-webkit-user-select: none;
-		 -moz-user-select: none;
-			-ms-user-select: none;
-					user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
 }
 
 canvas {
@@ -65,6 +65,7 @@ canvas {
 }
 
 .control-row {
+	margin-bottom: 7px;
 }
 
 .control-cell {
@@ -93,8 +94,11 @@ canvas {
 	height: 250px;
 }
 
-#data-canvas {
+#data-canvas, #error-canvas {
 	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.45);
+}
+
+#data-canvas {
 	width: 250px;
 	height: 250px;
 	min-width: 250px;

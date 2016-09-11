@@ -4,9 +4,9 @@ var ErrorPlot = function() {
 	this.maxTotalError = 0;
 	
 	var canvas = this.domElement = document.createElement("canvas");
+	canvas.id = "error-canvas";
 	canvas.width = this.maxDataLength;
 	canvas.height = 100;
-	canvas.style.border = "1px solid black";
 	this.ctx = canvas.getContext("2d");
 }
 
@@ -56,7 +56,7 @@ p.redraw = function() {
 		var x = i / (this.maxDataLength - 1) * width;
 		var y = height * (1 - totalError / maxTotalError);
 		ctx.beginPath();
-		ctx.strokeStyle = "red";
+		ctx.strokeStyle = "rgb(255, 221, 78)";
 		ctx.moveTo(x, height);
 		ctx.lineTo(x, y);
 		ctx.stroke();

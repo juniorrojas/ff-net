@@ -34,15 +34,9 @@ var ControlPanel = function(neuralNet, controllableParameters) {
 		controllableParameters.regularization = this.value / 1000000;
 	}.bind(row.control));
 	
-	row = this.addRow("text", "total error");
+	row = this.addRow("text", "error");
 	row.control.className = "formatted-number";
-	
-	row = this.addRow("text", "data error");
-	row.control.className = "formatted-number";
-	
-	row = this.addRow("text", "regularization error");
-	row.control.className = "formatted-number";
-	
+		
 	row = this.addRow("full");
 	var errorPlot = this.errorPlot = new ErrorPlot();
 	row.cells[0].appendChild(errorPlot.domElement);
@@ -98,12 +92,8 @@ p.addRow = function(type, label) {
 }
 
 p.update = function(data) {
-	this.rowsByLabel["total error"].control.innerHTML =
-		math.roundToString(data.totalError, 5);
-	this.rowsByLabel["data error"].control.innerHTML =
-		math.roundToString(data.dataError, 5);
-	this.rowsByLabel["regularization error"].control.innerHTML =
-		math.roundToString(data.regularizationError, 5);
+	this.rowsByLabel["error"].control.innerHTML =
+		math.roundToString(data.totalError, 10);
 	this.errorPlot.update(data.dataError, data.regularizationError);
 }
 
