@@ -14,7 +14,7 @@ function init() {
 	var data = require("./data");
 	
 	controllableParameters = {
-		learningRate: 0.3,
+		learningRate: 0.2,
 		regularization: 0.000009
 	};
 	
