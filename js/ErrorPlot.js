@@ -1,13 +1,12 @@
+var minTopError = 4;
+
 var ErrorPlot = function() {	
 	var canvas = this.domElement = document.createElement("canvas");
 	canvas.id = "error-canvas";
-	// canvas.width = this.maxDataLength;
-	// canvas.height = 100;
-	this.ctx = canvas.getContext("2d");
-	
+	this.ctx = canvas.getContext("2d");	
 	this.maxDataLength = canvas.width;
 	this.data = [];
-	this.maxTotalError = 0;
+	this.topError = minTopError;
 }
 
 var p = ErrorPlot.prototype;
@@ -24,11 +23,7 @@ p.getMaxTotalError = function() {
 
 p.update = function(dataError, regularizationError) {
 	if (this.data.length == this.maxDataLength) {
-		var totalErrorToRemove = this.data[0].totalError;
 		this.data.shift();
-		if (totalErrorToRemove == this.maxTotalError) {
-			this.maxTotalError = this.getMaxTotalError();
-		}
 	}
 	var totalError = dataError + regularizationError;
 	this.data.push({
@@ -36,15 +31,13 @@ p.update = function(dataError, regularizationError) {
 		regularizationError: regularizationError,
 		totalError: totalError
 	});
-	if (totalError > this.maxTotalError) this.maxTotalError = totalError;
+	var maxTotalError = this.getMaxTotalError();
+	if (maxTotalError > minTopError) this.topError = maxTotalError;
+	else this.topError = minTopError;
 	this.redraw();
 }
 
-p.redraw = function() {
-	var maxTotalError;
-	if (this.maxTotalError == 0) maxTotalError = 1;
-	else maxTotalError = this.maxTotalError;
-	
+p.redraw = function() {	
 	var ctx = this.ctx;
 	var width = this.domElement.width;
 	var height = this.domElement.height;
@@ -54,7 +47,7 @@ p.redraw = function() {
 		var item = this.data[i];
 		var totalError = item.totalError;
 		var x = i / (this.maxDataLength - 1) * width;
-		var y = height * (1 - totalError / maxTotalError);
+		var y = height * (1 - totalError / this.topError);
 		ctx.beginPath();
 		ctx.strokeStyle = "rgb(255, 221, 78)";
 		ctx.moveTo(x, height);
