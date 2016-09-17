@@ -3,8 +3,6 @@ var DataCanvas = require("./DataCanvas");
 var ControlPanel = require("./ControlPanel");
 var svg = require("./svg");
 
-window.math = require("./math");
-
 window.neuralNet;
 window.dataCanvas;
 window.controllableParameters;
