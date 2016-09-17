@@ -56,8 +56,9 @@ p.getPosition = function() {
 	
 	var container = neuralNet.svgElement.parentNode;
 	if (container == null) return {x: 0, y: 0};
-	var width = container.width.baseVal.value;
-	var height = container.height.baseVal.value;
+	var containerRect = container.getBoundingClientRect();
+	var width = containerRect.width;
+	var height = containerRect.height;
 	
 	var cy = height / 2;
 	var cx = width / 2;
