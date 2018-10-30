@@ -7,7 +7,7 @@ var DataCanvas = function() {
 	canvas.width = 250;
 	canvas.height = 250;
 	this.ctx = canvas.getContext("2d");
-	
+
 	this.width = 50;
 	this.height = 50;
 	this.pixelColors = [];
@@ -17,7 +17,7 @@ var DataCanvas = function() {
 			this.pixelColors[i].push(0);
 		}
 	}
-	
+
 	this.setUpDragBehavior();
 }
 
@@ -32,10 +32,10 @@ p.redraw = function(classify) {
 	var canvas = this.domElement;
 	var canvasWidth = canvas.width;
 	var canvasHeight = canvas.height;
-	
+
 	var width = this.width;
 	var height = this.height;
-	
+
 	for (var i = 0; i < width; i++) {
 		for (var j = 0; j < height; j++) {
 			var label = classify(i / width, j / height);
@@ -60,7 +60,7 @@ p.redraw = function(classify) {
 		canvasImageData.data[4 * i + 3] = 255;
 	}
 	ctx.putImageData(canvasImageData, 0, 0);
-	
+
 	for (var i = 0; i < this.dataPoints.length; i++) {
 		var dataPoint = this.dataPoints[i];
 		dataPoint.redraw();
@@ -85,34 +85,35 @@ p.computeCursor = function(event) {
 
 p.setUpDragBehavior = function() {
 	var canvas = this.domElement;
-	
+
 	this.dragState = null;
-	
+
 	this.handleDragBegin = this.handleDragBegin.bind(this);
 	canvas.addEventListener("touchstart", this.handleDragBegin);
 	canvas.addEventListener("mousedown", this.handleDragBegin);
-	
+
 	this.handleDragProgress = this.handleDragProgress.bind(this);
 	window.addEventListener("mousemove", this.handleDragProgress);
 	window.addEventListener("touchmove", this.handleDragProgress);
-	
+
 	this.handleDragEnd = this.handleDragEnd.bind(this);
-	window.addEventListener("mouseup", this.handleDragEnd);	
+	window.addEventListener("mouseup", this.handleDragEnd);
 	window.addEventListener("touchend", this.handleDragEnd);
 	window.addEventListener("touchcancel", this.handleDragEnd);
 }
 
 p.handleDragBegin = function(event) {
+	event.preventDefault();
 	this.computeCursor(event);
-	
+
 	for (var i = 0; i < this.dataPoints.length; i++) {
 		var dataPoint = this.dataPoints[i];
-		
+
 		var dx = event.cursor.x - dataPoint.x * this.domElement.width;
 		var dy = event.cursor.y - dataPoint.y * this.domElement.height;
-		
+
 		var r = dataPoint.radius;
-		
+
 		if (dx * dx + dy * dy <= r * r) {
 			this.dragState = {
 				dataPoint: dataPoint,
@@ -127,13 +128,13 @@ p.handleDragProgress = function(event) {
 	if (this.dragState == null) return;
 	this.computeCursor(event);
 	event.preventDefault();
-	
+
 	var dataPoint = this.dragState.dataPoint;
 	var offset = this.dragState.offset;
-	
+
 	dataPoint.x = (event.cursor.x - offset.x) / this.domElement.width;
 	dataPoint.y = (event.cursor.y - offset.y) / this.domElement.height;
-	
+
 	if (dataPoint.x < 0) dataPoint.x = 0;
 	else if (dataPoint.x > 1) dataPoint.x = 1;
 	if (dataPoint.y < 0) dataPoint.y = 0;
