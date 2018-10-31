@@ -3,9 +3,22 @@ A feedforward neural network learning in real time. [See the live demo.](http://
 
 ![screenshot](media/screenshot.png)
 
-## build source
+## development
+
+Install dependencies
 
 ```sh
 npm install
-npm run start
+```
+
+Build source
+
+```sh
+npm run dev
+```
+
+Publish to `gh-pages`
+
+```sh
+npm run deploy
 ```
