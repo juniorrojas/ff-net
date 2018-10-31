@@ -4,9 +4,11 @@
     "name": "Junior Rojas"
   },
   "scripts": {
-    "start": "parcel index.html"
+    "start": "parcel index.html",
+    "deploy": "gh-pages -d dist --repo https://juniorrojas@github.com/juniorrojas/ff-net"
   },
   "devDependencies": {
+    "gh-pages": "^2.0.1",
     "parcel-bundler": "^1.10.3"
   }
 }
