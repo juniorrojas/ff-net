@@ -5,6 +5,7 @@
   },
   "scripts": {
     "dev": "parcel --public-url ./ index.html",
+    "build": "parcel build --public-url ./ index.html",
     "deploy": "gh-pages -d dist --repo https://juniorrojas@github.com/juniorrojas/ff-net"
   },
   "devDependencies": {

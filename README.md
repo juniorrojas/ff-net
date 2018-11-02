@@ -11,7 +11,7 @@ Install dependencies
 npm install
 ```
 
-Build source
+Build and watch source for development
 
 ```sh
 npm run dev
@@ -20,5 +20,6 @@ npm run dev
 Publish to `gh-pages`
 
 ```sh
+npm run build
 npm run deploy
 ```
