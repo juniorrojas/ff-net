@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "mkdir -p dist && watchify js/main.js -o dist/main.js",
     "build": "mkdir -p dist && browserify js/main.js -o dist/main.js",
-    "deploy": "gh-pages -d dist --repo https://juniorrojas@github.com/juniorrojas/ff-net"
+    "deploy": "gh-pages -d . --repo https://juniorrojas@github.com/juniorrojas/ff-net"
   },
   "devDependencies": {
     "gh-pages": "^2.0.1"
