@@ -7,19 +7,19 @@ A feedforward neural network learning in real time. [See the live demo.](http://
 
 Install dependencies
 
-```sh
+```
 npm install
 ```
 
-Build and watch source for development
+Watch source for development
 
-```sh
-npm run dev
+```
+npm run watch
 ```
 
-Publish to `gh-pages`
+Build and publish to `gh-pages`
 
-```sh
+```
 npm run build
 npm run deploy
 ```
