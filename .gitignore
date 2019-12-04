@@ -5,3 +5,4 @@ node_modules
 *.swo
 *.swp
 dist
+dist-gh-pages
