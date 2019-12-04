@@ -4,9 +4,9 @@
     "name": "Junior Rojas"
   },
   "scripts": {
-    "watch": "mkdir -p dist && watchify js/main.js -o dist/main.js",
-    "build": "mkdir -p dist && browserify js/main.js -o dist/main.js",
-    "deploy": "rm -rf dist-gh-pages && mkdir dist-gh-pages && cp index.html dist-gh-pages/index.html && cp -r dist dist-gh-pages/ && cp -r css dist-gh-pages/ && gh-pages -d dist-gh-pages --repo https://juniorrojas@github.com/juniorrojas/ff-net"
+    "watch": "mkdir -p dist-js && watchify js/main.js -o dist-js/main.js",
+    "build": "mkdir -p dist-js && browserify js/main.js -o dist-js/main.js && rm -rf dist-gh-pages && mkdir dist-gh-pages && cp index.html dist-gh-pages/index.html && cp -r dist-js dist-gh-pages/ && cp -r css dist-gh-pages/",
+    "deploy": "gh-pages -d dist-gh-pages --repo https://juniorrojas@github.com/juniorrojas/ff-net"
   },
   "devDependencies": {
     "gh-pages": "^2.0.1",
