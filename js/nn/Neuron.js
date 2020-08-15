@@ -5,11 +5,11 @@ const radius = 12;
 const strokeWidth = 2;
 
 function sigmoid(n) {
-	return 1 / (1 + Math.exp(-n));
+  return 1 / (1 + Math.exp(-n));
 }
 
 function dSigmoid(n) {
-	return sigmoid(n) * (1 - sigmoid(n));
+  return sigmoid(n) * (1 - sigmoid(n));
 }
 
 class Neuron {
