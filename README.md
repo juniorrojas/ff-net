@@ -20,7 +20,7 @@ Watch source for development
 npm run watch
 ```
 
-Open `index.html`.
+Open `index.html`
 
 Build and publish to `gh-pages`
 
