@@ -13,7 +13,7 @@ class ControlPanel {
     let row;
 
     row = this.addRow("full");
-    var btnRandomize = document.createElement("div");
+    const btnRandomize = document.createElement("div");
     btnRandomize.innerHTML = "randomize network parameters";
     btnRandomize.className = "btn";
     row.cells[0].appendChild(btnRandomize);
@@ -42,7 +42,7 @@ class ControlPanel {
     row.control.className = "formatted-number";
       
     row = this.addRow("full");
-    var lossPlot = this.lossPlot = new LossPlot();
+    const lossPlot = this.lossPlot = new LossPlot();
     row.cells[0].appendChild(lossPlot.domElement);
   }
 
@@ -55,14 +55,14 @@ class ControlPanel {
   }
 
   addRow(type, label) {
-    var row = document.createElement("div");
+    const row = document.createElement("div");
     row.cells = [];
     row.className = "control-row";
     this.domElement.appendChild(row);
     this.rows.push(row);
     this.rowsByLabel[label] = row;
     
-    var cell;
+    let cell;
     
     if (type == "full") {
       cell = document.createElement("div");
@@ -74,7 +74,7 @@ class ControlPanel {
       cell.innerHTML = label;
       
       cell = this.addCell(row);
-      var control;
+      let control;
       switch (type) {
         case "slider":
           control = document.createElement("input");
