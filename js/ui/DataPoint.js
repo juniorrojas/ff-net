@@ -30,6 +30,14 @@ class DataPoint {
     ctx.fill();
     ctx.stroke();
   }
+
+  toData() {
+    return {
+      x: this.x,
+      y: this.y,
+      label: this.label
+    }
+  }
 }
 
 module.exports = DataPoint;

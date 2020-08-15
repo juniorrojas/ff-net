@@ -23,7 +23,9 @@ class DataCanvas {
   }
 
   addDataPoint(x, y, label) {
-    this.dataPoints.push(new DataPoint(this, x, y, label));
+    const dataPoint = new DataPoint(this, x, y, label);
+    this.dataPoints.push(dataPoint);
+    return dataPoint;
   }
 
   render(classify) {
@@ -37,22 +39,22 @@ class DataCanvas {
 
     for (let i = 0; i < width; i++) {
       for (let j = 0; j < height; j++) {
-        var label = classify(i / width, j / height);
-        var color = Color.LIGHT_RED.blend(Color.LIGHT_BLUE, label);
+        const label = classify(i / width, j / height);
+        const color = Color.LIGHT_RED.blend(Color.LIGHT_BLUE, label);
         this.pixelColors[i][j] = color;
       }
     }
 
-    var fWidth = canvasWidth / width;
-    var fHeight = canvasHeight / height;
-    var canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+    const fWidth = canvasWidth / width;
+    const fHeight = canvasHeight / height;
+    const canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    for (var i = 0; i < canvasImageData.data.length / 4; i++) {
-      var y = Math.floor(i / canvasWidth);
-      var x = i % canvasWidth;
-      var ii = Math.floor(x / fWidth);
-      var jj = Math.floor(y / fHeight);
-      var color = this.pixelColors[ii][jj];
+    for (let i = 0; i < canvasImageData.data.length / 4; i++) {
+      const y = Math.floor(i / canvasWidth);
+      const x = i % canvasWidth;
+      const ii = Math.floor(x / fWidth);
+      const jj = Math.floor(y / fHeight);
+      const color = this.pixelColors[ii][jj];
       canvasImageData.data[4 * i] = Math.round(color.r * 255);
       canvasImageData.data[4 * i + 1] = Math.round(color.g * 255);
       canvasImageData.data[4 * i + 2] = Math.round(color.b * 255);
@@ -60,15 +62,12 @@ class DataCanvas {
     }
     ctx.putImageData(canvasImageData, 0, 0);
 
-    for (var i = 0; i < this.dataPoints.length; i++) {
-      var dataPoint = this.dataPoints[i];
-      dataPoint.render();
-    }
+    this.dataPoints.forEach((dataPoint) => dataPoint.render());
   }
 
   computeCursor(event) {
-    var rect = this.domElement.getBoundingClientRect();
-    var clientX, clientY;
+    const rect = this.domElement.getBoundingClientRect();
+    let clientX, clientY;
     if (event.touches == null) {
       clientX = event.clientX;
       clientY = event.clientY;
@@ -76,14 +75,14 @@ class DataCanvas {
       clientX = event.touches[0].clientX;
       clientY = event.touches[0].clientY;
     }
-    var left = clientX - rect.left;
-    var top = clientY - rect.top;
-    var cursor = {x: left, y: top};
+    const left = clientX - rect.left;
+    const top = clientY - rect.top;
+    const cursor = {x: left, y: top};
     event.cursor = cursor;
   }
 
   setUpDragBehavior() {
-    var canvas = this.domElement;
+    const canvas = this.domElement;
 
     this.dragState = null;
 
@@ -105,20 +104,22 @@ class DataCanvas {
     event.preventDefault();
     this.computeCursor(event);
 
-    for (var i = 0; i < this.dataPoints.length; i++) {
-      var dataPoint = this.dataPoints[i];
+    for (let i = 0; i < this.dataPoints.length; i++) {
+      const dataPoint = this.dataPoints[i];
 
-      var dx = event.cursor.x - dataPoint.x * this.domElement.width;
-      var dy = event.cursor.y - dataPoint.y * this.domElement.height;
+      const dx = event.cursor.x - dataPoint.x * this.domElement.width;
+      const dy = event.cursor.y - dataPoint.y * this.domElement.height;
 
-      var r = dataPoint.radius;
-
-      const selectionRadius = r * 3;
+      const radius = dataPoint.radius;
+      const selectionRadius = radius * 3;
 
       if (dx * dx + dy * dy <= selectionRadius * selectionRadius) {
         this.dragState = {
           dataPoint: dataPoint,
-          offset: {x: dx, y: dy}
+          offset: {
+            x: dx,
+            y: dy
+          }
         };
         break;
       }
@@ -130,8 +131,8 @@ class DataCanvas {
     this.computeCursor(event);
     event.preventDefault();
 
-    var dataPoint = this.dragState.dataPoint;
-    var offset = this.dragState.offset;
+    const dataPoint = this.dragState.dataPoint;
+    const offset = this.dragState.offset;
 
     dataPoint.x = (event.cursor.x - offset.x) / this.domElement.width;
     dataPoint.y = (event.cursor.y - offset.y) / this.domElement.height;
@@ -144,20 +145,12 @@ class DataCanvas {
 
   handleDragEnd(event) {
     if (this.dragState == null) return;
-    var dataPoint = this.dragState.dataPoint;
+    const dataPoint = this.dragState.dataPoint;
     this.dragState = null;
   }
 
   toData() {
-    const data = [];
-    for (var i = 0; i < this.dataPoints.length; i++) {
-      const dataPoint = this.dataPoints[i];
-      data.push({
-        x: dataPoint.x,
-        y: dataPoint.y,
-        label: dataPoint.label
-      });
-    }
+    const data = this.dataPoints.map((dataPoint) => dataPoint.toData());
     return data;
   }
 
