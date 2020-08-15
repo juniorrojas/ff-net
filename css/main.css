@@ -1,120 +1,120 @@
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html, body {
-	padding: 0;
-	margin: 0;
-	font-family: "Open Sans", sans-serif;
-	font-size: small;
+  padding: 0;
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+  font-size: small;
 }
 
 h1 {
-	color: white;
-	margin: 0;
-	text-align: center;
-	font-weight: normal;
+  color: white;
+  margin: 0;
+  text-align: center;
+  font-weight: normal;
 }
 
 h2 {
-	color: rgb(185, 185, 185);
-	text-align: center;
-	font-weight: normal;
-	font-size: small;
+  color: rgb(185, 185, 185);
+  text-align: center;
+  font-weight: normal;
+  font-size: small;
 }
 
 svg {
-	cursor: default;
-	user-select: none;
+  cursor: default;
+  user-select: none;
 }
 
 canvas {
-	cursor: default;
+  cursor: default;
 }
 
 .title-container {
-	padding-top: 25px;
-	padding-bottom: 5px;
-	margin-bottom: 30px;
-	padding-right: 5px;
-	padding-left: 5px;
-	background-color: rgb(46, 53, 56);
-	box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.65);
+  padding-top: 25px;
+  padding-bottom: 5px;
+  margin-bottom: 30px;
+  padding-right: 5px;
+  padding-left: 5px;
+  background-color: rgb(46, 53, 56);
+  box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.65);
 }
 
 .content-container {
-	width: 100%;
-	text-align: center;
+  width: 100%;
+  text-align: center;
 }
 
 .content-container-row {
-	display: block;
-	text-align: center;
+  display: block;
+  text-align: center;
 }
 
 .content-container-cell {
-	display: inline-block;
+  display: inline-block;
 }
 
 .control-panel {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-right: 0px;
-	padding-left: 0px;
-	width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 0px;
+  padding-left: 0px;
+  width: 100%;
 }
 
 .control-row {
-	margin-bottom: 7px;
+  margin-bottom: 7px;
 }
 
 .control-cell {
-	text-align: center;
+  text-align: center;
 }
 
 .control-cell-full {
-	text-align: center;
+  text-align: center;
 }
 
 .btn {
-	width: 250px;
-	margin: 8px auto;
-	padding: 10px 16px 10px 16px;
-	background-color: rgb(255, 221, 78);
-	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.45);
-	cursor: pointer;
+  width: 250px;
+  margin: 8px auto;
+  padding: 10px 16px 10px 16px;
+  background-color: rgb(255, 221, 78);
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
 }
 
 .formatted-number {
-	font-family: monospace;
+  font-family: monospace;
 }
 
 #neural-net {
-	width: 300px;
-	min-width: 300px;
-	height: 250px;
-	margin-right: 3px;
+  width: 300px;
+  min-width: 300px;
+  height: 250px;
+  margin-right: 3px;
 }
 
 #data-canvas, #error-canvas {
-	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.45);
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.45);
 }
 
 #data-canvas {
-	margin-left: 3px;
-	width: 250px;
-	height: 250px;
-	min-width: 250px;
+  margin-left: 3px;
+  width: 250px;
+  height: 250px;
+  min-width: 250px;
 }
 
 #error-canvas {
-	width: 500px;
-	height: 100px;
+  width: 500px;
+  height: 100px;
 }
 
 @media screen and (max-width: 500px) {
-	#error-canvas {
-		width: 250px;
-		height: 50px;
-	}
+  #error-canvas {
+    width: 250px;
+    height: 50px;
+  }
 }

@@ -1,4 +1,5 @@
 # ff-net
+
 A feedforward neural network learning in real time. [See the live demo.](http://juniorrojas.github.io/ff-net)
 
 ![screenshot](media/screenshot.png)
@@ -8,7 +9,7 @@ A feedforward neural network learning in real time. [See the live demo.](http://
 Install dependencies
 
 ```
-npm install
+npm ci
 ```
 
 Watch source for development
@@ -17,9 +18,10 @@ Watch source for development
 npm run watch
 ```
 
+Open `index.html`.
+
 Build and publish to `gh-pages`
 
 ```
-npm run build
-npm run deploy
+# TODO
 ```
