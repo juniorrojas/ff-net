@@ -2,95 +2,97 @@ const nn = require("./nn");
 const ui = require("./ui");
 const svg = require("./common/svg");
 
-function init() {
-  const data = require("./data");
-  
-  window.controllableParameters = {
-    learningRate: 0.2,
-    regularization: 0.000009
-  };
-  
-  const container = document.createElement("div");
-  container.className = "content-container";
-  document.body.appendChild(container);
-  
-  let row;
-  
-  row = document.createElement("div");
-  container.appendChild(row);
-  row.className = "content-container-row";
-  
-  const svgNeuralNet = svg.createElement("svg");
-  svgNeuralNet.className = "content-container-cell";
-  svgNeuralNet.id = "neural-net";
-  row.appendChild(svgNeuralNet);
-  
-  window.neuralNet = nn.Sequential.fromData(data.neuralNet);
-  svgNeuralNet.appendChild(neuralNet.svgElement);
-  
-  window.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
-  dataCanvas.domElement.className += " content-container-cell";
-  dataCanvas.domElement.id = "data-canvas";
-  row.appendChild(dataCanvas.domElement);
-  
-  row = document.createElement("div");
-  container.appendChild(row);
-  row.className = "content-container-row";
-  
-  window.controlPanel = new ui.ControlPanel(neuralNet, controllableParameters);
-  controlPanel.domElement.className += " content-container-cell";
-  row.appendChild(controlPanel.domElement);
-  
-  update();
-}
+class App {
+  constructor(data) {
+    this.learningRate = 0.2;
+    this.regularization = 0.000009;
+    
+    const container = document.createElement("div");
+    container.className = "content-container";
+    document.body.appendChild(container);
+    
+    let row;
+    
+    row = document.createElement("div");
+    container.appendChild(row);
+    row.className = "content-container-row";
+    
+    let svgModel = svg.createElement("svg");
+    svgModel.class = "content-container-cell";
+    svgModel.id = "neural-net";
+    row.appendChild(svgModel);
+    
+    const model = this.model = nn.Sequential.fromData(data.model);
+    svgModel.appendChild(model.svgElement);
+    
+    const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
+    dataCanvas.domElement.className += " content-container-cell";
+    dataCanvas.domElement.id = "data-canvas";
+    row.appendChild(dataCanvas.domElement);
+    
+    row = document.createElement("div");
+    container.appendChild(row);
+    row.className = "content-container-row";
+    
+    const controlPanel = this.controlPanel = new ui.ControlPanel(this);
+    controlPanel.domElement.className += " content-container-cell";
+    row.appendChild(controlPanel.domElement);
+    
+    this.update();
+  }
 
-function update() {
-  const iters = 10;
-  let dataError, regularizationError;
+  update() {
+    const iters = 10;
+    let dataLoss, regularizationLoss;
 
-  for (let i = 0; i < iters; i++) {
-    dataError = 0;
-    dataCanvas.dataPoints.forEach((dataPoint) => {
-      neuralNet.reset();
-      neuralNet.layers[0].neurons[0].activation = dataPoint.x;
-      neuralNet.layers[0].neurons[1].activation = dataPoint.y;
-      neuralNet.forward();
-      
-      const neuron = neuralNet.layers[neuralNet.layers.length - 1].neurons[0];
-      const output = neuron.activation;
-      const d = dataPoint.label - output;
-      dataError += 0.5 * d * d;
-      neuron.dActivation = -d;
-      
-      regularizationError = neuralNet.backward(
-        controllableParameters.learningRate,
-        controllableParameters.regularization
-      );
+    const model = this.model;
+    const dataCanvas = this.dataCanvas;
+    for (let i = 0; i < iters; i++) {
+      dataLoss = 0;
+      dataCanvas.dataPoints.forEach((dataPoint) => {
+        model.reset();
+        model.layers[0].neurons[0].activation = dataPoint.x;
+        model.layers[0].neurons[1].activation = dataPoint.y;
+        model.forward();
+        
+        const neuron = model.layers[model.layers.length - 1].neurons[0];
+        const output = neuron.activation;
+        const d = dataPoint.label - output;
+        dataLoss += 0.5 * d * d;
+        neuron.dActivation = -d;
+        
+        regularizationLoss = model.backward(
+          this.learningRate,
+          this.regularization
+        );
+      });
+    }
+    
+    model.render();
+    dataCanvas.render((x, y) => {
+      model.layers[0].neurons[0].activation = x;
+      model.layers[0].neurons[1].activation = y;
+      model.forward();
+      return model.layers[model.layers.length - 1].neurons[0].activation;
+    });
+    this.controlPanel.update({
+      totalLoss: dataLoss + regularizationLoss,
+      dataLoss: dataLoss,
+      regularizationLoss: regularizationLoss
+    });
+
+    requestAnimationFrame(() => {
+      this.update();
     });
   }
-  
-  neuralNet.render();
-  dataCanvas.render(function(x, y) {
-    neuralNet.layers[0].neurons[0].activation = x;
-    neuralNet.layers[0].neurons[1].activation = y;
-    neuralNet.forward();
-    return neuralNet.layers[neuralNet.layers.length - 1].neurons[0].activation;
-  });
-  controlPanel.update({
-    totalError: dataError + regularizationError,
-    dataError: dataError,
-    regularizationError: regularizationError
-  });
 
-  requestAnimationFrame(update);
-}
-
-function getData() {
-  return {
-    dataPoints: dataCanvas.toData(),
-    neuralNet: neuralNet.toData()
+  toData() {
+    return {
+      dataPoints: this.dataCanvas.toData(),
+      model: this.model.toData()
+    }
   }
 }
-window.getData = getData;
 
-init();
+const data = require("./data");
+window.app = new App(data);

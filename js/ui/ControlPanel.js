@@ -1,7 +1,9 @@
 const LossPlot = require("./LossPlot");
 
 class ControlPanel {
-  constructor(neuralNet, controllableParameters) {
+  constructor(app) {
+    this.app = app;
+    
     const div = this.domElement = document.createElement("div");
     div.className = "control-panel";
     
@@ -15,24 +17,25 @@ class ControlPanel {
     btnRandomize.innerHTML = "randomize network parameters";
     btnRandomize.className = "btn";
     row.cells[0].appendChild(btnRandomize);
+    const model = this.app.model;
     btnRandomize.addEventListener("click", () => {
-      neuralNet.randomizeParameters();
+      model.randomizeParameters();
     });
     
     row = this.addRow("slider", "learning rate");
     row.control.min = 1;
     row.control.max = 80;
-    row.control.value = Math.round(controllableParameters.learningRate * 100);
+    row.control.value = Math.round(this.app.learningRate * 100);
     row.control.addEventListener("change", function() {
-      controllableParameters.learningRate = this.value / 100;
+      this.app.learningRate = this.value / 100;
     }.bind(row.control));
     
     row = this.addRow("slider", "regularization");
     row.control.min = 0;
     row.control.max = 100;
-    row.control.value = Math.round(controllableParameters.regularization * 1000000);
+    row.control.value = Math.round(this.app.regularization * 1000000);
     row.control.addEventListener("change", function() {
-      controllableParameters.regularization = this.value / 1000000;
+      this.app.regularization = this.value / 1000000;
     }.bind(row.control));
     
     row = this.addRow("text", "loss");
@@ -89,9 +92,9 @@ class ControlPanel {
     return row;
   }
 
-  update(data) {
-    this.rowsByLabel["loss"].control.textContent = data.totalError.toFixed(10);
-    this.lossPlot.update(data.dataError, data.regularizationError);
+  update(args) {
+    this.rowsByLabel["loss"].control.textContent = args.totalLoss.toFixed(10);
+    this.lossPlot.update(args.dataLoss, args.regularizationLoss);
   }
 }
 
