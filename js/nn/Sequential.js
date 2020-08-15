@@ -17,34 +17,34 @@ class Sequential {
     this.svgElement.appendChild(this.svgNeurons);
   }
 
-  addLayer(neuronCount) {
-    if (neuronCount == null) neuronCount = 0;	
+  addLayer(neurons) {
+    if (neurons == null) neurons = 0;	
     
-    var layer = new Layer(this);
+    const layer = new Layer(this);
     this.layers.push(layer);
     
-    for (var i = 0; i < neuronCount; i++) {
-      var neuron = layer.addNeuron();
+    for (let i = 0; i < neurons; i++) {
+      layer.addNeuron();
     }
     
     return layer;
   }
 
-  addFullyConnectedLayer(neuronCount) {
-    var l0 = this.layers[this.layers.length - 1];
-    this.addLayer(neuronCount);
-    var lf = this.layers[this.layers.length - 1];
-    for (var i = 0; i < l0.neurons.length; i++) {
-      var n0 = l0.neurons[i];
-      for (var j = 0; j < lf.neurons.length; j++) {
-        var nf = lf.neurons[j];
+  addFullyConnectedLayer(neurons) {
+    const l0 = this.layers[this.layers.length - 1];
+    this.addLayer(neurons);
+    const lf = this.layers[this.layers.length - 1];
+    for (let i = 0; i < l0.neurons.length; i++) {
+      const n0 = l0.neurons[i];
+      for (let j = 0; j < lf.neurons.length; j++) {
+        const nf = lf.neurons[j];
         this.addLink(n0, nf);
       }
     }
   }
 
   addLink(n0, nf, weight) {
-    var link = new Link(this, n0, nf, weight);
+    const link = new Link(this, n0, nf, weight);
     n0.links.push(link);
     nf.backLinks.push(link);
     this.links.push(link);
@@ -53,96 +53,69 @@ class Sequential {
   }
 
   render() {
-    for (var i = 0; i < this.layers.length; i++) {
-      var layer = this.layers[i];
-      layer.render();
-    }
-    for (var i = 0; i < this.links.length; i++) {
-      var link = this.links[i];
-      link.redraw();
-    }
+    this.layers.forEach((layer) => layer.render());
+    this.links.forEach((link) => link.render());
   }
 
-  reset(input) {
-    for (var i = 0; i < this.layers.length; i++) {
-      var layer = this.layers[i];
-      layer.reset();
-    }
+  reset() {
+    this.layers.forEach((layer) => layer.reset());
   }
 
   randomizeParameters() {
-    for (var i = 0; i < this.links.length; i++) {
-      var link = this.links[i];
-      var weight = 2 + Math.random() * 4;
+    this.links.forEach((link) => {
+      let weight = 2 + Math.random() * 4;
       if (Math.random() <= 0.5) weight *= -1;
       link.weight = weight;
-    }
+    });
     
-    for (var i = 0; i < this.neurons.length; i++) {
-      var neuron = this.neurons[i];
-      var bias = 1 + Math.random() * 2;
+    this.neurons.forEach((neuron) => {
+      let bias = 1 + Math.random() * 2;
       if (Math.random() <= 0.5) bias *= -1;
       neuron.bias = bias;
-    }
+    });
   }
 
-  forward(input) {
-    for (var i = 1; i < this.layers.length; i++) {
-      var layer = this.layers[i];
-      for (var j = 0; j < layer.neurons.length; j++) {
-        var neuron = layer.neurons[j];
+  forward() {
+    for (let i = 1; i < this.layers.length; i++) {
+      const layer = this.layers[i];
+      layer.neurons.forEach((neuron) => {
         neuron.forward();
-      }
+      });
     }
   }
 
   backward(learningRate, regularization) {
-    let regularizationError = 0;
+    let regularizationLoss = 0;
     
-    for (var i = this.layers.length - 1; i >= 0; i--) {
-      var layer = this.layers[i];
-      for (var j = 0; j < layer.neurons.length; j++) {
-        var neuron = layer.neurons[j];
-        regularizationError += neuron.backward(regularization);
-      }
+    for (let i = this.layers.length - 1; i >= 0; i--) {
+      const layer = this.layers[i];
+      layer.neurons.forEach((neuron) => {
+        regularizationLoss += neuron.backward(regularization);
+      });
     }
     
     this.applyGradient(learningRate);
-    
-    return regularizationError;
+    return regularizationLoss;
   }
 
   applyGradient(learningRate) {
-    for (var i = 0; i < this.links.length; i++) {
-      var link = this.links[i];
+    this.links.forEach((link) => {
       link.applyGradient(learningRate);
-    }
+    });
     
-    for (var i = 1; i < this.layers.length; i++) {
-      var layer = this.layers[i];
-      for (var j = 0; j < layer.neurons.length; j++) {
-        var neuron = layer.neurons[j];
+    for (let i = 1; i < this.layers.length; i++) {
+      const layer = this.layers[i];
+      layer.neurons.forEach((neuron) => {
         neuron.applyGradient(learningRate);
-      }
+      });
     }
   }
 
   toData() {
-    var data = {};
-    
-    data.layers = [];
-    for (var i = 0; i < this.layers.length; i++) {
-      var layer = this.layers[i];
-      data.layers.push(layer.toData());
+    return {
+      layers: this.layers.map((layer) => layer.toData()),
+      links: this.links.map((link) => link.toData)
     }
-    
-    data.links = [];
-    for (var i = 0; i < this.links.length; i++) {
-      var link = this.links[i];
-      data.links.push(link.toData());
-    }
-    
-    return data;
   }
 
   static fromData(data) {

@@ -16,10 +16,10 @@ class Link {
     this.dWeight = 0;
 
     this.svgElement = svg.createElement("path");
-    this.redraw();
+    this.render();
   }
 
-  redraw() {
+  render() {
     const path = this.svgElement;
     const p0 = this.n0.getPosition();
     const pf = this.nf.getPosition();
