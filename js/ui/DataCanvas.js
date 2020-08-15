@@ -113,7 +113,9 @@ class DataCanvas {
 
       var r = dataPoint.radius;
 
-      if (dx * dx + dy * dy <= r * r) {
+      const selectionRadius = r * 3;
+
+      if (dx * dx + dy * dy <= selectionRadius * selectionRadius) {
         this.dragState = {
           dataPoint: dataPoint,
           offset: {x: dx, y: dy}
