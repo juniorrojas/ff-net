@@ -1,6 +1,6 @@
 const minTopError = 4;
 
-class ErrorPlot {
+class LossPlot {
   constructor() {
     const canvas = this.domElement = document.createElement("canvas");
     canvas.id = "error-canvas";
@@ -54,4 +54,4 @@ class ErrorPlot {
   }
 }
 
-module.exports = ErrorPlot;
+module.exports = LossPlot;

@@ -46,15 +46,13 @@ class Layer {
     };
     return data;
   }
-}
 
-Layer.fromData = function(neuralNet, data) {
-	const layer = neuralNet.addLayer();
-	for (let i = 0; i < data.neurons.length; i++) {
-		const neuronData = data.neurons[i];
-		Neuron.fromData(layer, neuronData);
-	}
-	return layer;
+  static fromData(neuralNet, data) {
+    const layer = neuralNet.addLayer();
+    data.neurons.forEach((neuronData) => {
+      Neuron.fromData(layer, neuronData);
+    });
+  }
 }
 
 module.exports = Layer;

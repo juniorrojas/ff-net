@@ -144,20 +144,20 @@ class Sequential {
     
     return data;
   }
-}
 
-Sequential.fromData = function(data) {
-	const sequential = new Sequential();
+  static fromData(data) {
+    const sequential = new Sequential();
+    
+    data.layers.forEach((layerData) => {
+      Layer.fromData(sequential, layerData);
+    });
   
-  data.layers.forEach((layerData) => {
-    Layer.fromData(sequential, layerData);
-  });
-
-  data.links.forEach((linkData) => {
-    Link.fromData(sequential, linkData);
-  });
-	
-	return sequential;
+    data.links.forEach((linkData) => {
+      Link.fromData(sequential, linkData);
+    });
+    
+    return sequential;
+  }
 }
 
 module.exports = Sequential;

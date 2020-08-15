@@ -160,14 +160,14 @@ class DataCanvas {
     }
     return data;
   }
-}
 
-DataCanvas.fromData = function(data) {
-  const dataCanvas = new DataCanvas();
-  data.forEach((item) => {
-    dataCanvas.addDataPoint(item.x, item.y, item.label);
-  });
-  return dataCanvas;
+  static fromData(data) {
+    const dataCanvas = new DataCanvas();
+    data.forEach((item) => {
+      dataCanvas.addDataPoint(item.x, item.y, item.label);
+    });
+    return dataCanvas;
+  }
 }
 
 module.exports = DataCanvas;

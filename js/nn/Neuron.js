@@ -130,10 +130,10 @@ class Neuron {
       bias: this.bias
     };
   }
-}
 
-Neuron.fromData = function(layer, data) {
-  layer.addNeuron(data.bias);
+  static fromData(layer, data) {
+    layer.addNeuron(data.bias);
+  }
 }
 
 module.exports = Neuron;

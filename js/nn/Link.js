@@ -64,14 +64,16 @@ class Link {
     data.weight = this.weight;
     return data;
   }
-}
 
-Link.fromData = function(neuralNet, data) {
-  const weight = data.weight;
-  const n0 = neuralNet.layers[data.n0[0]].neurons[data.n0[1]];
-  const nf = neuralNet.layers[data.nf[0]].neurons[data.nf[1]];
-  const link = neuralNet.addLink(n0, nf, weight);
-  return link;
+  static fromData(neuralNet, data) {
+    const weight = data.weight;
+    const a = data.n0;
+    const b = data.nf;
+    const n0 = neuralNet.layers[a[0]].neurons[a[1]];
+    const nf = neuralNet.layers[b[0]].neurons[b[1]];
+    const link = neuralNet.addLink(n0, nf, weight);
+    return link;
+  }
 }
 
 module.exports = Link;

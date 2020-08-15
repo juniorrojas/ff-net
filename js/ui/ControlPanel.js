@@ -1,4 +1,4 @@
-const ErrorPlot = require("./ErrorPlot");
+const LossPlot = require("./LossPlot");
 
 class ControlPanel {
   constructor(neuralNet, controllableParameters) {
@@ -39,8 +39,8 @@ class ControlPanel {
     row.control.className = "formatted-number";
       
     row = this.addRow("full");
-    var errorPlot = this.errorPlot = new ErrorPlot();
-    row.cells[0].appendChild(errorPlot.domElement);
+    var lossPlot = this.lossPlot = new LossPlot();
+    row.cells[0].appendChild(lossPlot.domElement);
   }
 
   addCell(row) {
@@ -91,7 +91,7 @@ class ControlPanel {
 
   update(data) {
     this.rowsByLabel["loss"].control.textContent = data.totalError.toFixed(10);
-    this.errorPlot.update(data.dataError, data.regularizationError);
+    this.lossPlot.update(data.dataError, data.regularizationError);
   }
 }
 
