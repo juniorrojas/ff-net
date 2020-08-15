@@ -13,7 +13,7 @@ class LossPlot {
   getMaxTotalError() {
     let max = 0;
     this.data.forEach((item) => {
-      const totalError = item.totalError;
+      const totalError = item.totalError; // TODO totalLoss ?
       if (totalError > max) max = totalError;
     });
     return max;
