@@ -6,7 +6,6 @@ this_dirpath = this_filepath.parent
 import shutil
 import subprocess
 import argparse
-import tempfile
 
 def cleandir(d):
     if os.path.exists(d):
