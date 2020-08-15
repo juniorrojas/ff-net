@@ -4,5 +4,4 @@ node_modules
 .cache
 *.swo
 *.swp
-dist-js
-dist-gh-pages
+*.out

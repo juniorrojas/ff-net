@@ -4,9 +4,8 @@
     "name": "Junior Rojas"
   },
   "scripts": {
-    "watch": "mkdir -p dist-js && watchify js/main.js -o dist-js/main.js",
-    "build": "mkdir -p dist-js && browserify js/main.js -o dist-js/main.js && rm -rf dist-gh-pages && mkdir dist-gh-pages && cp index.html dist-gh-pages/index.html && cp -r dist-js dist-gh-pages/ && cp -r css dist-gh-pages/",
-    "deploy": "echo TODO!"
+    "watch": "mkdir -p js.build.out && watchify js/main.js -o js.build.out/main.js",
+    "build": "mkdir -p js.build.out && browserify js/main.js -o js.build.out/main.js"
   },
   "devDependencies": {
     "browserify": "^16.5.0",

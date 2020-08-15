@@ -25,5 +25,6 @@ Open `index.html`.
 Build and publish to `gh-pages`
 
 ```
-# TODO
+npm run build
+./scripts/deploy --push
 ```
