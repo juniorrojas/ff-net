@@ -17,15 +17,13 @@ class Neuron {
     this.layer = layer;
     this.links = [];
     this.backLinks = [];
+    
     this.bias = bias;
     this.preActivation = 0;
     this.activation = sigmoid(this.bias);
     this.dActivation = 0;
     this.dPreActivation = 0;
     this.dBias = 0;
-
-    this.isInput = false; // TODO determine based on links
-    this.isOutput = false; // TODO determine based on links
 
     const svgElement = this.svgElement = svg.createElement("circle");
     svgElement.setAttribute("r", radius);
