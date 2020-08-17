@@ -1,37 +1,30 @@
-const minTopError = 4;
+const minTopLoss = 4;
 
 class LossPlot {
   constructor() {
     const canvas = this.domElement = document.createElement("canvas");
-    canvas.id = "error-canvas";
+    canvas.className = "loss-plot-canvas";
     this.ctx = canvas.getContext("2d");	
     this.maxDataLength = canvas.width;
     this.data = [];
-    this.topError = minTopError;
+    this.topLoss = minTopLoss;
   }
 
-  getMaxTotalError() {
-    let max = 0;
-    this.data.forEach((item) => {
-      const totalError = item.totalError; // TODO totalLoss ?
-      if (totalError > max) max = totalError;
-    });
-    return max;
-  }
+  update(dataLoss, regularizationLoss) {
+    if (this.data.length == this.maxDataLength) this.data.shift();
 
-  update(dataError, regularizationError) {
-    if (this.data.length == this.maxDataLength) {
-      this.data.shift();
-    }
-    const totalError = dataError + regularizationError;
+    const totalLoss = dataLoss + regularizationLoss;
     this.data.push({
-      dataError: dataError,
-      regularizationError: regularizationError,
-      totalError: totalError
+      dataLoss: dataLoss,
+      regularizationLoss: regularizationLoss,
+      totalLoss: totalLoss
     });
-    const maxTotalError = this.getMaxTotalError();
-    if (maxTotalError > minTopError) this.topError = maxTotalError;
-    else this.topError = minTopError;
+
+    const totalLosses = this.data.map((item) => item.totalLoss)
+    const maxTotalLoss = Math.max.apply(null, totalLosses);
+    if (maxTotalLoss > minTopLoss) this.topLoss = maxTotalLoss;
+    else this.topLoss = minTopLoss;
+
     this.render();
   }
 
@@ -42,9 +35,9 @@ class LossPlot {
     ctx.clearRect(0, 0, width, height);
     
     this.data.forEach((item, i) => {
-      const totalError = item.totalError;
+      const totalLoss = item.totalLoss;
       const x = i / (this.maxDataLength - 1) * width;
-      const y = height * (1 - totalError / this.topError);
+      const y = height * (1 - totalLoss / this.topLoss);
       ctx.beginPath();
       ctx.strokeStyle = "rgb(255, 221, 78)";
       ctx.moveTo(x, height);
