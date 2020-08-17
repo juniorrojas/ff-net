@@ -15,9 +15,9 @@ class DataPoint {
     const height = this.canvas.domElement.height;
     
     let fillColor;
-    if (this.label == 0) fillColor = Color.RED;
-    else fillColor = Color.BLUE;
-    const strokeColor = fillColor.blend(Color.BLACK, 0.6);
+    if (this.label == 0) fillColor = Color.red;
+    else fillColor = Color.blue;
+    const strokeColor = fillColor.blend(Color.black, 0.6);
     
     ctx.beginPath();
     ctx.fillStyle = fillColor.toString();

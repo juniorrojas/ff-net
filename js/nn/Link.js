@@ -32,8 +32,8 @@ class Link {
     const width = 9 * Math.min(1, Math.abs(this.weight) / maxVisibleWeight);
     path.setAttribute("stroke-width", width);
     let color;
-    if (this.weight < 0) color = Color.RED;
-    else color = Color.BLUE;
+    if (this.weight < 0) color = Color.red;
+    else color = Color.blue;
     path.setAttribute("stroke-opacity", 0.4);
     path.setAttribute("stroke", color);
   }

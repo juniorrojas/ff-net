@@ -69,7 +69,6 @@ class Sequential {
     });
     
     this.neurons.forEach((neuron) => {
-      // TODO skip for input neurons to avoid misleading neuron color
       let bias = 1 + Math.random() * 2;
       if (Math.random() <= 0.5) bias *= -1;
       neuron.bias = bias;

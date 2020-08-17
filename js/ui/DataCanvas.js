@@ -40,7 +40,7 @@ class DataCanvas {
     for (let i = 0; i < width; i++) {
       for (let j = 0; j < height; j++) {
         const label = classify(i / width, j / height);
-        const color = Color.LIGHT_RED.blend(Color.LIGHT_BLUE, label);
+        const color = Color.lightRed.blend(Color.lightBlue, label);
         this.pixelColors[i][j] = color;
       }
     }

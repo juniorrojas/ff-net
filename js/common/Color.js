@@ -7,8 +7,7 @@ class Color {
     this.b = b;
     this.a = a;
   }
-
-  // t = 1 means replace this with color c
+  
   blend(c, t) {
     if (Math.abs(t) > 1) throw new Error("t must be a number between -1 and 1");
     
@@ -37,13 +36,13 @@ class Color {
   }
 }
 
-Color.WHITE = new Color(1, 1, 1);
-Color.BLACK = new Color(0, 0, 0);
+Color.white = new Color(1, 1, 1);
+Color.black = new Color(0, 0, 0);
 
-Color.RED = new Color(226 / 255, 86 / 255, 86 / 255);
-Color.BLUE = new Color(135 / 255, 173 / 255, 236 / 255);
+Color.red = new Color(226 / 255, 86 / 255, 86 / 255);
+Color.blue = new Color(135 / 255, 173 / 255, 236 / 255);
 
-Color.LIGHT_BLUE = new Color(186 / 255, 224 / 255, 251 / 255);
-Color.LIGHT_RED = new Color(252 / 255, 163 / 255, 163 / 255);
+Color.lightBlue = new Color(186 / 255, 224 / 255, 251 / 255);
+Color.lightRed = new Color(252 / 255, 163 / 255, 163 / 255);
 
 module.exports = Color;

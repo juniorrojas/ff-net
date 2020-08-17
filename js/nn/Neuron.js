@@ -17,10 +17,11 @@ class Neuron {
     this.layer = layer;
     this.links = [];
     this.backLinks = [];
-    
+
     this.bias = bias;
     this.preActivation = 0;
     this.activation = sigmoid(this.bias);
+
     this.dActivation = 0;
     this.dPreActivation = 0;
     this.dBias = 0;
@@ -64,14 +65,19 @@ class Neuron {
     const position = this.getPosition();
     circle.setAttribute("cx", position.x);
     circle.setAttribute("cy", position.y);
-    
-    const maxVisibleBias = 3;
-    let bias = this.bias;
-    if (bias < -maxVisibleBias) bias = -maxVisibleBias;
-    else if (bias > maxVisibleBias) bias = maxVisibleBias;
-    const tFillColor = (bias / maxVisibleBias + 1) * 0.5;
-    const fillColor = Color.RED.blend(Color.BLUE, tFillColor);
-    const strokeColor = fillColor.blend(Color.BLACK, 0.3);
+
+    const isInput = this.backLinks.length == 0;
+    let fillColor;
+    if (isInput) {
+      fillColor = Color.blue.blend(Color.red, 0.6);
+    } else {
+      const maxVisibleAbsBias = 3;
+      let visibleBias = Math.max(Math.min(this.bias, maxVisibleAbsBias), -maxVisibleAbsBias);
+      const t = 0.5  + visibleBias / maxVisibleAbsBias * 0.5;
+      fillColor = Color.red.blend(Color.blue, t);
+    }
+
+    const strokeColor = fillColor.blend(Color.black, 0.3);
     
     circle.setAttribute("fill", fillColor.toString());
     circle.setAttribute("stroke", strokeColor.toString());
