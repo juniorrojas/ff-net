@@ -114,7 +114,7 @@ class Sequential {
   toData() {
     return {
       layers: this.layers.map((layer) => layer.toData()),
-      links: this.links.map((link) => link.toData)
+      links: this.links.map((link) => link.toData())
     }
   }
 
