@@ -22,21 +22,21 @@ class ControlPanel {
       model.randomizeParameters();
     });
     
-    row = this.addRow("slider", "learning rate");
-    row.control.min = 1;
-    row.control.max = 80;
-    row.control.value = Math.round(this.app.learningRate * 100);
-    row.control.addEventListener("change", function() {
-      this.app.learningRate = this.value / 100;
-    }.bind(row.control));
+    const uiLearningRate = this.addRow("slider", "learning rate");
+    uiLearningRate.control.min = 1;
+    uiLearningRate.control.max = 80;
+    uiLearningRate.control.value = Math.round(this.app.learningRate * 100);
+    uiLearningRate.control.addEventListener("change", () => {
+      this.app.learningRate = uiLearningRate.control.value / 100;
+    });
     
-    row = this.addRow("slider", "regularization");
-    row.control.min = 0;
-    row.control.max = 100;
-    row.control.value = Math.round(this.app.regularization * 1000000);
-    row.control.addEventListener("change", function() {
-      this.app.regularization = this.value / 1000000;
-    }.bind(row.control));
+    const uiRegularization = this.addRow("slider", "regularization");
+    uiRegularization.control.min = 0;
+    uiRegularization.control.max = 100;
+    uiRegularization.control.value = Math.round(this.app.regularization * 1000000);
+    uiRegularization.control.addEventListener("change", () => {
+      this.app.regularization = uiRegularization.control.value / 1000000;
+    });
     
     row = this.addRow("text", "loss");
     row.control.className = "formatted-number";
