@@ -111,6 +111,42 @@ class Sequential {
     }
   }
 
+  train(args) {
+    // TODO decouple data from canvas
+    const dataCanvas = args.dataCanvas;
+    const learningRate = args.learningRate;
+    const regularization = args.regularization;
+    const iters = args.iters;
+
+    let regularizationLoss, dataLoss;
+
+    for (let i = 0; i < iters; i++) {
+      dataLoss = 0;
+      dataCanvas.dataPoints.forEach((dataPoint) => {
+        this.reset();
+        this.layers[0].neurons[0].activation = dataPoint.x;
+        this.layers[0].neurons[1].activation = dataPoint.y;
+        this.forward();
+        
+        const neuron = this.layers[this.layers.length - 1].neurons[0];
+        const output = neuron.activation;
+        const d = dataPoint.label - output;
+        dataLoss += 0.5 * d * d;
+        neuron.dActivation = -d;
+
+        regularizationLoss = this.backward(
+          learningRate,
+          regularization
+        );
+      });
+    }
+
+    return {
+      dataLoss: dataLoss,
+      regularizationLoss: regularizationLoss
+    }
+  }
+
   toData() {
     return {
       layers: this.layers.map((layer) => layer.toData()),

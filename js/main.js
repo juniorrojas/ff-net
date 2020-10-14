@@ -34,7 +34,10 @@ class App {
     container.appendChild(row);
     row.className = "content-container-row";
     
-    const controlPanel = this.controlPanel = new ui.ControlPanel(this);
+    const controlPanel = this.controlPanel = new ui.ControlPanel({
+      app: this,
+      neuralNet: model
+    });
     controlPanel.domElement.className += " content-container-cell";
     row.appendChild(controlPanel.domElement);
     
@@ -42,31 +45,17 @@ class App {
   }
 
   update() {
-    const iters = 10;
-    let dataLoss, regularizationLoss;
-
     const model = this.model;
     const dataCanvas = this.dataCanvas;
-    for (let i = 0; i < iters; i++) {
-      dataLoss = 0;
-      dataCanvas.dataPoints.forEach((dataPoint) => {
-        model.reset();
-        model.layers[0].neurons[0].activation = dataPoint.x;
-        model.layers[0].neurons[1].activation = dataPoint.y;
-        model.forward();
-        
-        const neuron = model.layers[model.layers.length - 1].neurons[0];
-        const output = neuron.activation;
-        const d = dataPoint.label - output;
-        dataLoss += 0.5 * d * d;
-        neuron.dActivation = -d;
-        
-        regularizationLoss = model.backward(
-          this.learningRate,
-          this.regularization
-        );
-      });
-    }
+    const trainOutput = model.train({
+      learningRate: this.learningRate,
+      regularization: this.regularization,
+      iters: 10,
+      dataCanvas: dataCanvas
+    });
+
+    const dataLoss = trainOutput.dataLoss;
+    const regularizationLoss = trainOutput.regularizationLoss;
     
     model.render();
     dataCanvas.render((x, y) => {
