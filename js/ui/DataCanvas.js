@@ -1,5 +1,6 @@
 const Color = require("../common/Color");
 const DataPoint = require("./DataPoint");
+const DragBehavior = require("./DragBehavior");
 
 class DataCanvas {
   constructor() {
@@ -19,7 +20,9 @@ class DataCanvas {
       }
     }
 
-    this.setUpDragBehavior();
+    this.dragBehavior = new DragBehavior(canvas);
+    this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
+    this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
   }
 
   addDataPoint(x, y, label) {
@@ -81,29 +84,7 @@ class DataCanvas {
     event.cursor = cursor;
   }
 
-  setUpDragBehavior() {
-    const canvas = this.domElement;
-
-    this.dragState = null;
-
-    this.handleDragBegin = this.handleDragBegin.bind(this);
-    canvas.addEventListener("touchstart", this.handleDragBegin);
-    canvas.addEventListener("mousedown", this.handleDragBegin);
-
-    this.handleDragProgress = this.handleDragProgress.bind(this);
-    window.addEventListener("mousemove", this.handleDragProgress);
-    window.addEventListener("touchmove", this.handleDragProgress);
-
-    this.handleDragEnd = this.handleDragEnd.bind(this);
-    window.addEventListener("mouseup", this.handleDragEnd);
-    window.addEventListener("touchend", this.handleDragEnd);
-    window.addEventListener("touchcancel", this.handleDragEnd);
-  }
-
-  handleDragBegin(event) {
-    event.preventDefault();
-    this.computeCursor(event);
-
+  processDragBegin(event) {
     for (let i = 0; i < this.dataPoints.length; i++) {
       const dataPoint = this.dataPoints[i];
 
@@ -114,25 +95,17 @@ class DataCanvas {
       const selectionRadius = radius * 3;
 
       if (dx * dx + dy * dy <= selectionRadius * selectionRadius) {
-        this.dragState = {
-          dataPoint: dataPoint,
-          offset: {
-            x: dx,
-            y: dy
-          }
-        };
+        const dragState = this.dragBehavior.dragState = {};
+        dragState.dataPoint = dataPoint;
+        dragState.offset = {x: dx, y: dy};
         break;
       }
-    }
+    };
   }
 
-  handleDragProgress(event) {
-    if (this.dragState == null) return;
-    this.computeCursor(event);
-    event.preventDefault();
-
-    const dataPoint = this.dragState.dataPoint;
-    const offset = this.dragState.offset;
+  processDragProgress(event) {
+    const dataPoint = this.dragBehavior.dragState.dataPoint;
+    const offset = this.dragBehavior.dragState.offset;
 
     dataPoint.x = (event.cursor.x - offset.x) / this.domElement.width;
     dataPoint.y = (event.cursor.y - offset.y) / this.domElement.height;
@@ -141,12 +114,6 @@ class DataCanvas {
     else if (dataPoint.x > 1) dataPoint.x = 1;
     if (dataPoint.y < 0) dataPoint.y = 0;
     else if (dataPoint.y > 1) dataPoint.y = 1;
-  }
-
-  handleDragEnd(event) {
-    if (this.dragState == null) return;
-    const dataPoint = this.dragState.dataPoint;
-    this.dragState = null;
   }
 
   toData() {
