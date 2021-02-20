@@ -3,10 +3,7 @@ const ui = require("./ui");
 const svg = require("./common/svg");
 
 class App {
-  constructor(data) {
-    this.learningRate = 0.2;
-    this.regularization = 0.000009;
-    
+  constructor(data) {    
     const container = document.createElement("div");
     container.className = "content-container";
     this.domElement = container;
@@ -48,8 +45,8 @@ class App {
     const model = this.model;
     const dataCanvas = this.dataCanvas;
     const trainOutput = model.train({
-      learningRate: this.learningRate,
-      regularization: this.regularization,
+      learningRate: this.controlPanel.learningRate,
+      regularization: this.controlPanel.regularization,
       iters: 10,
       dataCanvas: dataCanvas
     });
