@@ -6,21 +6,54 @@ this_dirpath = this_filepath.parent
 import shutil
 import subprocess
 import argparse
+import configparser
 
 def cleandir(d):
     if os.path.exists(d):
         shutil.rmtree(d)
     os.makedirs(d)
 
+def infer_remote_url():
+    config = configparser.ConfigParser()
+    config.read(".git/config")
+    sections = config.sections()
+    for section in sections:
+        is_remote = False
+        try:
+            section.index("remote")
+            is_remote = True
+        except:
+            pass
+        if is_remote:
+            is_github_remote = False
+            remote_url = config.get(section, "url")
+            try:
+                remote_url.index("github") # TODO the criterion to determine if a remote url is on github could be better
+                is_github_remote = True
+            except:
+                pass
+            if is_github_remote:
+                return remote_url
+
+    return None
+
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("--repo", default="git@github.com:juniorrojas/ff-net.git") # TODO infer repo?
-    arg_parser.add_argument("--branch", default="gh-pages")
+    arg_parser.add_argument("--repo", type=str)
+    arg_parser.add_argument("--branch", type=str, default="gh-pages")
     arg_parser.add_argument("--push", action="store_true")
     args = arg_parser.parse_args()
 
-    repo = args.repo
+    if args.repo is not None:
+        repo = args.repo
+    else:
+        repo = infer_remote_url()
+        if repo is None:
+            print("github remote could not be inferred, run the script with --repo <remote-url>")
+            exit(1)
+    
     deploy_branch = args.branch
+
     remote = "origin"
 
     project_path = this_dirpath.parent
@@ -36,10 +69,15 @@ if __name__ == "__main__":
         exit(e)
     e = subprocess.call(["git", "pull", remote, deploy_branch])
     if e != 0:
-        exit(e)
-    e = subprocess.call(["git", "checkout", deploy_branch])
-    if e != 0:
-        exit(e)
+        # we assume git pull failed because the branch doesn't exist,
+        # this is the case the first time you try to deploy
+        e = subprocess.call(["git", "checkout", "-b", deploy_branch])
+        if e != 0:
+            exit(e)
+    else:
+        e = subprocess.call(["git", "checkout", deploy_branch])
+        if e != 0:
+            exit(e)
 
     for filename in os.listdir(deploy_path):
         if filename == ".git":
@@ -67,6 +105,10 @@ if __name__ == "__main__":
     print(f"Preview available at {deploy_index_filename}")
 
     if args.push:
+        a = input(f"Deploy to {repo}@{deploy_branch}? [y/_] ")
+        if a != "y":
+            exit(1)
+
         e = subprocess.call(["git", "add", "."])
         if e != 0:
             exit(e)

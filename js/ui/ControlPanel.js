@@ -1,8 +1,11 @@
 const LossPlot = require("./LossPlot");
 
 class ControlPanel {
-  constructor(app) {
-    this.app = app;
+  constructor(args = {}) {
+    this.app = args.app;
+    
+    this.learningRate = 0.2;
+    this.regularization = 0.000009;
     
     const div = this.domElement = document.createElement("div");
     div.className = "control-panel";
@@ -14,10 +17,10 @@ class ControlPanel {
 
     row = this.addRow("full");
     const btnRandomize = document.createElement("div");
-    btnRandomize.innerHTML = "randomize network parameters";
+    btnRandomize.textContent = "randomize network parameters";
     btnRandomize.className = "btn";
     row.cells[0].appendChild(btnRandomize);
-    const model = this.app.model;
+    const model = args.neuralNet;
     btnRandomize.addEventListener("click", () => {
       model.randomizeParameters();
     });
@@ -25,17 +28,17 @@ class ControlPanel {
     const uiLearningRate = this.addRow("slider", "learning rate");
     uiLearningRate.control.min = 1;
     uiLearningRate.control.max = 80;
-    uiLearningRate.control.value = Math.round(this.app.learningRate * 100);
+    uiLearningRate.control.value = Math.round(this.learningRate * 100);
     uiLearningRate.control.addEventListener("change", () => {
-      this.app.learningRate = uiLearningRate.control.value / 100;
+      this.learningRate = uiLearningRate.control.value / 100;
     });
     
     const uiRegularization = this.addRow("slider", "regularization");
     uiRegularization.control.min = 0;
     uiRegularization.control.max = 100;
-    uiRegularization.control.value = Math.round(this.app.regularization * 1000000);
+    uiRegularization.control.value = Math.round(this.regularization * 1000000);
     uiRegularization.control.addEventListener("change", () => {
-      this.app.regularization = uiRegularization.control.value / 1000000;
+      this.regularization = uiRegularization.control.value / 1000000;
     });
     
     row = this.addRow("text", "loss");
@@ -71,7 +74,7 @@ class ControlPanel {
       row.cells.push(cell);
     } else {
       cell = this.addCell(row);
-      cell.innerHTML = label;
+      cell.textContent = label;
       
       cell = this.addCell(row);
       let control;
