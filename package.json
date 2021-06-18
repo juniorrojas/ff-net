@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "browserify": "^16.5.0",
-    "watchify": "^3.11.1"
+    "glob-parent": ">=5.1.2",
+    "watchify": "^4.0.0"
   }
 }
