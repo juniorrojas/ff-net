@@ -31,16 +31,14 @@ class Sequential {
   }
 
   addFullyConnectedLayer(neurons) {
-    const l0 = this.neuronGroups[this.neuronGroups.length - 1];
+    const inputGroup = this.neuronGroups[this.neuronGroups.length - 1];
     this.addNeuronGroup(neurons);
-    const lf = this.neuronGroups[this.neuronGroups.length - 1];
-    for (let i = 0; i < l0.neurons.length; i++) {
-      const n0 = l0.neurons[i];
-      for (let j = 0; j < lf.neurons.length; j++) {
-        const nf = lf.neurons[j];
-        this.addLink(n0, nf);
-      }
-    }
+    const outputGroup = this.neuronGroups[this.neuronGroups.length - 1];
+    inputGroup.forEach((inputNeuron) => {
+      outputGroup.forEach((outputNeuron) => {
+        this.addLink(inputNeuron, outputNeuron);
+      })
+    });
   }
 
   addLink(n0, nf, weight) {
