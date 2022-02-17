@@ -1,6 +1,6 @@
 const Neuron = require("./Neuron");
 
-class Layer {
+class NeuronGroup {
   constructor(parent) {
     this.parent = parent;
     this.neurons = [];
@@ -37,7 +37,7 @@ class Layer {
   }
 
   getIndex() {
-    return this.parent.layers.indexOf(this);
+    return this.parent.neuronGroups.indexOf(this);
   }
 
   toData() {
@@ -48,11 +48,11 @@ class Layer {
   }
 
   static fromData(neuralNet, data) {
-    const layer = neuralNet.addLayer();
+    const neuronGroup = neuralNet.addNeuronGroup();
     data.neurons.forEach((neuronData) => {
-      Neuron.fromData(layer, neuronData);
+      Neuron.fromData(neuronGroup, neuronData);
     });
   }
 }
 
-module.exports = Layer;
+module.exports = NeuronGroup;

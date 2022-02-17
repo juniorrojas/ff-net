@@ -56,10 +56,10 @@ class App {
     
     model.render();
     dataCanvas.render((x, y) => {
-      model.layers[0].neurons[0].activation = x;
-      model.layers[0].neurons[1].activation = y;
+      model.neuronGroups[0].neurons[0].activation = x;
+      model.neuronGroups[0].neurons[1].activation = y;
       model.forward();
-      return model.layers[model.layers.length - 1].neurons[0].activation;
+      return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
     });
     this.controlPanel.update({
       totalLoss: dataLoss + regularizationLoss,

@@ -1,12 +1,12 @@
 const svg = require("../common/svg");
 const Link = require("./Link");
-const Layer = require("./Layer");
+const NeuronGroup = require("./NeuronGroup");
 
 class Sequential {
   constructor() {
     this.neurons = [];
     this.links = [];
-    this.layers = [];
+    this.neuronGroups = [];
 
     this.svgElement = svg.createElement("g");
     
@@ -17,23 +17,23 @@ class Sequential {
     this.svgElement.appendChild(this.svgNeurons);
   }
 
-  addLayer(neurons) {
+  addNeuronGroup(neurons) {
     if (neurons == null) neurons = 0;	
     
-    const layer = new Layer(this);
-    this.layers.push(layer);
+    const group = new NeuronGroup(this);
+    this.neuronGroups.push(group);
     
     for (let i = 0; i < neurons; i++) {
-      layer.addNeuron();
+      group.addNeuron();
     }
     
-    return layer;
+    return group;
   }
 
   addFullyConnectedLayer(neurons) {
-    const l0 = this.layers[this.layers.length - 1];
-    this.addLayer(neurons);
-    const lf = this.layers[this.layers.length - 1];
+    const l0 = this.neuronGroups[this.neuronGroups.length - 1];
+    this.addNeuronGroup(neurons);
+    const lf = this.neuronGroups[this.neuronGroups.length - 1];
     for (let i = 0; i < l0.neurons.length; i++) {
       const n0 = l0.neurons[i];
       for (let j = 0; j < lf.neurons.length; j++) {
@@ -53,12 +53,12 @@ class Sequential {
   }
 
   render() {
-    this.layers.forEach((layer) => layer.render());
+    this.neuronGroups.forEach((group) => group.render());
     this.links.forEach((link) => link.render());
   }
 
   reset() {
-    this.layers.forEach((layer) => layer.reset());
+    this.neuronGroups.forEach((group) => group.reset());
   }
 
   randomizeParameters() {
@@ -76,9 +76,9 @@ class Sequential {
   }
 
   forward() {
-    for (let i = 1; i < this.layers.length; i++) {
-      const layer = this.layers[i];
-      layer.neurons.forEach((neuron) => {
+    for (let i = 1; i < this.neuronGroups.length; i++) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
         neuron.forward();
       });
     }
@@ -87,9 +87,9 @@ class Sequential {
   backward(learningRate, regularization) {
     let regularizationLoss = 0;
     
-    for (let i = this.layers.length - 1; i >= 0; i--) {
-      const layer = this.layers[i];
-      layer.neurons.forEach((neuron) => {
+    for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
         regularizationLoss += neuron.backward(regularization);
       });
     }
@@ -103,9 +103,9 @@ class Sequential {
       link.applyGradient(learningRate);
     });
     
-    for (let i = 1; i < this.layers.length; i++) {
-      const layer = this.layers[i];
-      layer.neurons.forEach((neuron) => {
+    for (let i = 1; i < this.neuronGroups.length; i++) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
         neuron.applyGradient(learningRate);
       });
     }
@@ -124,11 +124,11 @@ class Sequential {
       dataLoss = 0;
       dataCanvas.dataPoints.forEach((dataPoint) => {
         this.reset();
-        this.layers[0].neurons[0].activation = dataPoint.x;
-        this.layers[0].neurons[1].activation = dataPoint.y;
+        this.neuronGroups[0].neurons[0].activation = dataPoint.x;
+        this.neuronGroups[0].neurons[1].activation = dataPoint.y;
         this.forward();
         
-        const neuron = this.layers[this.layers.length - 1].neurons[0];
+        const neuron = this.neuronGroups[this.neuronGroups.length - 1].neurons[0];
         const output = neuron.activation;
         const d = dataPoint.label - output;
         dataLoss += 0.5 * d * d;
@@ -149,7 +149,7 @@ class Sequential {
 
   toData() {
     return {
-      layers: this.layers.map((layer) => layer.toData()),
+      groups: this.neuronGroups.map((group) => group.toData()),
       links: this.links.map((link) => link.toData())
     }
   }
@@ -157,8 +157,8 @@ class Sequential {
   static fromData(data) {
     const sequential = new Sequential();
     
-    data.layers.forEach((layerData) => {
-      Layer.fromData(sequential, layerData);
+    data.neuronGroups.forEach((groupData) => {
+      NeuronGroup.fromData(sequential, groupData);
     });
   
     data.links.forEach((linkData) => {

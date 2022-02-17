@@ -13,8 +13,8 @@ function dSigmoid(n) {
 }
 
 class Neuron {
-  constructor(layer, bias) {
-    this.layer = layer;
+  constructor(group, bias) {
+    this.group = group;
     this.links = [];
     this.backLinks = [];
 
@@ -85,14 +85,14 @@ class Neuron {
   }
 
   getIndex() {
-    return this.layer.neurons.indexOf(this);
+    return this.group.neurons.indexOf(this);
   }
 
   getPosition() {
-    const neuralNet = this.layer.parent;
-    const neuronCount = this.layer.neurons.length;
-    const layerCount = neuralNet.layers.length;
-    const maxNeuronCountPerLayer = 5;
+    const neuralNet = this.group.parent;
+    const neuronCount = this.group.neurons.length;
+    const neuronGroupCount = neuralNet.neuronGroups.length;
+    const maxNeuronCountPerGroup = 5;
     
     const container = neuralNet.svgElement.parentNode;
     if (container == null) return {x: 0, y: 0};
@@ -103,10 +103,10 @@ class Neuron {
     const cy = height / 2;
     const cx = width / 2;
     
-    const dx = (width - (radius + strokeWidth) * 2) / (layerCount - 1);
-    const dy = (height - (radius + strokeWidth) * 2) / (maxNeuronCountPerLayer - 1);
+    const dx = (width - (radius + strokeWidth) * 2) / (neuronGroupCount - 1);
+    const dy = (height - (radius + strokeWidth) * 2) / (maxNeuronCountPerGroup - 1);
     
-    const x = cx + (this.layer.getIndex() - (layerCount - 1) / 2) * dx;
+    const x = cx + (this.group.getIndex() - (neuronGroupCount - 1) / 2) * dx;
     
     let y;
     if (neuronCount == 0) {
@@ -135,8 +135,8 @@ class Neuron {
     };
   }
 
-  static fromData(layer, data) {
-    layer.addNeuron(data.bias);
+  static fromData(group, data) {
+    group.addNeuron(data.bias);
   }
 }
 

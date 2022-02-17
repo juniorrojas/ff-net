@@ -7,8 +7,8 @@ class Link {
     this.n0 = n0;
     this.nf = nf;
     
-    if (this.n0.layer.getIndex() + 1 != this.nf.layer.getIndex()) {
-      throw "Cannot connect neurons from non-consecutive layers";
+    if (this.n0.group.getIndex() + 1 != this.nf.group.getIndex()) {
+      throw "Cannot connect neurons from non-consecutive groups";
     }
     
     if (weight == null) this.weight = 1;
@@ -54,11 +54,11 @@ class Link {
   toData() {
     const data = {};
     data.n0 = [
-      this.n0.layer.getIndex(),
+      this.n0.group.getIndex(),
       this.n0.getIndex()
     ];
     data.nf = [
-      this.nf.layer.getIndex(),
+      this.nf.group.getIndex(),
       this.nf.getIndex()
     ];
     data.weight = this.weight;
@@ -69,8 +69,8 @@ class Link {
     const weight = data.weight;
     const a = data.n0;
     const b = data.nf;
-    const n0 = neuralNet.layers[a[0]].neurons[a[1]];
-    const nf = neuralNet.layers[b[0]].neurons[b[1]];
+    const n0 = neuralNet.neuronGroups[a[0]].neurons[a[1]];
+    const nf = neuralNet.neuronGroups[b[0]].neurons[b[1]];
     const link = neuralNet.addLink(n0, nf, weight);
     return link;
   }
