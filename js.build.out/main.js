@@ -57,7 +57,7 @@ svg.createElement = function(element) {
 module.exports = svg;
 
 },{}],3:[function(require,module,exports){
-module.exports={"dataPoints":[{"x":0.08,"y":0.24,"label":1},{"x":0.2,"y":0.27,"label":1},{"x":0.05,"y":0.3,"label":1},{"x":0.1,"y":0.1,"label":1},{"x":0.4,"y":0.4,"label":0},{"x":0.6,"y":0.4,"label":0},{"x":0.65,"y":0.7,"label":0},{"x":0.7,"y":0.3,"label":0},{"x":0.35,"y":0.65,"label":0},{"x":0.3,"y":0.5,"label":0},{"x":0.7,"y":0.5,"label":0},{"x":0.75,"y":0.55,"label":0},{"x":0.7,"y":0.6,"label":0},{"x":0.65,"y":0.34,"label":0},{"x":0.8,"y":0.65,"label":0},{"x":0.5,"y":0.7,"label":0},{"x":0.5,"y":0.66,"label":0},{"x":0.56,"y":0.66,"label":0},{"x":0.46,"y":0.36,"label":0},{"x":0.46,"y":0.26,"label":0},{"x":0.36,"y":0.26,"label":0},{"x":0.26,"y":0.36,"label":0},{"x":0.56,"y":0.28,"label":0},{"x":0.33,"y":0.54,"label":0},{"x":0.23,"y":0.52,"label":0},{"x":0.26,"y":0.16,"label":1},{"x":0.06,"y":0.46,"label":1},{"x":0.13,"y":0.66,"label":1},{"x":0.2,"y":0.8,"label":1},{"x":0.5,"y":0.5,"label":1},{"x":0.45,"y":0.5,"label":1},{"x":0.5,"y":0.45,"label":1},{"x":0.45,"y":0.45,"label":1},{"x":0.55,"y":0.55,"label":1},{"x":0.5,"y":0.55,"label":1},{"x":0.5,"y":0.2,"label":1},{"x":0.4,"y":0.1,"label":1},{"x":0.6,"y":0.1,"label":1},{"x":0.75,"y":0.15,"label":1},{"x":0.88,"y":0.22,"label":1},{"x":0.9,"y":0.35,"label":1},{"x":0.9,"y":0.49,"label":1},{"x":0.88,"y":0.62,"label":1},{"x":0.9,"y":0.9,"label":1},{"x":0.9,"y":0.8,"label":1},{"x":0.75,"y":0.85,"label":1},{"x":0.55,"y":0.92,"label":1},{"x":0.6,"y":0.95,"label":1},{"x":0.06,"y":0.57,"label":1},{"x":0.09,"y":0.8,"label":1},{"x":0.4,"y":0.9,"label":1}],"model":{"layers":[{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5}]}],"links":[{"n0":[0,0],"nf":[1,0],"weight":2.2559318523672673},{"n0":[0,0],"nf":[1,1],"weight":3.7705902078344162},{"n0":[0,0],"nf":[1,2],"weight":-5.673868837964195},{"n0":[0,0],"nf":[1,3],"weight":-2.552116396138559},{"n0":[0,0],"nf":[1,4],"weight":-4.765897189158554},{"n0":[0,1],"nf":[1,0],"weight":2.522847383501193},{"n0":[0,1],"nf":[1,1],"weight":-2.9902303588384505},{"n0":[0,1],"nf":[1,2],"weight":2.749623598598969},{"n0":[0,1],"nf":[1,3],"weight":-2.0657459601688077},{"n0":[0,1],"nf":[1,4],"weight":2.311040191441733},{"n0":[1,0],"nf":[2,0],"weight":-2.8083933750840506},{"n0":[1,0],"nf":[2,1],"weight":2.368208438212055},{"n0":[1,0],"nf":[2,2],"weight":2.792010178964303},{"n0":[1,0],"nf":[2,3],"weight":2.1204797088106764},{"n0":[1,0],"nf":[2,4],"weight":3.0855603411983634},{"n0":[1,1],"nf":[2,0],"weight":-2.1619760012233913},{"n0":[1,1],"nf":[2,1],"weight":2.7735676578848043},{"n0":[1,1],"nf":[2,2],"weight":-4.795321974592097},{"n0":[1,1],"nf":[2,3],"weight":-3.1618858651724424},{"n0":[1,1],"nf":[2,4],"weight":2.642537468325151},{"n0":[1,2],"nf":[2,0],"weight":5.111269168104936},{"n0":[1,2],"nf":[2,1],"weight":1.8060793114773712},{"n0":[1,2],"nf":[2,2],"weight":1.2874475479043777},{"n0":[1,2],"nf":[2,3],"weight":3.715659708889894},{"n0":[1,2],"nf":[2,4],"weight":-5.479057778095251},{"n0":[1,3],"nf":[2,0],"weight":4.279970838297447},{"n0":[1,3],"nf":[2,1],"weight":-3.8573191202934085},{"n0":[1,3],"nf":[2,2],"weight":-4.346636276004062},{"n0":[1,3],"nf":[2,3],"weight":1.8026421918582567},{"n0":[1,3],"nf":[2,4],"weight":3.9687935202147346},{"n0":[1,4],"nf":[2,0],"weight":-3.5216391228147197},{"n0":[1,4],"nf":[2,1],"weight":4.599458665307638},{"n0":[1,4],"nf":[2,2],"weight":-4.752572287153145},{"n0":[1,4],"nf":[2,3],"weight":-3.810827524569661},{"n0":[1,4],"nf":[2,4],"weight":3.0650028924296953},{"n0":[2,0],"nf":[3,0],"weight":-4.300364295192499},{"n0":[2,0],"nf":[3,1],"weight":-2.9036061692080217},{"n0":[2,1],"nf":[3,0],"weight":4.132576329093505},{"n0":[2,1],"nf":[3,1],"weight":-3.817976850598705},{"n0":[2,2],"nf":[3,0],"weight":4.606542085589321},{"n0":[2,2],"nf":[3,1],"weight":2.8220313920923323},{"n0":[2,3],"nf":[3,0],"weight":2.3423002019828885},{"n0":[2,3],"nf":[3,1],"weight":2.098573708791525},{"n0":[2,4],"nf":[3,0],"weight":4.4760505444141625},{"n0":[2,4],"nf":[3,1],"weight":3.95752484391276},{"n0":[3,0],"nf":[4,0],"weight":-0.7265226578414495},{"n0":[3,1],"nf":[4,0],"weight":-4.316679309853457}]}}
+module.exports={"dataPoints":[{"x":0.08,"y":0.24,"label":1},{"x":0.2,"y":0.27,"label":1},{"x":0.05,"y":0.3,"label":1},{"x":0.1,"y":0.1,"label":1},{"x":0.4,"y":0.4,"label":0},{"x":0.6,"y":0.4,"label":0},{"x":0.65,"y":0.7,"label":0},{"x":0.7,"y":0.3,"label":0},{"x":0.35,"y":0.65,"label":0},{"x":0.3,"y":0.5,"label":0},{"x":0.7,"y":0.5,"label":0},{"x":0.75,"y":0.55,"label":0},{"x":0.7,"y":0.6,"label":0},{"x":0.65,"y":0.34,"label":0},{"x":0.8,"y":0.65,"label":0},{"x":0.5,"y":0.7,"label":0},{"x":0.5,"y":0.66,"label":0},{"x":0.56,"y":0.66,"label":0},{"x":0.46,"y":0.36,"label":0},{"x":0.46,"y":0.26,"label":0},{"x":0.36,"y":0.26,"label":0},{"x":0.26,"y":0.36,"label":0},{"x":0.56,"y":0.28,"label":0},{"x":0.33,"y":0.54,"label":0},{"x":0.23,"y":0.52,"label":0},{"x":0.26,"y":0.16,"label":1},{"x":0.06,"y":0.46,"label":1},{"x":0.13,"y":0.66,"label":1},{"x":0.2,"y":0.8,"label":1},{"x":0.5,"y":0.5,"label":1},{"x":0.45,"y":0.5,"label":1},{"x":0.5,"y":0.45,"label":1},{"x":0.45,"y":0.45,"label":1},{"x":0.55,"y":0.55,"label":1},{"x":0.5,"y":0.55,"label":1},{"x":0.5,"y":0.2,"label":1},{"x":0.4,"y":0.1,"label":1},{"x":0.6,"y":0.1,"label":1},{"x":0.75,"y":0.15,"label":1},{"x":0.88,"y":0.22,"label":1},{"x":0.9,"y":0.35,"label":1},{"x":0.9,"y":0.49,"label":1},{"x":0.88,"y":0.62,"label":1},{"x":0.9,"y":0.9,"label":1},{"x":0.9,"y":0.8,"label":1},{"x":0.75,"y":0.85,"label":1},{"x":0.55,"y":0.92,"label":1},{"x":0.6,"y":0.95,"label":1},{"x":0.06,"y":0.57,"label":1},{"x":0.09,"y":0.8,"label":1},{"x":0.4,"y":0.9,"label":1}],"model":{"neuronGroups":[{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5}]}],"links":[{"n0":[0,0],"nf":[1,0],"weight":2.2559318523672673},{"n0":[0,0],"nf":[1,1],"weight":3.7705902078344162},{"n0":[0,0],"nf":[1,2],"weight":-5.673868837964195},{"n0":[0,0],"nf":[1,3],"weight":-2.552116396138559},{"n0":[0,0],"nf":[1,4],"weight":-4.765897189158554},{"n0":[0,1],"nf":[1,0],"weight":2.522847383501193},{"n0":[0,1],"nf":[1,1],"weight":-2.9902303588384505},{"n0":[0,1],"nf":[1,2],"weight":2.749623598598969},{"n0":[0,1],"nf":[1,3],"weight":-2.0657459601688077},{"n0":[0,1],"nf":[1,4],"weight":2.311040191441733},{"n0":[1,0],"nf":[2,0],"weight":-2.8083933750840506},{"n0":[1,0],"nf":[2,1],"weight":2.368208438212055},{"n0":[1,0],"nf":[2,2],"weight":2.792010178964303},{"n0":[1,0],"nf":[2,3],"weight":2.1204797088106764},{"n0":[1,0],"nf":[2,4],"weight":3.0855603411983634},{"n0":[1,1],"nf":[2,0],"weight":-2.1619760012233913},{"n0":[1,1],"nf":[2,1],"weight":2.7735676578848043},{"n0":[1,1],"nf":[2,2],"weight":-4.795321974592097},{"n0":[1,1],"nf":[2,3],"weight":-3.1618858651724424},{"n0":[1,1],"nf":[2,4],"weight":2.642537468325151},{"n0":[1,2],"nf":[2,0],"weight":5.111269168104936},{"n0":[1,2],"nf":[2,1],"weight":1.8060793114773712},{"n0":[1,2],"nf":[2,2],"weight":1.2874475479043777},{"n0":[1,2],"nf":[2,3],"weight":3.715659708889894},{"n0":[1,2],"nf":[2,4],"weight":-5.479057778095251},{"n0":[1,3],"nf":[2,0],"weight":4.279970838297447},{"n0":[1,3],"nf":[2,1],"weight":-3.8573191202934085},{"n0":[1,3],"nf":[2,2],"weight":-4.346636276004062},{"n0":[1,3],"nf":[2,3],"weight":1.8026421918582567},{"n0":[1,3],"nf":[2,4],"weight":3.9687935202147346},{"n0":[1,4],"nf":[2,0],"weight":-3.5216391228147197},{"n0":[1,4],"nf":[2,1],"weight":4.599458665307638},{"n0":[1,4],"nf":[2,2],"weight":-4.752572287153145},{"n0":[1,4],"nf":[2,3],"weight":-3.810827524569661},{"n0":[1,4],"nf":[2,4],"weight":3.0650028924296953},{"n0":[2,0],"nf":[3,0],"weight":-4.300364295192499},{"n0":[2,0],"nf":[3,1],"weight":-2.9036061692080217},{"n0":[2,1],"nf":[3,0],"weight":4.132576329093505},{"n0":[2,1],"nf":[3,1],"weight":-3.817976850598705},{"n0":[2,2],"nf":[3,0],"weight":4.606542085589321},{"n0":[2,2],"nf":[3,1],"weight":2.8220313920923323},{"n0":[2,3],"nf":[3,0],"weight":2.3423002019828885},{"n0":[2,3],"nf":[3,1],"weight":2.098573708791525},{"n0":[2,4],"nf":[3,0],"weight":4.4760505444141625},{"n0":[2,4],"nf":[3,1],"weight":3.95752484391276},{"n0":[3,0],"nf":[4,0],"weight":-0.7265226578414495},{"n0":[3,1],"nf":[4,0],"weight":-4.316679309853457}]}}
 },{}],4:[function(require,module,exports){
 const nn = require("./nn");
 const ui = require("./ui");
@@ -117,10 +117,10 @@ class App {
     
     model.render();
     dataCanvas.render((x, y) => {
-      model.layers[0].neurons[0].activation = x;
-      model.layers[0].neurons[1].activation = y;
+      model.neuronGroups[0].neurons[0].activation = x;
+      model.neuronGroups[0].neurons[1].activation = y;
       model.forward();
-      return model.layers[model.layers.length - 1].neurons[0].activation;
+      return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
     });
     this.controlPanel.update({
       totalLoss: dataLoss + regularizationLoss,
@@ -161,66 +161,6 @@ ui.init(() => {
   window.app = app;
 });
 },{"./common/svg":2,"./data":3,"./nn":9,"./ui":15}],5:[function(require,module,exports){
-const Neuron = require("./Neuron");
-
-class Layer {
-  constructor(parent) {
-    this.parent = parent;
-    this.neurons = [];
-  }
-
-  render() {
-    this.neurons.forEach((neuron) => {
-      neuron.render();
-    });
-  }
-
-  reset() {
-    for (let i = 0; i < this.neurons.length; i++) {
-      const neuron = this.neurons[i];
-      neuron.reset();
-    }
-  }
-
-  addNeuron(bias) {
-    if (bias == null) bias = 0.5;
-    const neuron = new Neuron(this, bias);
-    this.neurons.push(neuron);
-    this.parent.neurons.push(neuron);
-    this.parent.svgNeurons.appendChild(neuron.svgElement);
-    return neuron;
-  }
-
-  getNeuronAt(i) {
-    return this.neurons[i];
-  }
-
-  getNeuronCount() {
-    return this.neurons.length;
-  }
-
-  getIndex() {
-    return this.parent.layers.indexOf(this);
-  }
-
-  toData() {
-    const data = {
-      neurons: this.neurons.map((neuron) => neuron.toData())
-    };
-    return data;
-  }
-
-  static fromData(neuralNet, data) {
-    const layer = neuralNet.addLayer();
-    data.neurons.forEach((neuronData) => {
-      Neuron.fromData(layer, neuronData);
-    });
-  }
-}
-
-module.exports = Layer;
-
-},{"./Neuron":7}],6:[function(require,module,exports){
 const svg = require("../common/svg");
 const Color = require("../common/Color");
 
@@ -230,8 +170,8 @@ class Link {
     this.n0 = n0;
     this.nf = nf;
     
-    if (this.n0.layer.getIndex() + 1 != this.nf.layer.getIndex()) {
-      throw "Cannot connect neurons from non-consecutive layers";
+    if (this.n0.group.getIndex() + 1 != this.nf.group.getIndex()) {
+      throw "Cannot connect neurons from non-consecutive groups";
     }
     
     if (weight == null) this.weight = 1;
@@ -277,11 +217,11 @@ class Link {
   toData() {
     const data = {};
     data.n0 = [
-      this.n0.layer.getIndex(),
+      this.n0.group.getIndex(),
       this.n0.getIndex()
     ];
     data.nf = [
-      this.nf.layer.getIndex(),
+      this.nf.group.getIndex(),
       this.nf.getIndex()
     ];
     data.weight = this.weight;
@@ -292,8 +232,8 @@ class Link {
     const weight = data.weight;
     const a = data.n0;
     const b = data.nf;
-    const n0 = neuralNet.layers[a[0]].neurons[a[1]];
-    const nf = neuralNet.layers[b[0]].neurons[b[1]];
+    const n0 = neuralNet.neuronGroups[a[0]].neurons[a[1]];
+    const nf = neuralNet.neuronGroups[b[0]].neurons[b[1]];
     const link = neuralNet.addLink(n0, nf, weight);
     return link;
   }
@@ -301,7 +241,7 @@ class Link {
 
 module.exports = Link;
 
-},{"../common/Color":1,"../common/svg":2}],7:[function(require,module,exports){
+},{"../common/Color":1,"../common/svg":2}],6:[function(require,module,exports){
 const svg = require("../common/svg");
 const Color = require("../common/Color");
 
@@ -317,8 +257,8 @@ function dSigmoid(n) {
 }
 
 class Neuron {
-  constructor(layer, bias) {
-    this.layer = layer;
+  constructor(group, bias) {
+    this.group = group;
     this.links = [];
     this.backLinks = [];
 
@@ -389,14 +329,14 @@ class Neuron {
   }
 
   getIndex() {
-    return this.layer.neurons.indexOf(this);
+    return this.group.neurons.indexOf(this);
   }
 
   getPosition() {
-    const neuralNet = this.layer.parent;
-    const neuronCount = this.layer.neurons.length;
-    const layerCount = neuralNet.layers.length;
-    const maxNeuronCountPerLayer = 5;
+    const neuralNet = this.group.parent;
+    const neuronCount = this.group.neurons.length;
+    const neuronGroupCount = neuralNet.neuronGroups.length;
+    const maxNeuronCountPerGroup = 5;
     
     const container = neuralNet.svgElement.parentNode;
     if (container == null) return {x: 0, y: 0};
@@ -407,10 +347,10 @@ class Neuron {
     const cy = height / 2;
     const cx = width / 2;
     
-    const dx = (width - (radius + strokeWidth) * 2) / (layerCount - 1);
-    const dy = (height - (radius + strokeWidth) * 2) / (maxNeuronCountPerLayer - 1);
+    const dx = (width - (radius + strokeWidth) * 2) / (neuronGroupCount - 1);
+    const dy = (height - (radius + strokeWidth) * 2) / (maxNeuronCountPerGroup - 1);
     
-    const x = cx + (this.layer.getIndex() - (layerCount - 1) / 2) * dx;
+    const x = cx + (this.group.getIndex() - (neuronGroupCount - 1) / 2) * dx;
     
     let y;
     if (neuronCount == 0) {
@@ -439,23 +379,83 @@ class Neuron {
     };
   }
 
-  static fromData(layer, data) {
-    layer.addNeuron(data.bias);
+  static fromData(group, data) {
+    group.addNeuron(data.bias);
   }
 }
 
 module.exports = Neuron;
 
-},{"../common/Color":1,"../common/svg":2}],8:[function(require,module,exports){
+},{"../common/Color":1,"../common/svg":2}],7:[function(require,module,exports){
+const Neuron = require("./Neuron");
+
+class NeuronGroup {
+  constructor(parent) {
+    this.parent = parent;
+    this.neurons = [];
+  }
+
+  render() {
+    this.neurons.forEach((neuron) => {
+      neuron.render();
+    });
+  }
+
+  reset() {
+    for (let i = 0; i < this.neurons.length; i++) {
+      const neuron = this.neurons[i];
+      neuron.reset();
+    }
+  }
+
+  addNeuron(bias) {
+    if (bias == null) bias = 0.5;
+    const neuron = new Neuron(this, bias);
+    this.neurons.push(neuron);
+    this.parent.neurons.push(neuron);
+    this.parent.svgNeurons.appendChild(neuron.svgElement);
+    return neuron;
+  }
+
+  getNeuronAt(i) {
+    return this.neurons[i];
+  }
+
+  getNeuronCount() {
+    return this.neurons.length;
+  }
+
+  getIndex() {
+    return this.parent.neuronGroups.indexOf(this);
+  }
+
+  toData() {
+    const data = {
+      neurons: this.neurons.map((neuron) => neuron.toData())
+    };
+    return data;
+  }
+
+  static fromData(neuralNet, data) {
+    const neuronGroup = neuralNet.addNeuronGroup();
+    data.neurons.forEach((neuronData) => {
+      Neuron.fromData(neuronGroup, neuronData);
+    });
+  }
+}
+
+module.exports = NeuronGroup;
+
+},{"./Neuron":6}],8:[function(require,module,exports){
 const svg = require("../common/svg");
 const Link = require("./Link");
-const Layer = require("./Layer");
+const NeuronGroup = require("./NeuronGroup");
 
 class Sequential {
   constructor() {
     this.neurons = [];
     this.links = [];
-    this.layers = [];
+    this.neuronGroups = [];
 
     this.svgElement = svg.createElement("g");
     
@@ -466,23 +466,23 @@ class Sequential {
     this.svgElement.appendChild(this.svgNeurons);
   }
 
-  addLayer(neurons) {
+  addNeuronGroup(neurons) {
     if (neurons == null) neurons = 0;	
     
-    const layer = new Layer(this);
-    this.layers.push(layer);
+    const group = new NeuronGroup(this);
+    this.neuronGroups.push(group);
     
     for (let i = 0; i < neurons; i++) {
-      layer.addNeuron();
+      group.addNeuron();
     }
     
-    return layer;
+    return group;
   }
 
   addFullyConnectedLayer(neurons) {
-    const l0 = this.layers[this.layers.length - 1];
-    this.addLayer(neurons);
-    const lf = this.layers[this.layers.length - 1];
+    const l0 = this.neuronGroups[this.neuronGroups.length - 1];
+    this.addNeuronGroup(neurons);
+    const lf = this.neuronGroups[this.neuronGroups.length - 1];
     for (let i = 0; i < l0.neurons.length; i++) {
       const n0 = l0.neurons[i];
       for (let j = 0; j < lf.neurons.length; j++) {
@@ -502,12 +502,12 @@ class Sequential {
   }
 
   render() {
-    this.layers.forEach((layer) => layer.render());
+    this.neuronGroups.forEach((group) => group.render());
     this.links.forEach((link) => link.render());
   }
 
   reset() {
-    this.layers.forEach((layer) => layer.reset());
+    this.neuronGroups.forEach((group) => group.reset());
   }
 
   randomizeParameters() {
@@ -525,9 +525,9 @@ class Sequential {
   }
 
   forward() {
-    for (let i = 1; i < this.layers.length; i++) {
-      const layer = this.layers[i];
-      layer.neurons.forEach((neuron) => {
+    for (let i = 1; i < this.neuronGroups.length; i++) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
         neuron.forward();
       });
     }
@@ -536,9 +536,9 @@ class Sequential {
   backward(learningRate, regularization) {
     let regularizationLoss = 0;
     
-    for (let i = this.layers.length - 1; i >= 0; i--) {
-      const layer = this.layers[i];
-      layer.neurons.forEach((neuron) => {
+    for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
         regularizationLoss += neuron.backward(regularization);
       });
     }
@@ -552,9 +552,9 @@ class Sequential {
       link.applyGradient(learningRate);
     });
     
-    for (let i = 1; i < this.layers.length; i++) {
-      const layer = this.layers[i];
-      layer.neurons.forEach((neuron) => {
+    for (let i = 1; i < this.neuronGroups.length; i++) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
         neuron.applyGradient(learningRate);
       });
     }
@@ -573,11 +573,11 @@ class Sequential {
       dataLoss = 0;
       dataCanvas.dataPoints.forEach((dataPoint) => {
         this.reset();
-        this.layers[0].neurons[0].activation = dataPoint.x;
-        this.layers[0].neurons[1].activation = dataPoint.y;
+        this.neuronGroups[0].neurons[0].activation = dataPoint.x;
+        this.neuronGroups[0].neurons[1].activation = dataPoint.y;
         this.forward();
         
-        const neuron = this.layers[this.layers.length - 1].neurons[0];
+        const neuron = this.neuronGroups[this.neuronGroups.length - 1].neurons[0];
         const output = neuron.activation;
         const d = dataPoint.label - output;
         dataLoss += 0.5 * d * d;
@@ -598,7 +598,7 @@ class Sequential {
 
   toData() {
     return {
-      layers: this.layers.map((layer) => layer.toData()),
+      groups: this.neuronGroups.map((group) => group.toData()),
       links: this.links.map((link) => link.toData())
     }
   }
@@ -606,8 +606,8 @@ class Sequential {
   static fromData(data) {
     const sequential = new Sequential();
     
-    data.layers.forEach((layerData) => {
-      Layer.fromData(sequential, layerData);
+    data.neuronGroups.forEach((groupData) => {
+      NeuronGroup.fromData(sequential, groupData);
     });
   
     data.links.forEach((linkData) => {
@@ -620,7 +620,7 @@ class Sequential {
 
 module.exports = Sequential;
 
-},{"../common/svg":2,"./Layer":5,"./Link":6}],9:[function(require,module,exports){
+},{"../common/svg":2,"./Link":5,"./NeuronGroup":7}],9:[function(require,module,exports){
 module.exports = {
   Sequential: require("./Sequential")
 };
