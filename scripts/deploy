@@ -26,6 +26,7 @@ def infer_remote_url():
     repo_dirname = infer_repo_dirname()
     config.read(os.path.join(repo_dirname, ".git", "config"))
     sections = config.sections()
+    # TODO handle case when .git/config contains multiple remote sections
     for section in sections:
         is_remote = False
         try:
@@ -36,6 +37,7 @@ def infer_remote_url():
         if is_remote:
             is_github_remote = False
             remote_url = config.get(section, "url")
+            print(f"inferred url: {remote_url}")
             try:
                 remote_url.index("github") # TODO the criterion to determine if a remote url is on github could be better
                 is_github_remote = True
