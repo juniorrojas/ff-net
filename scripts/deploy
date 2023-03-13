@@ -4,6 +4,7 @@ import os
 this_filepath = Path(os.path.abspath(__file__))
 this_dirpath = this_filepath.parent
 import shutil
+import sys
 import subprocess
 import argparse
 import configparser
@@ -51,7 +52,7 @@ def infer_remote_url():
         if is_remote:
             is_github_remote = False
             remote_url = config.get(section, "url")
-            print(yellow(f"Inferred remote: {remote_url}"))
+            print(yellow(f"Inferred remote: {remote_url}"), file=sys.stderr)
             try:
                 remote_url.index("github") # TODO the criterion to determine if a remote url is on github could be better
                 is_github_remote = True
@@ -74,7 +75,7 @@ if __name__ == "__main__":
     else:
         repo = infer_remote_url()
         if repo is None:
-            print("github remote could not be inferred, run the script with --repo <remote-url>")
+            print("github remote could not be inferred, run the script with --repo <remote-url>", file=sys.stderr)
             exit(1)
     
     deploy_branch = args.branch
@@ -85,7 +86,7 @@ if __name__ == "__main__":
     deploy_path = project_path.joinpath("deploy.out")
     cleandir(deploy_path)
 
-    print(yellow(f"Cloning git repo {repo}"))
+    print(yellow(f"Cloning git repo {repo}"), file=sys.stderr)
 
     os.chdir(deploy_path)
     e = subprocess.call(["git", "init"])
@@ -129,7 +130,7 @@ if __name__ == "__main__":
         deploy_path.joinpath("css")
     )
 
-    print(green(f"Preview available at:\n{deploy_index_filename}"))
+    print(green(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
 
     if args.push:
         a = input(f"Deploy to {repo}@{deploy_branch}? [y/_] ")
