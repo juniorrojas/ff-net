@@ -8,6 +8,20 @@ import subprocess
 import argparse
 import configparser
 
+class TextColor:
+    green = "\033[92m"
+    yellow = "\033[93m"
+    end = "\033[0m"
+
+def color_text(color, text):
+    return f"{color}{text}{TextColor.end}"
+
+def yellow(text):
+    return color_text(TextColor.yellow, text)
+
+def green(text):
+    return color_text(TextColor.green, text)
+
 def cleandir(d):
     if os.path.exists(d):
         shutil.rmtree(d)
@@ -37,7 +51,7 @@ def infer_remote_url():
         if is_remote:
             is_github_remote = False
             remote_url = config.get(section, "url")
-            print(f"inferred url: {remote_url}")
+            print(yellow(f"Inferred remote: {remote_url}"))
             try:
                 remote_url.index("github") # TODO the criterion to determine if a remote url is on github could be better
                 is_github_remote = True
@@ -70,6 +84,8 @@ if __name__ == "__main__":
     project_path = this_dirpath.parent
     deploy_path = project_path.joinpath("deploy.out")
     cleandir(deploy_path)
+
+    print(yellow(f"Cloning git repo {repo}"))
 
     os.chdir(deploy_path)
     e = subprocess.call(["git", "init"])
@@ -113,7 +129,7 @@ if __name__ == "__main__":
         deploy_path.joinpath("css")
     )
 
-    print(f"Preview available at {deploy_index_filename}")
+    print(green(f"Preview available at:\n{deploy_index_filename}"))
 
     if args.push:
         a = input(f"Deploy to {repo}@{deploy_branch}? [y/_] ")
