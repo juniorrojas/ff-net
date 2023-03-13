@@ -15,6 +15,7 @@ def cleandir(d):
 
 def infer_remote_url():
     config = configparser.ConfigParser()
+    # TODO infer git repo dirname first
     config.read(".git/config")
     sections = config.sections()
     for section in sections:
