@@ -13,10 +13,18 @@ def cleandir(d):
         shutil.rmtree(d)
     os.makedirs(d)
 
+def infer_repo_dirname():
+    current_dirpath = Path(os.path.abspath(os.getcwd()))
+    while not os.path.exists(current_dirpath.joinpath(".git")):
+        if current_dirpath.parent == current_dirpath:
+            raise RuntimeError("could not infer repo name")
+        current_dirpath = current_dirpath.parent
+    return str(current_dirpath)
+
 def infer_remote_url():
     config = configparser.ConfigParser()
-    # TODO infer git repo dirname first
-    config.read(".git/config")
+    repo_dirname = infer_repo_dirname()
+    config.read(os.path.join(repo_dirname, ".git", "config"))
     sections = config.sections()
     for section in sections:
         is_remote = False
