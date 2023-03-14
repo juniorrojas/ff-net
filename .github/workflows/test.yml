@@ -17,13 +17,14 @@ jobs:
         run: |
           npm ci
           npm test
-  test-demo-build:
+  test-demo:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Build demo
+      - name: Test demo
         run: |
           cd demo
           npm ci
           npm run build
+          npm test
