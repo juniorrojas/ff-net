@@ -26,8 +26,13 @@ test("backward", () => {
 
   model.forward();
   
-  expect(outputNeuron.activation).toEqual(0.5);
+  expect(outputNeuron.activation).toBe(0.5);
+
+  outputNeuron.dActivation = 1;
+  expect(outputNeuron.dPreActivation).toBe(0);
 
   model.backward(0, 0);
+  expect(outputNeuron.dPreActivation).toBe(0.25);
   // TODO check that w.grad and b.grad are correct
+  console.log(model.links[0].dWeight);
 });
