@@ -4,7 +4,7 @@
     "name": "Junior Rojas"
   },
   "scripts": {
-    "test": "export NODE_PATH=. && jest"
+    "test": "export NODE_PATH=. && jest ./test"
   },
   "devDependencies": {
     "jest": "^29.5.0"
