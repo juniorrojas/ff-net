@@ -1,4 +1,7 @@
+const nn = require("./nn");
+
 module.exports = {
   common: require("./common"),
-  nn: require("./nn")
+  nn: nn,
+  Sequential: nn.Sequential
 };

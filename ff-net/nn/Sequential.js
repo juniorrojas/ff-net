@@ -7,7 +7,7 @@ class Sequential {
     this.links = [];
     this.neuronGroups = [];
 
-    this.headless = args.headless;
+    this.headless = args.headless ?? true;
     if (!this.headless) {
       const svg = require("../common/svg");
 
@@ -165,8 +165,13 @@ class Sequential {
     }
   }
 
-  static fromData(data) {
-    const sequential = new Sequential();
+  static fromData(args = {}) {
+    const data = args.data;
+    const headless = args.headless;
+
+    const sequential = new Sequential({
+      headless: headless
+    });
     
     data.neuronGroups.forEach((groupData) => {
       NeuronGroup.fromData(sequential, groupData);

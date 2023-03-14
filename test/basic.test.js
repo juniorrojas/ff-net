@@ -1,7 +1,7 @@
 const ffnet = require("ff-net");
 
 test("test", () => {
-  const model = new ffnet.nn.Sequential({
+  const model = new ffnet.Sequential({
     headless: true
   });
   expect(model.numLayers()).toBe(0);

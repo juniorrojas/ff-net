@@ -4,7 +4,7 @@ const svg = ffnet.common.svg;
 const ui = require("./ui");
 
 class App {
-  constructor(data) {    
+  constructor(data) {
     const container = document.createElement("div");
     container.className = "content-container";
     this.domElement = container;
@@ -20,7 +20,10 @@ class App {
     svgModel.id = "neural-net";
     row.appendChild(svgModel);
     
-    const model = this.model = nn.Sequential.fromData(data.model);
+    const model = this.model = nn.Sequential.fromData({
+      data: data.model,
+      headless: false
+    });
     svgModel.appendChild(model.svgElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
