@@ -1,4 +1,5 @@
-const Color = require("../common/Color");
+const ffnet = require("../../../ff-net");
+const Color = ffnet.common.Color;
 const DataPoint = require("./DataPoint");
 const DragBehavior = require("./DragBehavior");
 
