@@ -22,7 +22,8 @@ test("backward", () => {
   const outputNeuronGroup = model.getOutputNeuronGroup();
   const outputNeuron = outputNeuronGroup.neurons[0];
   outputNeuron.bias = b;
-  model.links[0].weight = w;
+  const link = model.links[0];
+  link.weight = w;
 
   model.forward();
   
@@ -33,6 +34,7 @@ test("backward", () => {
 
   model.backward(0, 0);
   expect(outputNeuron.dPreActivation).toBe(0.25);
-  // TODO check that w.grad and b.grad are correct
-  console.log(model.links[0].dWeight);
+  
+  expect(link.dWeight).toBe(0);
+  expect(outputNeuron.dBias).toBe(0.25);
 });
