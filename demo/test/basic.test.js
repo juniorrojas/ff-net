@@ -9,6 +9,19 @@ test("main", async () => {
   });
   try {
     await window.launch();
+    await window.evaluate(async () => {
+      function waitInit() {
+        return new Promise((resolve, reject) => {
+          const interval = setInterval(() => {
+            if (window.app != null) {
+              clearInterval(interval);
+              resolve();
+            }
+          }, 1);
+        });
+      }
+      await waitInit();
+    });
   } finally {
     await window.close();
   }
