@@ -26,7 +26,7 @@ class Neuron {
     const headless = group.parent.headless;
     
     if (!headless) {
-      const svg = require("../common/svg");
+      const svg = require("../ui/svg");
       const svgElement = this.svgElement = svg.createElement("circle");
       svgElement.setAttribute("r", radius);
     }
@@ -63,7 +63,7 @@ class Neuron {
   }
 
   render() {
-    const Color = require("../common/Color");
+    const Color = require("../ui/Color");
     
     const circle = this.svgElement;
     const position = this.getPosition();
