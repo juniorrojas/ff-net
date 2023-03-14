@@ -1,4 +1,4 @@
-# <div style="display:flex;align-items:center;"><img src="media/logo.png" width="100px" style="margin-right:20px">ff-net</div>
+<img src="media/logo.png" width="300px" align="center">
 
 ---
 
