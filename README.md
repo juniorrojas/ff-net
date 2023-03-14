@@ -1,4 +1,8 @@
-# ff-net
+<div align="center">
+  <img src="media/logo.png" width="300px">
+</div>
+
+---
 
 [![test](https://github.com/juniorrojas/ff-net/actions/workflows/test.yml/badge.svg)](https://github.com/juniorrojas/ff-net/actions/workflows/test.yml)
 
