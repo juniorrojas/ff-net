@@ -1,70 +1,13 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-class Color {
-  // r, g, b, a are numbers between 0 and 1
-  constructor(r, g, b, a) {
-    if (a == null) a = 1;
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
-  }
-  
-  blend(c, t) {
-    if (Math.abs(t) > 1) throw new Error("t must be a number between -1 and 1");
-    
-    let source, target;
-    if (t >= 0) {
-      source = this;
-      target = c;
-    } else {
-      source = c;
-      target = this;
-    }
-    
-    return new Color(
-      source.r * (1 - t) + target.r * t,
-      source.g * (1 - t) + target.g * t,
-      source.b * (1 - t) + target.b * t
-    );
-  }
-
-  toString() {
-    const r = Math.floor(255 * this.r);
-    const g = Math.floor(255 * this.g);
-    const b = Math.floor(255 * this.b);
-    const a = this.a;
-    return `rgba(${r}, ${g}, ${b}, ${a})`;
-  }
-}
-
-Color.white = new Color(1, 1, 1);
-Color.black = new Color(0, 0, 0);
-
-Color.red = new Color(226 / 255, 86 / 255, 86 / 255);
-Color.blue = new Color(135 / 255, 173 / 255, 236 / 255);
-
-Color.lightBlue = new Color(186 / 255, 224 / 255, 251 / 255);
-Color.lightRed = new Color(252 / 255, 163 / 255, 163 / 255);
-
-module.exports = Color;
-},{}],2:[function(require,module,exports){
-const svg = {};
-
-svg.createElement = function(element) {
-  return document.createElementNS("http://www.w3.org/2000/svg", element);
-}
-
-module.exports = svg;
-
-},{}],3:[function(require,module,exports){
 module.exports={"dataPoints":[{"x":0.08,"y":0.24,"label":1},{"x":0.2,"y":0.27,"label":1},{"x":0.05,"y":0.3,"label":1},{"x":0.1,"y":0.1,"label":1},{"x":0.4,"y":0.4,"label":0},{"x":0.6,"y":0.4,"label":0},{"x":0.65,"y":0.7,"label":0},{"x":0.7,"y":0.3,"label":0},{"x":0.35,"y":0.65,"label":0},{"x":0.3,"y":0.5,"label":0},{"x":0.7,"y":0.5,"label":0},{"x":0.75,"y":0.55,"label":0},{"x":0.7,"y":0.6,"label":0},{"x":0.65,"y":0.34,"label":0},{"x":0.8,"y":0.65,"label":0},{"x":0.5,"y":0.7,"label":0},{"x":0.5,"y":0.66,"label":0},{"x":0.56,"y":0.66,"label":0},{"x":0.46,"y":0.36,"label":0},{"x":0.46,"y":0.26,"label":0},{"x":0.36,"y":0.26,"label":0},{"x":0.26,"y":0.36,"label":0},{"x":0.56,"y":0.28,"label":0},{"x":0.33,"y":0.54,"label":0},{"x":0.23,"y":0.52,"label":0},{"x":0.26,"y":0.16,"label":1},{"x":0.06,"y":0.46,"label":1},{"x":0.13,"y":0.66,"label":1},{"x":0.2,"y":0.8,"label":1},{"x":0.5,"y":0.5,"label":1},{"x":0.45,"y":0.5,"label":1},{"x":0.5,"y":0.45,"label":1},{"x":0.45,"y":0.45,"label":1},{"x":0.55,"y":0.55,"label":1},{"x":0.5,"y":0.55,"label":1},{"x":0.5,"y":0.2,"label":1},{"x":0.4,"y":0.1,"label":1},{"x":0.6,"y":0.1,"label":1},{"x":0.75,"y":0.15,"label":1},{"x":0.88,"y":0.22,"label":1},{"x":0.9,"y":0.35,"label":1},{"x":0.9,"y":0.49,"label":1},{"x":0.88,"y":0.62,"label":1},{"x":0.9,"y":0.9,"label":1},{"x":0.9,"y":0.8,"label":1},{"x":0.75,"y":0.85,"label":1},{"x":0.55,"y":0.92,"label":1},{"x":0.6,"y":0.95,"label":1},{"x":0.06,"y":0.57,"label":1},{"x":0.09,"y":0.8,"label":1},{"x":0.4,"y":0.9,"label":1}],"model":{"neuronGroups":[{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5}]}],"links":[{"n0":[0,0],"nf":[1,0],"weight":2.2559318523672673},{"n0":[0,0],"nf":[1,1],"weight":3.7705902078344162},{"n0":[0,0],"nf":[1,2],"weight":-5.673868837964195},{"n0":[0,0],"nf":[1,3],"weight":-2.552116396138559},{"n0":[0,0],"nf":[1,4],"weight":-4.765897189158554},{"n0":[0,1],"nf":[1,0],"weight":2.522847383501193},{"n0":[0,1],"nf":[1,1],"weight":-2.9902303588384505},{"n0":[0,1],"nf":[1,2],"weight":2.749623598598969},{"n0":[0,1],"nf":[1,3],"weight":-2.0657459601688077},{"n0":[0,1],"nf":[1,4],"weight":2.311040191441733},{"n0":[1,0],"nf":[2,0],"weight":-2.8083933750840506},{"n0":[1,0],"nf":[2,1],"weight":2.368208438212055},{"n0":[1,0],"nf":[2,2],"weight":2.792010178964303},{"n0":[1,0],"nf":[2,3],"weight":2.1204797088106764},{"n0":[1,0],"nf":[2,4],"weight":3.0855603411983634},{"n0":[1,1],"nf":[2,0],"weight":-2.1619760012233913},{"n0":[1,1],"nf":[2,1],"weight":2.7735676578848043},{"n0":[1,1],"nf":[2,2],"weight":-4.795321974592097},{"n0":[1,1],"nf":[2,3],"weight":-3.1618858651724424},{"n0":[1,1],"nf":[2,4],"weight":2.642537468325151},{"n0":[1,2],"nf":[2,0],"weight":5.111269168104936},{"n0":[1,2],"nf":[2,1],"weight":1.8060793114773712},{"n0":[1,2],"nf":[2,2],"weight":1.2874475479043777},{"n0":[1,2],"nf":[2,3],"weight":3.715659708889894},{"n0":[1,2],"nf":[2,4],"weight":-5.479057778095251},{"n0":[1,3],"nf":[2,0],"weight":4.279970838297447},{"n0":[1,3],"nf":[2,1],"weight":-3.8573191202934085},{"n0":[1,3],"nf":[2,2],"weight":-4.346636276004062},{"n0":[1,3],"nf":[2,3],"weight":1.8026421918582567},{"n0":[1,3],"nf":[2,4],"weight":3.9687935202147346},{"n0":[1,4],"nf":[2,0],"weight":-3.5216391228147197},{"n0":[1,4],"nf":[2,1],"weight":4.599458665307638},{"n0":[1,4],"nf":[2,2],"weight":-4.752572287153145},{"n0":[1,4],"nf":[2,3],"weight":-3.810827524569661},{"n0":[1,4],"nf":[2,4],"weight":3.0650028924296953},{"n0":[2,0],"nf":[3,0],"weight":-4.300364295192499},{"n0":[2,0],"nf":[3,1],"weight":-2.9036061692080217},{"n0":[2,1],"nf":[3,0],"weight":4.132576329093505},{"n0":[2,1],"nf":[3,1],"weight":-3.817976850598705},{"n0":[2,2],"nf":[3,0],"weight":4.606542085589321},{"n0":[2,2],"nf":[3,1],"weight":2.8220313920923323},{"n0":[2,3],"nf":[3,0],"weight":2.3423002019828885},{"n0":[2,3],"nf":[3,1],"weight":2.098573708791525},{"n0":[2,4],"nf":[3,0],"weight":4.4760505444141625},{"n0":[2,4],"nf":[3,1],"weight":3.95752484391276},{"n0":[3,0],"nf":[4,0],"weight":-0.7265226578414495},{"n0":[3,1],"nf":[4,0],"weight":-4.316679309853457}]}}
-},{}],4:[function(require,module,exports){
-const nn = require("./nn");
+},{}],2:[function(require,module,exports){
+const ffnet = require("../../ff-net");
+const nn = ffnet.nn;
+const svg = ffnet.common.svg;
 const ui = require("./ui");
-const svg = require("./common/svg");
 
 class App {
-  constructor(data) {    
+  constructor(data) {
     const container = document.createElement("div");
     container.className = "content-container";
     this.domElement = container;
@@ -80,7 +23,10 @@ class App {
     svgModel.id = "neural-net";
     row.appendChild(svgModel);
     
-    const model = this.model = nn.Sequential.fromData(data.model);
+    const model = this.model = nn.Sequential.fromData({
+      data: data.model,
+      headless: false
+    });
     svgModel.appendChild(model.svgElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
@@ -160,469 +106,7 @@ ui.init(() => {
   document.body.appendChild(app.domElement);
   window.app = app;
 });
-},{"./common/svg":2,"./data":3,"./nn":9,"./ui":15}],5:[function(require,module,exports){
-const svg = require("../common/svg");
-const Color = require("../common/Color");
-
-class Link {
-  constructor(neuralNet, n0, nf, weight) {
-    this.neuralNet = neuralNet;
-    this.n0 = n0;
-    this.nf = nf;
-    
-    if (this.n0.group.getIndex() + 1 != this.nf.group.getIndex()) {
-      throw "Cannot connect neurons from non-consecutive groups";
-    }
-    
-    if (weight == null) this.weight = 1;
-    else this.weight = weight;
-    this.dWeight = 0;
-
-    this.svgElement = svg.createElement("path");
-    this.render();
-  }
-
-  render() {
-    const path = this.svgElement;
-    const p0 = this.n0.getPosition();
-    const pf = this.nf.getPosition();
-    path.setAttribute(
-      "d",
-      "M" + p0.x + " " + p0.y + " " +
-      "L" + pf.x + " " + pf.y
-    );
-    const maxVisibleWeight = 5;
-    const width = 9 * Math.min(1, Math.abs(this.weight) / maxVisibleWeight);
-    path.setAttribute("stroke-width", width);
-    let color;
-    if (this.weight < 0) color = Color.red;
-    else color = Color.blue;
-    path.setAttribute("stroke-opacity", 0.4);
-    path.setAttribute("stroke", color);
-  }
-
-  backward(regularization) {
-    let regularizationError = 0;
-    this.dWeight = this.n0.activation * this.nf.dPreActivation;
-    // regularization error = 0.5 * regularization * weight^2
-    this.dWeight += regularization * this.weight;
-    regularizationError += 0.5 * regularization * this.weight * this.weight;
-    return regularizationError;
-  }
-
-  applyGradient(learningRate) {
-    this.weight -= learningRate * this.dWeight;
-  }
-
-  toData() {
-    const data = {};
-    data.n0 = [
-      this.n0.group.getIndex(),
-      this.n0.getIndex()
-    ];
-    data.nf = [
-      this.nf.group.getIndex(),
-      this.nf.getIndex()
-    ];
-    data.weight = this.weight;
-    return data;
-  }
-
-  static fromData(neuralNet, data) {
-    const weight = data.weight;
-    const a = data.n0;
-    const b = data.nf;
-    const n0 = neuralNet.neuronGroups[a[0]].neurons[a[1]];
-    const nf = neuralNet.neuronGroups[b[0]].neurons[b[1]];
-    const link = neuralNet.addLink(n0, nf, weight);
-    return link;
-  }
-}
-
-module.exports = Link;
-
-},{"../common/Color":1,"../common/svg":2}],6:[function(require,module,exports){
-const svg = require("../common/svg");
-const Color = require("../common/Color");
-
-const radius = 12;
-const strokeWidth = 2;
-
-function sigmoid(n) {
-  return 1 / (1 + Math.exp(-n));
-}
-
-function dSigmoid(n) {
-  return sigmoid(n) * (1 - sigmoid(n));
-}
-
-class Neuron {
-  constructor(group, bias) {
-    this.group = group;
-    this.links = [];
-    this.backLinks = [];
-
-    this.bias = bias;
-    this.preActivation = 0;
-    this.activation = sigmoid(this.bias);
-
-    this.dActivation = 0;
-    this.dPreActivation = 0;
-    this.dBias = 0;
-
-    const svgElement = this.svgElement = svg.createElement("circle");
-    svgElement.setAttribute("r", radius);
-  }
-
-  forward() {
-    this.preActivation = 0;
-    this.preActivation += this.bias;
-    this.backLinks.forEach((link) => {
-      this.preActivation += link.weight * link.n0.activation;
-    });
-    this.activation = sigmoid(this.preActivation);
-  }
-
-  backward(regularization) {
-    let regularizationError = 0;
-
-    this.links.forEach((link) => {
-      this.dActivation += link.weight * link.dWeight;
-    });
-    
-    this.dPreActivation = this.dActivation * dSigmoid(this.preActivation);
-    this.dBias = this.dPreActivation;
-    
-    this.backLinks.forEach((link) => {
-      regularizationError += link.backward(regularization);
-    });
-    
-    return regularizationError;
-  }
-
-  applyGradient(learningRate) {
-    this.bias -= learningRate * this.dBias;
-  }
-
-  render() {
-    const circle = this.svgElement;
-    const position = this.getPosition();
-    circle.setAttribute("cx", position.x);
-    circle.setAttribute("cy", position.y);
-
-    const isInput = this.backLinks.length == 0;
-    let fillColor;
-    if (isInput) {
-      fillColor = Color.blue.blend(Color.red, 0.6);
-    } else {
-      const maxVisibleAbsBias = 3;
-      let visibleBias = Math.max(Math.min(this.bias, maxVisibleAbsBias), -maxVisibleAbsBias);
-      const t = 0.5  + visibleBias / maxVisibleAbsBias * 0.5;
-      fillColor = Color.red.blend(Color.blue, t);
-    }
-
-    const strokeColor = fillColor.blend(Color.black, 0.3);
-    
-    circle.setAttribute("fill", fillColor.toString());
-    circle.setAttribute("stroke", strokeColor.toString());
-    circle.setAttribute("stroke-width", strokeWidth);
-  }
-
-  getIndex() {
-    return this.group.neurons.indexOf(this);
-  }
-
-  getPosition() {
-    const neuralNet = this.group.parent;
-    const neuronCount = this.group.neurons.length;
-    const neuronGroupCount = neuralNet.neuronGroups.length;
-    const maxNeuronCountPerGroup = 5;
-    
-    const container = neuralNet.svgElement.parentNode;
-    if (container == null) return {x: 0, y: 0};
-    const containerRect = container.getBoundingClientRect();
-    const width = containerRect.width;
-    const height = containerRect.height;
-    
-    const cy = height / 2;
-    const cx = width / 2;
-    
-    const dx = (width - (radius + strokeWidth) * 2) / (neuronGroupCount - 1);
-    const dy = (height - (radius + strokeWidth) * 2) / (maxNeuronCountPerGroup - 1);
-    
-    const x = cx + (this.group.getIndex() - (neuronGroupCount - 1) / 2) * dx;
-    
-    let y;
-    if (neuronCount == 0) {
-      y = cy;
-    } else {
-      y = cy + (this.getIndex() - (neuronCount - 1) / 2) * dy;
-    }
-    
-    return {
-      x: x,
-      y: y
-    };
-  }
-
-  reset() {
-    this.preActivation = 0;
-    this.activation = sigmoid(this.bias);
-    this.dActivation = 0;
-    this.dPreActivation = 0;
-    this.dBias = 0;
-  }
-
-  toData() {
-    return {
-      bias: this.bias
-    };
-  }
-
-  static fromData(group, data) {
-    group.addNeuron(data.bias);
-  }
-}
-
-module.exports = Neuron;
-
-},{"../common/Color":1,"../common/svg":2}],7:[function(require,module,exports){
-const Neuron = require("./Neuron");
-
-class NeuronGroup {
-  constructor(parent) {
-    this.parent = parent;
-    this.neurons = [];
-  }
-
-  render() {
-    this.neurons.forEach((neuron) => {
-      neuron.render();
-    });
-  }
-
-  reset() {
-    for (let i = 0; i < this.neurons.length; i++) {
-      const neuron = this.neurons[i];
-      neuron.reset();
-    }
-  }
-
-  addNeuron(bias) {
-    if (bias == null) bias = 0.5;
-    const neuron = new Neuron(this, bias);
-    this.neurons.push(neuron);
-    this.parent.neurons.push(neuron);
-    this.parent.svgNeurons.appendChild(neuron.svgElement);
-    return neuron;
-  }
-
-  getNeuronAt(i) {
-    return this.neurons[i];
-  }
-
-  getNeuronCount() {
-    return this.neurons.length;
-  }
-
-  getIndex() {
-    return this.parent.neuronGroups.indexOf(this);
-  }
-
-  toData() {
-    const data = {
-      neurons: this.neurons.map((neuron) => neuron.toData())
-    };
-    return data;
-  }
-
-  static fromData(neuralNet, data) {
-    const neuronGroup = neuralNet.addNeuronGroup();
-    data.neurons.forEach((neuronData) => {
-      Neuron.fromData(neuronGroup, neuronData);
-    });
-  }
-}
-
-module.exports = NeuronGroup;
-
-},{"./Neuron":6}],8:[function(require,module,exports){
-const svg = require("../common/svg");
-const Link = require("./Link");
-const NeuronGroup = require("./NeuronGroup");
-
-class Sequential {
-  constructor() {
-    this.neurons = [];
-    this.links = [];
-    this.neuronGroups = [];
-
-    this.svgElement = svg.createElement("g");
-    
-    this.svgLinks = svg.createElement("g");
-    this.svgElement.appendChild(this.svgLinks);
-    
-    this.svgNeurons = svg.createElement("g");
-    this.svgElement.appendChild(this.svgNeurons);
-  }
-
-  addNeuronGroup(neurons) {
-    if (neurons == null) neurons = 0;	
-    
-    const group = new NeuronGroup(this);
-    this.neuronGroups.push(group);
-    
-    for (let i = 0; i < neurons; i++) {
-      group.addNeuron();
-    }
-    
-    return group;
-  }
-
-  addFullyConnectedLayer(neurons) {
-    const inputGroup = this.neuronGroups[this.neuronGroups.length - 1];
-    this.addNeuronGroup(neurons);
-    const outputGroup = this.neuronGroups[this.neuronGroups.length - 1];
-    inputGroup.forEach((inputNeuron) => {
-      outputGroup.forEach((outputNeuron) => {
-        this.addLink(inputNeuron, outputNeuron);
-      })
-    });
-  }
-
-  addLink(n0, nf, weight) {
-    const link = new Link(this, n0, nf, weight);
-    n0.links.push(link);
-    nf.backLinks.push(link);
-    this.links.push(link);
-    this.svgLinks.appendChild(link.svgElement);
-    return link;
-  }
-
-  render() {
-    this.neuronGroups.forEach((group) => group.render());
-    this.links.forEach((link) => link.render());
-  }
-
-  reset() {
-    this.neuronGroups.forEach((group) => group.reset());
-  }
-
-  randomizeParameters() {
-    this.links.forEach((link) => {
-      let weight = 2 + Math.random() * 4;
-      if (Math.random() <= 0.5) weight *= -1;
-      link.weight = weight;
-    });
-    
-    this.neurons.forEach((neuron) => {
-      let bias = 1 + Math.random() * 2;
-      if (Math.random() <= 0.5) bias *= -1;
-      neuron.bias = bias;
-    });
-  }
-
-  forward() {
-    for (let i = 1; i < this.neuronGroups.length; i++) {
-      const group = this.neuronGroups[i];
-      group.neurons.forEach((neuron) => {
-        neuron.forward();
-      });
-    }
-  }
-
-  backward(learningRate, regularization) {
-    let regularizationLoss = 0;
-    
-    for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
-      const group = this.neuronGroups[i];
-      group.neurons.forEach((neuron) => {
-        regularizationLoss += neuron.backward(regularization);
-      });
-    }
-    
-    this.applyGradient(learningRate);
-    return regularizationLoss;
-  }
-
-  applyGradient(learningRate) {
-    this.links.forEach((link) => {
-      link.applyGradient(learningRate);
-    });
-    
-    for (let i = 1; i < this.neuronGroups.length; i++) {
-      const group = this.neuronGroups[i];
-      group.neurons.forEach((neuron) => {
-        neuron.applyGradient(learningRate);
-      });
-    }
-  }
-
-  train(args) {
-    // TODO decouple data from canvas
-    const dataCanvas = args.dataCanvas;
-    const learningRate = args.learningRate;
-    const regularization = args.regularization;
-    const iters = args.iters;
-
-    let regularizationLoss, dataLoss;
-
-    for (let i = 0; i < iters; i++) {
-      dataLoss = 0;
-      dataCanvas.dataPoints.forEach((dataPoint) => {
-        this.reset();
-        this.neuronGroups[0].neurons[0].activation = dataPoint.x;
-        this.neuronGroups[0].neurons[1].activation = dataPoint.y;
-        this.forward();
-        
-        const neuron = this.neuronGroups[this.neuronGroups.length - 1].neurons[0];
-        const output = neuron.activation;
-        const d = dataPoint.label - output;
-        dataLoss += 0.5 * d * d;
-        neuron.dActivation = -d;
-
-        regularizationLoss = this.backward(
-          learningRate,
-          regularization
-        );
-      });
-    }
-
-    return {
-      dataLoss: dataLoss,
-      regularizationLoss: regularizationLoss
-    }
-  }
-
-  toData() {
-    return {
-      groups: this.neuronGroups.map((group) => group.toData()),
-      links: this.links.map((link) => link.toData())
-    }
-  }
-
-  static fromData(data) {
-    const sequential = new Sequential();
-    
-    data.neuronGroups.forEach((groupData) => {
-      NeuronGroup.fromData(sequential, groupData);
-    });
-  
-    data.links.forEach((linkData) => {
-      Link.fromData(sequential, linkData);
-    });
-    
-    return sequential;
-  }
-}
-
-module.exports = Sequential;
-
-},{"../common/svg":2,"./Link":5,"./NeuronGroup":7}],9:[function(require,module,exports){
-module.exports = {
-  Sequential: require("./Sequential")
-};
-},{"./Sequential":8}],10:[function(require,module,exports){
+},{"../../ff-net":12,"./data":1,"./ui":8}],3:[function(require,module,exports){
 const LossPlot = require("./LossPlot");
 
 class ControlPanel {
@@ -728,8 +212,9 @@ class ControlPanel {
 
 module.exports = ControlPanel;
 
-},{"./LossPlot":14}],11:[function(require,module,exports){
-const Color = require("../common/Color");
+},{"./LossPlot":7}],4:[function(require,module,exports){
+const ffnet = require("../../../ff-net");
+const Color = ffnet.common.Color;
 const DataPoint = require("./DataPoint");
 const DragBehavior = require("./DragBehavior");
 
@@ -863,8 +348,9 @@ class DataCanvas {
 
 module.exports = DataCanvas;
 
-},{"../common/Color":1,"./DataPoint":12,"./DragBehavior":13}],12:[function(require,module,exports){
-const Color = require("../common/Color");
+},{"../../../ff-net":12,"./DataPoint":5,"./DragBehavior":6}],5:[function(require,module,exports){
+const ffnet = require("../../../ff-net");
+const Color = ffnet.common.Color;
 
 class DataPoint {
   constructor(canvas, x, y, label) {
@@ -907,7 +393,7 @@ class DataPoint {
 }
 
 module.exports = DataPoint;
-},{"../common/Color":1}],13:[function(require,module,exports){
+},{"../../../ff-net":12}],6:[function(require,module,exports){
 class DragBehavior {
   constructor(canvas) {
     this.canvas = canvas;
@@ -961,7 +447,7 @@ class DragBehavior {
 }
 
 module.exports = DragBehavior;
-},{}],14:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 const minTopLoss = 4;
 
 class LossPlot {
@@ -1012,7 +498,7 @@ class LossPlot {
 }
 
 module.exports = LossPlot;
-},{}],15:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 function init(onReady) {
   const link = document.createElement("link");
   link.onload = onReady;
@@ -1027,4 +513,567 @@ module.exports = {
   ControlPanel: require("./ControlPanel"),
   DataCanvas: require("./DataCanvas")
 };
-},{"./ControlPanel":10,"./DataCanvas":11}]},{},[4]);
+},{"./ControlPanel":3,"./DataCanvas":4}],9:[function(require,module,exports){
+class Color {
+  // r, g, b, a are numbers between 0 and 1
+  constructor(r, g, b, a) {
+    if (a == null) a = 1;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
+  }
+  
+  blend(c, t) {
+    if (Math.abs(t) > 1) throw new Error("t must be a number between -1 and 1");
+    
+    let source, target;
+    if (t >= 0) {
+      source = this;
+      target = c;
+    } else {
+      source = c;
+      target = this;
+    }
+    
+    return new Color(
+      source.r * (1 - t) + target.r * t,
+      source.g * (1 - t) + target.g * t,
+      source.b * (1 - t) + target.b * t
+    );
+  }
+
+  toString() {
+    const r = Math.floor(255 * this.r);
+    const g = Math.floor(255 * this.g);
+    const b = Math.floor(255 * this.b);
+    const a = this.a;
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
+  }
+}
+
+Color.white = new Color(1, 1, 1);
+Color.black = new Color(0, 0, 0);
+
+Color.red = new Color(226 / 255, 86 / 255, 86 / 255);
+Color.blue = new Color(135 / 255, 173 / 255, 236 / 255);
+
+Color.lightBlue = new Color(186 / 255, 224 / 255, 251 / 255);
+Color.lightRed = new Color(252 / 255, 163 / 255, 163 / 255);
+
+module.exports = Color;
+},{}],10:[function(require,module,exports){
+module.exports = {
+  Color: require("./Color"),
+  svg: require("./svg")
+};
+},{"./Color":9,"./svg":11}],11:[function(require,module,exports){
+const svg = {};
+
+svg.createElement = function(element) {
+  return document.createElementNS("http://www.w3.org/2000/svg", element);
+}
+
+module.exports = svg;
+
+},{}],12:[function(require,module,exports){
+const nn = require("./nn");
+
+module.exports = {
+  common: require("./common"),
+  nn: nn,
+  Sequential: nn.Sequential
+};
+},{"./common":10,"./nn":17}],13:[function(require,module,exports){
+class Link {
+  constructor(neuralNet, n0, nf, weight) {
+    this.neuralNet = neuralNet;
+
+    this.n0 = n0;
+    this.nf = nf;
+    
+    if (this.n0.group.getIndex() + 1 != this.nf.group.getIndex()) {
+      throw "Cannot connect neurons from non-consecutive groups";
+    }
+    
+    if (weight == null) this.weight = 1;
+    else this.weight = weight;
+    this.dWeight = 0;
+    
+    const headless = neuralNet.headless;
+    if (!headless) {
+      const svg = require("../common/svg");
+      this.svgElement = svg.createElement("path");
+      this.render();
+    }
+  }
+
+  render() {
+    const Color = require("../common/Color");
+
+    const path = this.svgElement;
+    const p0 = this.n0.getPosition();
+    const pf = this.nf.getPosition();
+    path.setAttribute(
+      "d",
+      "M" + p0.x + " " + p0.y + " " +
+      "L" + pf.x + " " + pf.y
+    );
+    const maxVisibleWeight = 5;
+    const width = 9 * Math.min(1, Math.abs(this.weight) / maxVisibleWeight);
+    path.setAttribute("stroke-width", width);
+    let color;
+    if (this.weight < 0) color = Color.red;
+    else color = Color.blue;
+    path.setAttribute("stroke-opacity", 0.4);
+    path.setAttribute("stroke", color);
+  }
+
+  backward(regularization) {
+    let regularizationError = 0;
+    this.dWeight = this.n0.activation * this.nf.dPreActivation;
+    // regularization error = 0.5 * regularization * weight^2
+    this.dWeight += regularization * this.weight;
+    regularizationError += 0.5 * regularization * this.weight * this.weight;
+    return regularizationError;
+  }
+
+  applyGradient(learningRate) {
+    this.weight -= learningRate * this.dWeight;
+  }
+
+  toData() {
+    const data = {};
+    data.n0 = [
+      this.n0.group.getIndex(),
+      this.n0.getIndex()
+    ];
+    data.nf = [
+      this.nf.group.getIndex(),
+      this.nf.getIndex()
+    ];
+    data.weight = this.weight;
+    return data;
+  }
+
+  static fromData(neuralNet, data) {
+    const weight = data.weight;
+    const a = data.n0;
+    const b = data.nf;
+    const n0 = neuralNet.neuronGroups[a[0]].neurons[a[1]];
+    const nf = neuralNet.neuronGroups[b[0]].neurons[b[1]];
+    const link = neuralNet.addLink(n0, nf, weight);
+    return link;
+  }
+}
+
+module.exports = Link;
+
+},{"../common/Color":9,"../common/svg":11}],14:[function(require,module,exports){
+const radius = 12;
+const strokeWidth = 2;
+
+function sigmoid(n) {
+  return 1 / (1 + Math.exp(-n));
+}
+
+function dSigmoid(n) {
+  return sigmoid(n) * (1 - sigmoid(n));
+}
+
+class Neuron {
+  constructor(group, bias) {
+    this.group = group;
+    this.links = [];
+    this.backLinks = [];
+
+    this.bias = bias;
+    this.preActivation = 0;
+    this.activation = sigmoid(this.bias);
+
+    this.dActivation = 0;
+    this.dPreActivation = 0;
+    this.dBias = 0;
+    
+    const headless = group.parent.headless;
+    
+    if (!headless) {
+      const svg = require("../common/svg");
+      const svgElement = this.svgElement = svg.createElement("circle");
+      svgElement.setAttribute("r", radius);
+    }
+  }
+
+  forward() {
+    this.preActivation = 0;
+    this.preActivation += this.bias;
+    this.backLinks.forEach((link) => {
+      this.preActivation += link.weight * link.n0.activation;
+    });
+    this.activation = sigmoid(this.preActivation);
+  }
+
+  backward(regularization) {
+    let regularizationError = 0;
+
+    this.links.forEach((link) => {
+      this.dActivation += link.weight * link.dWeight;
+    });
+    
+    this.dPreActivation = this.dActivation * dSigmoid(this.preActivation);
+    this.dBias = this.dPreActivation;
+    
+    this.backLinks.forEach((link) => {
+      regularizationError += link.backward(regularization);
+    });
+    
+    return regularizationError;
+  }
+
+  applyGradient(learningRate) {
+    this.bias -= learningRate * this.dBias;
+  }
+
+  render() {
+    const Color = require("../common/Color");
+    
+    const circle = this.svgElement;
+    const position = this.getPosition();
+    circle.setAttribute("cx", position.x);
+    circle.setAttribute("cy", position.y);
+
+    const isInput = this.backLinks.length == 0;
+    let fillColor;
+    if (isInput) {
+      fillColor = Color.blue.blend(Color.red, 0.6);
+    } else {
+      const maxVisibleAbsBias = 3;
+      let visibleBias = Math.max(Math.min(this.bias, maxVisibleAbsBias), -maxVisibleAbsBias);
+      const t = 0.5  + visibleBias / maxVisibleAbsBias * 0.5;
+      fillColor = Color.red.blend(Color.blue, t);
+    }
+
+    const strokeColor = fillColor.blend(Color.black, 0.3);
+    
+    circle.setAttribute("fill", fillColor.toString());
+    circle.setAttribute("stroke", strokeColor.toString());
+    circle.setAttribute("stroke-width", strokeWidth);
+  }
+
+  getIndex() {
+    return this.group.neurons.indexOf(this);
+  }
+
+  getPosition() {
+    const neuralNet = this.group.parent;
+    const neuronCount = this.group.neurons.length;
+    const neuronGroupCount = neuralNet.neuronGroups.length;
+    const maxNeuronCountPerGroup = 5;
+    
+    const container = neuralNet.svgElement.parentNode;
+    if (container == null) return {x: 0, y: 0};
+    const containerRect = container.getBoundingClientRect();
+    const width = containerRect.width;
+    const height = containerRect.height;
+    
+    const cy = height / 2;
+    const cx = width / 2;
+    
+    const dx = (width - (radius + strokeWidth) * 2) / (neuronGroupCount - 1);
+    const dy = (height - (radius + strokeWidth) * 2) / (maxNeuronCountPerGroup - 1);
+    
+    const x = cx + (this.group.getIndex() - (neuronGroupCount - 1) / 2) * dx;
+    
+    let y;
+    if (neuronCount == 0) {
+      y = cy;
+    } else {
+      y = cy + (this.getIndex() - (neuronCount - 1) / 2) * dy;
+    }
+    
+    return {
+      x: x,
+      y: y
+    };
+  }
+
+  reset() {
+    this.preActivation = 0;
+    this.activation = sigmoid(this.bias);
+    this.dActivation = 0;
+    this.dPreActivation = 0;
+    this.dBias = 0;
+  }
+
+  toData() {
+    return {
+      bias: this.bias
+    };
+  }
+
+  static fromData(group, data) {
+    group.addNeuron(data.bias);
+  }
+}
+
+module.exports = Neuron;
+
+},{"../common/Color":9,"../common/svg":11}],15:[function(require,module,exports){
+const Neuron = require("./Neuron");
+
+class NeuronGroup {
+  constructor(parent) {
+    this.parent = parent;
+    this.neurons = [];
+
+    this.headless = parent.headless;
+  }
+
+  render() {
+    this.neurons.forEach((neuron) => {
+      neuron.render();
+    });
+  }
+
+  reset() {
+    for (let i = 0; i < this.neurons.length; i++) {
+      const neuron = this.neurons[i];
+      neuron.reset();
+    }
+  }
+
+  addNeuron(bias) {
+    if (bias == null) bias = 0.5;
+    const neuron = new Neuron(this, bias);
+    this.neurons.push(neuron);
+    this.parent.neurons.push(neuron);
+    if (!this.headless) {
+      this.parent.svgNeurons.appendChild(neuron.svgElement);
+    }
+    return neuron;
+  }
+
+  getNeuronAt(i) {
+    return this.neurons[i];
+  }
+
+  getNeuronCount() {
+    return this.neurons.length;
+  }
+
+  getIndex() {
+    return this.parent.neuronGroups.indexOf(this);
+  }
+
+  toData() {
+    const data = {
+      neurons: this.neurons.map((neuron) => neuron.toData())
+    };
+    return data;
+  }
+
+  static fromData(neuralNet, data) {
+    const neuronGroup = neuralNet.addNeuronGroup();
+    data.neurons.forEach((neuronData) => {
+      Neuron.fromData(neuronGroup, neuronData);
+    });
+  }
+}
+
+module.exports = NeuronGroup;
+
+},{"./Neuron":14}],16:[function(require,module,exports){
+const Link = require("./Link");
+const NeuronGroup = require("./NeuronGroup");
+
+class Sequential {
+  constructor(args = {}) {
+    this.neurons = [];
+    this.links = [];
+    this.neuronGroups = [];
+
+    this.headless = args.headless ?? true;
+    if (!this.headless) {
+      const svg = require("../common/svg");
+
+      this.svgElement = svg.createElement("g");
+    
+      this.svgLinks = svg.createElement("g");
+      this.svgElement.appendChild(this.svgLinks);
+      
+      this.svgNeurons = svg.createElement("g");
+      this.svgElement.appendChild(this.svgNeurons);
+    }
+  }
+
+  numLayers() {
+    return Math.max(0, this.neuronGroups.length - 1);
+  }
+
+  addNeuronGroup(neurons) {
+    if (neurons == null) neurons = 0;	
+    
+    const group = new NeuronGroup(this);
+    this.neuronGroups.push(group);
+    
+    for (let i = 0; i < neurons; i++) {
+      group.addNeuron();
+    }
+    
+    return group;
+  }
+
+  addFullyConnectedLayer(neurons) {
+    if (this.neuronGroups.length == 0) {
+      throw new Error("cannot add fully connected layer if no neuron groups exist");
+    }
+    const inputGroup = this.neuronGroups[this.neuronGroups.length - 1];
+    this.addNeuronGroup(neurons);
+    const outputGroup = this.neuronGroups[this.neuronGroups.length - 1];
+    inputGroup.neurons.forEach((inputNeuron) => {
+      outputGroup.neurons.forEach((outputNeuron) => {
+        this.addLink(inputNeuron, outputNeuron);
+      })
+    });
+  }
+
+  addLink(n0, nf, weight) {
+    const link = new Link(this, n0, nf, weight);
+    n0.links.push(link);
+    nf.backLinks.push(link);
+    this.links.push(link);
+    if (!this.headless) {
+      this.svgLinks.appendChild(link.svgElement);
+    }
+    return link;
+  }
+
+  render() {
+    this.neuronGroups.forEach((group) => group.render());
+    this.links.forEach((link) => link.render());
+  }
+
+  reset() {
+    this.neuronGroups.forEach((group) => group.reset());
+  }
+
+  randomizeParameters() {
+    this.links.forEach((link) => {
+      let weight = 2 + Math.random() * 4;
+      if (Math.random() <= 0.5) weight *= -1;
+      link.weight = weight;
+    });
+    
+    this.neurons.forEach((neuron) => {
+      let bias = 1 + Math.random() * 2;
+      if (Math.random() <= 0.5) bias *= -1;
+      neuron.bias = bias;
+    });
+  }
+
+  forward() {
+    for (let i = 1; i < this.neuronGroups.length; i++) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
+        neuron.forward();
+      });
+    }
+  }
+
+  backward(learningRate, regularization) {
+    let regularizationLoss = 0;
+    
+    for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
+        regularizationLoss += neuron.backward(regularization);
+      });
+    }
+    
+    this.applyGradient(learningRate);
+    return regularizationLoss;
+  }
+
+  applyGradient(learningRate) {
+    this.links.forEach((link) => {
+      link.applyGradient(learningRate);
+    });
+    
+    for (let i = 1; i < this.neuronGroups.length; i++) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
+        neuron.applyGradient(learningRate);
+      });
+    }
+  }
+
+  train(args) {
+    // TODO decouple data from canvas
+    const dataCanvas = args.dataCanvas;
+    const learningRate = args.learningRate;
+    const regularization = args.regularization;
+    const iters = args.iters;
+
+    let regularizationLoss, dataLoss;
+
+    for (let i = 0; i < iters; i++) {
+      dataLoss = 0;
+      dataCanvas.dataPoints.forEach((dataPoint) => {
+        this.reset();
+        this.neuronGroups[0].neurons[0].activation = dataPoint.x;
+        this.neuronGroups[0].neurons[1].activation = dataPoint.y;
+        this.forward();
+        
+        const neuron = this.neuronGroups[this.neuronGroups.length - 1].neurons[0];
+        const output = neuron.activation;
+        const d = dataPoint.label - output;
+        dataLoss += 0.5 * d * d;
+        neuron.dActivation = -d;
+
+        regularizationLoss = this.backward(
+          learningRate,
+          regularization
+        );
+      });
+    }
+
+    return {
+      dataLoss: dataLoss,
+      regularizationLoss: regularizationLoss
+    }
+  }
+
+  toData() {
+    return {
+      groups: this.neuronGroups.map((group) => group.toData()),
+      links: this.links.map((link) => link.toData())
+    }
+  }
+
+  static fromData(args = {}) {
+    const data = args.data;
+    const headless = args.headless;
+
+    const sequential = new Sequential({
+      headless: headless
+    });
+    
+    data.neuronGroups.forEach((groupData) => {
+      NeuronGroup.fromData(sequential, groupData);
+    });
+  
+    data.links.forEach((linkData) => {
+      Link.fromData(sequential, linkData);
+    });
+    
+    return sequential;
+  }
+}
+
+module.exports = Sequential;
+
+},{"../common/svg":11,"./Link":13,"./NeuronGroup":15}],17:[function(require,module,exports){
+module.exports = {
+  Sequential: require("./Sequential")
+};
+},{"./Sequential":16}]},{},[2]);
