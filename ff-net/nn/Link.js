@@ -1,9 +1,7 @@
-const svg = require("../common/svg");
-const Color = require("../common/Color");
-
 class Link {
   constructor(neuralNet, n0, nf, weight) {
     this.neuralNet = neuralNet;
+
     this.n0 = n0;
     this.nf = nf;
     
@@ -14,12 +12,18 @@ class Link {
     if (weight == null) this.weight = 1;
     else this.weight = weight;
     this.dWeight = 0;
-
-    this.svgElement = svg.createElement("path");
-    this.render();
+    
+    const headless = neuralNet.headless;
+    if (!headless) {
+      const svg = require("../common/svg");
+      this.svgElement = svg.createElement("path");
+      this.render();
+    }
   }
 
   render() {
+    const Color = require("../common/Color");
+
     const path = this.svgElement;
     const p0 = this.n0.getPosition();
     const pf = this.nf.getPosition();

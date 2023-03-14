@@ -1,6 +1,3 @@
-const svg = require("../common/svg");
-const Color = require("../common/Color");
-
 const radius = 12;
 const strokeWidth = 2;
 
@@ -25,9 +22,14 @@ class Neuron {
     this.dActivation = 0;
     this.dPreActivation = 0;
     this.dBias = 0;
-
-    const svgElement = this.svgElement = svg.createElement("circle");
-    svgElement.setAttribute("r", radius);
+    
+    const headless = group.parent.headless;
+    
+    if (!headless) {
+      const svg = require("../common/svg");
+      const svgElement = this.svgElement = svg.createElement("circle");
+      svgElement.setAttribute("r", radius);
+    }
   }
 
   forward() {
@@ -61,6 +63,8 @@ class Neuron {
   }
 
   render() {
+    const Color = require("../common/Color");
+    
     const circle = this.svgElement;
     const position = this.getPosition();
     circle.setAttribute("cx", position.x);

@@ -1,20 +1,28 @@
-const svg = require("../common/svg");
 const Link = require("./Link");
 const NeuronGroup = require("./NeuronGroup");
 
 class Sequential {
-  constructor() {
+  constructor(args = {}) {
     this.neurons = [];
     this.links = [];
     this.neuronGroups = [];
 
-    this.svgElement = svg.createElement("g");
+    this.headless = args.headless ?? true;
+    if (!this.headless) {
+      const svg = require("../common/svg");
+
+      this.svgElement = svg.createElement("g");
     
-    this.svgLinks = svg.createElement("g");
-    this.svgElement.appendChild(this.svgLinks);
-    
-    this.svgNeurons = svg.createElement("g");
-    this.svgElement.appendChild(this.svgNeurons);
+      this.svgLinks = svg.createElement("g");
+      this.svgElement.appendChild(this.svgLinks);
+      
+      this.svgNeurons = svg.createElement("g");
+      this.svgElement.appendChild(this.svgNeurons);
+    }
+  }
+
+  numLayers() {
+    return Math.max(0, this.neuronGroups.length - 1);
   }
 
   addNeuronGroup(neurons) {
@@ -31,11 +39,14 @@ class Sequential {
   }
 
   addFullyConnectedLayer(neurons) {
+    if (this.neuronGroups.length == 0) {
+      throw new Error("cannot add fully connected layer if no neuron groups exist");
+    }
     const inputGroup = this.neuronGroups[this.neuronGroups.length - 1];
     this.addNeuronGroup(neurons);
     const outputGroup = this.neuronGroups[this.neuronGroups.length - 1];
-    inputGroup.forEach((inputNeuron) => {
-      outputGroup.forEach((outputNeuron) => {
+    inputGroup.neurons.forEach((inputNeuron) => {
+      outputGroup.neurons.forEach((outputNeuron) => {
         this.addLink(inputNeuron, outputNeuron);
       })
     });
@@ -46,7 +57,9 @@ class Sequential {
     n0.links.push(link);
     nf.backLinks.push(link);
     this.links.push(link);
-    this.svgLinks.appendChild(link.svgElement);
+    if (!this.headless) {
+      this.svgLinks.appendChild(link.svgElement);
+    }
     return link;
   }
 
@@ -152,8 +165,13 @@ class Sequential {
     }
   }
 
-  static fromData(data) {
-    const sequential = new Sequential();
+  static fromData(args = {}) {
+    const data = args.data;
+    const headless = args.headless;
+
+    const sequential = new Sequential({
+      headless: headless
+    });
     
     data.neuronGroups.forEach((groupData) => {
       NeuronGroup.fromData(sequential, groupData);

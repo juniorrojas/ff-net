@@ -6,7 +6,11 @@ Feedforward neural network learning in real time.
 
 ![screenshot](media/screenshot.png)
 
-## development
+## build demo
+
+```
+cd demo
+```
 
 Install dependencies
 

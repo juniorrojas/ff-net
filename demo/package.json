@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "watch": "export NODE_PATH=..:${NODE_PATH} && mkdir -p js.build.out && watchify js/main.js -o js.build.out/main.js",
+    "build": "export NODE_PATH=..:${NODE_PATH} && mkdir -p js.build.out && browserify js/main.js -o js.build.out/main.js",
+    "test": "export NODE_PATH=. && jest"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.0",
+    "glob-parent": ">=6.0.1",
+    "watchify": "^4.0.0"
+  }
+}
