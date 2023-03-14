@@ -25,6 +25,20 @@ class Sequential {
     return Math.max(0, this.neuronGroups.length - 1);
   }
 
+  getInputNeuronGroup() {
+    if (this.neuronGroups.length == 0) {
+      throw new Error("no neuron groups available");
+    }
+    return this.neuronGroups[0];
+  }
+
+  getOutputNeuronGroup() {
+    if (this.neuronGroups.length == 0) {
+      throw new Error("no neuron groups available");
+    }
+    return this.neuronGroups[this.neuronGroups.length - 1];
+  }
+
   addNeuronGroup(neurons) {
     if (neurons == null) neurons = 0;	
     
