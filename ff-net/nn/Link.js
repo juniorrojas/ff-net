@@ -1,5 +1,3 @@
-// const Color = require("../common/Color");
-
 class Link {
   constructor(neuralNet, n0, nf, weight) {
     this.neuralNet = neuralNet;
@@ -24,6 +22,8 @@ class Link {
   }
 
   render() {
+    const Color = require("../common/Color");
+
     const path = this.svgElement;
     const p0 = this.n0.getPosition();
     const pf = this.nf.getPosition();

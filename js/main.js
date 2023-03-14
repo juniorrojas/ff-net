@@ -1,6 +1,7 @@
-const nn = require("./nn");
+const ffnet = require("../ff-net");
+const nn = ffnet.nn;
+const svg = ffnet.common.svg;
 const ui = require("./ui");
-const svg = require("./common/svg");
 
 class App {
   constructor(data) {    

@@ -1,5 +1,3 @@
-// const Color = require("../common/Color");
-
 const radius = 12;
 const strokeWidth = 2;
 
@@ -65,6 +63,8 @@ class Neuron {
   }
 
   render() {
+    const Color = require("../common/Color");
+    
     const circle = this.svgElement;
     const position = this.getPosition();
     circle.setAttribute("cx", position.x);
