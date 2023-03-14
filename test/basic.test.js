@@ -1,6 +1,6 @@
 const ffnet = require("ff-net");
 
-test("single neuron", () => {
+test("single input and single output", () => {
   const model = new ffnet.Sequential({
     headless: true
   });
