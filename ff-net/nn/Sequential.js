@@ -21,6 +21,10 @@ class Sequential {
     }
   }
 
+  numLayers() {
+    return Math.max(0, this.neuronGroups.length - 1);
+  }
+
   addNeuronGroup(neurons) {
     if (neurons == null) neurons = 0;	
     
@@ -35,11 +39,14 @@ class Sequential {
   }
 
   addFullyConnectedLayer(neurons) {
+    if (this.neuronGroups.length == 0) {
+      throw new Error("cannot add fully connected layer if no neuron groups exist");
+    }
     const inputGroup = this.neuronGroups[this.neuronGroups.length - 1];
     this.addNeuronGroup(neurons);
     const outputGroup = this.neuronGroups[this.neuronGroups.length - 1];
-    inputGroup.forEach((inputNeuron) => {
-      outputGroup.forEach((outputNeuron) => {
+    inputGroup.neurons.forEach((inputNeuron) => {
+      outputGroup.neurons.forEach((outputNeuron) => {
         this.addLink(inputNeuron, outputNeuron);
       })
     });
@@ -50,7 +57,9 @@ class Sequential {
     n0.links.push(link);
     nf.backLinks.push(link);
     this.links.push(link);
-    this.svgLinks.appendChild(link.svgElement);
+    if (!this.headless) {
+      this.svgLinks.appendChild(link.svgElement);
+    }
     return link;
   }
 

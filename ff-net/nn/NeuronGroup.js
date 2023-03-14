@@ -4,6 +4,8 @@ class NeuronGroup {
   constructor(parent) {
     this.parent = parent;
     this.neurons = [];
+
+    this.headless = parent.headless;
   }
 
   render() {
@@ -24,7 +26,9 @@ class NeuronGroup {
     const neuron = new Neuron(this, bias);
     this.neurons.push(neuron);
     this.parent.neurons.push(neuron);
-    this.parent.svgNeurons.appendChild(neuron.svgElement);
+    if (!this.headless) {
+      this.parent.svgNeurons.appendChild(neuron.svgElement);
+    }
     return neuron;
   }
 

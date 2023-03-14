@@ -24,12 +24,14 @@ class Neuron {
     this.dActivation = 0;
     this.dPreActivation = 0;
     this.dBias = 0;
-
-    const svgElement = this.svgElement = svg.createElement("circle");
-    svgElement.setAttribute("r", radius);
-
-    // const headless = group.parent.headless;
-    // const svg = require("../common/svg");
+    
+    const headless = group.parent.headless;
+    
+    if (!headless) {
+      const svg = require("../common/svg");
+      const svgElement = this.svgElement = svg.createElement("circle");
+      svgElement.setAttribute("r", radius);
+    }
   }
 
   forward() {
