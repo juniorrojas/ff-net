@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "watch": "mkdir -p js.build.out && watchify js/main.js -o js.build.out/main.js",
-    "build": "mkdir -p js.build.out && browserify js/main.js -o js.build.out/main.js",
+    "watch": "export NODE_PATH=..:${NODE_PATH} && mkdir -p js.build.out && watchify js/main.js -o js.build.out/main.js",
+    "build": "export NODE_PATH=..:${NODE_PATH} && mkdir -p js.build.out && browserify js/main.js -o js.build.out/main.js",
     "test": "export NODE_PATH=. && jest"
   },
   "devDependencies": {
