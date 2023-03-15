@@ -28,7 +28,7 @@ jobs:
           npm ci
           npm run build
           npm test
-      - name: Upload artifact
+      - name: Upload diff output
         uses: actions/upload-artifact@v3
         with:
           name: __diff_output__
