@@ -23,6 +23,17 @@ test("main", async () => {
         });
       }
       await waitInit();
+
+      const app = window.app;
+      app.pause();
+      
+      const model = app.model;
+      model.loadData(window.initData.model);
+      model.render();
+      
+      const lossPlot = app.controlPanel.lossPlot;
+      lossPlot.clear();
+      lossPlot.render();
     });
     const screenshot = await window.screenshot();
     expect(screenshot).toMatchImageSnapshot();
