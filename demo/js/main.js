@@ -68,7 +68,7 @@ class App {
         model.forward();
         return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
       }
-      window.classify = classify;
+      this.classify = classify;
       dataCanvas.render(classify);
       this.controlPanel.update({
         totalLoss: dataLoss + regularizationLoss,
