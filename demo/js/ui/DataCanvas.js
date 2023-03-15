@@ -122,11 +122,16 @@ class DataCanvas {
     return data;
   }
 
+  loadFromData(data) {
+    this.dataPoints = [];
+    data.forEach((item) => {
+      this.addDataPoint(item.x, item.y, item.label);
+    });
+  }
+
   static fromData(data) {
     const dataCanvas = new DataCanvas();
-    data.forEach((item) => {
-      dataCanvas.addDataPoint(item.x, item.y, item.label);
-    });
+    dataCanvas.loadFromData(data);
     return dataCanvas;
   }
 }

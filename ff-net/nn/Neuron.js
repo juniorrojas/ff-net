@@ -24,6 +24,7 @@ class Neuron {
     this.dBias = 0;
     
     const headless = group.parent.headless;
+    this.headless = headless;
     
     if (!headless) {
       const svg = require("../ui/svg");

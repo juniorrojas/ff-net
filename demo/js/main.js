@@ -41,35 +41,41 @@ class App {
     });
     controlPanel.domElement.className += " content-container-cell";
     row.appendChild(controlPanel.domElement);
+
+    this.paused = false;
     
     this.update();
   }
 
   update() {
-    const model = this.model;
-    const dataCanvas = this.dataCanvas;
-    const trainOutput = model.train({
-      learningRate: this.controlPanel.learningRate,
-      regularization: this.controlPanel.regularization,
-      iters: 10,
-      dataCanvas: dataCanvas
-    });
+    if (!this.paused) {
+      const model = this.model;
+      const dataCanvas = this.dataCanvas;
+      const trainOutput = model.train({
+        learningRate: this.controlPanel.learningRate,
+        regularization: this.controlPanel.regularization,
+        iters: 10,
+        dataCanvas: dataCanvas
+      });
 
-    const dataLoss = trainOutput.dataLoss;
-    const regularizationLoss = trainOutput.regularizationLoss;
-    
-    model.render();
-    dataCanvas.render((x, y) => {
-      model.neuronGroups[0].neurons[0].activation = x;
-      model.neuronGroups[0].neurons[1].activation = y;
-      model.forward();
-      return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
-    });
-    this.controlPanel.update({
-      totalLoss: dataLoss + regularizationLoss,
-      dataLoss: dataLoss,
-      regularizationLoss: regularizationLoss
-    });
+      const dataLoss = trainOutput.dataLoss;
+      const regularizationLoss = trainOutput.regularizationLoss;
+      
+      model.render();
+      const classify = (x, y) => {
+        model.neuronGroups[0].neurons[0].activation = x;
+        model.neuronGroups[0].neurons[1].activation = y;
+        model.forward();
+        return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
+      }
+      this.classify = classify;
+      dataCanvas.render(classify);
+      this.controlPanel.update({
+        totalLoss: dataLoss + regularizationLoss,
+        dataLoss: dataLoss,
+        regularizationLoss: regularizationLoss
+      });
+    }
 
     requestAnimationFrame(() => {
       this.update();
@@ -81,6 +87,14 @@ class App {
       dataPoints: this.dataCanvas.toData(),
       model: this.model.toData()
     }
+  }
+
+  pause() {
+    this.paused = true;
+  }
+
+  unpause() {
+    this.paused = false;
   }
 }
 
@@ -99,6 +113,7 @@ ui.init(() => {
   divTitle.appendChild(h2);
 
   const data = require("./data");
+  window.initData = data;
   const app = new App(data);
   document.body.appendChild(app.domElement);
   window.app = app;

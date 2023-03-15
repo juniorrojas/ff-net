@@ -7,7 +7,7 @@ class NeuronGroup {
 
     this.headless = parent.headless;
   }
-
+  
   render() {
     this.neurons.forEach((neuron) => {
       neuron.render();

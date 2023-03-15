@@ -17,13 +17,26 @@ jobs:
         run: |
           npm ci
           npm test
-  test-demo-build:
+  test-demo:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Build demo
+      - name: Test demo
         run: |
           cd demo
           npm ci
           npm run build
+          npm test
+      # - name: Upload diff output
+      #   if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: __diff_output__
+      #     path: demo/test/__image_snapshots__/__diff_output__/
+      # - name: Upload snapshot
+      #   if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: __image_snapshots__
+      #     path: demo/test/__image_snapshots__/
