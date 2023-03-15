@@ -3,7 +3,7 @@ module.exports={"dataPoints":[{"x":0.08,"y":0.24,"label":1},{"x":0.2,"y":0.27,"l
 },{}],2:[function(require,module,exports){
 const ffnet = require("ff-net");
 const nn = ffnet.nn;
-const svg = ffnet.common.svg;
+const svg = ffnet.ui.svg;
 const ui = require("./ui");
 
 class App {
@@ -18,7 +18,7 @@ class App {
     container.appendChild(row);
     row.className = "content-container-row";
     
-    let svgModel = svg.createElement("svg");
+    const svgModel = svg.createElement("svg");
     svgModel.class = "content-container-cell";
     svgModel.id = "neural-net";
     row.appendChild(svgModel);
@@ -44,35 +44,41 @@ class App {
     });
     controlPanel.domElement.className += " content-container-cell";
     row.appendChild(controlPanel.domElement);
+
+    this.paused = false;
     
     this.update();
   }
 
   update() {
-    const model = this.model;
-    const dataCanvas = this.dataCanvas;
-    const trainOutput = model.train({
-      learningRate: this.controlPanel.learningRate,
-      regularization: this.controlPanel.regularization,
-      iters: 10,
-      dataCanvas: dataCanvas
-    });
+    if (!this.paused) {
+      const model = this.model;
+      const dataCanvas = this.dataCanvas;
+      const trainOutput = model.train({
+        learningRate: this.controlPanel.learningRate,
+        regularization: this.controlPanel.regularization,
+        iters: 10,
+        dataCanvas: dataCanvas
+      });
 
-    const dataLoss = trainOutput.dataLoss;
-    const regularizationLoss = trainOutput.regularizationLoss;
-    
-    model.render();
-    dataCanvas.render((x, y) => {
-      model.neuronGroups[0].neurons[0].activation = x;
-      model.neuronGroups[0].neurons[1].activation = y;
-      model.forward();
-      return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
-    });
-    this.controlPanel.update({
-      totalLoss: dataLoss + regularizationLoss,
-      dataLoss: dataLoss,
-      regularizationLoss: regularizationLoss
-    });
+      const dataLoss = trainOutput.dataLoss;
+      const regularizationLoss = trainOutput.regularizationLoss;
+      
+      model.render();
+      const classify = (x, y) => {
+        model.neuronGroups[0].neurons[0].activation = x;
+        model.neuronGroups[0].neurons[1].activation = y;
+        model.forward();
+        return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
+      }
+      this.classify = classify;
+      dataCanvas.render(classify);
+      this.controlPanel.update({
+        totalLoss: dataLoss + regularizationLoss,
+        dataLoss: dataLoss,
+        regularizationLoss: regularizationLoss
+      });
+    }
 
     requestAnimationFrame(() => {
       this.update();
@@ -85,9 +91,17 @@ class App {
       model: this.model.toData()
     }
   }
+
+  pause() {
+    this.paused = true;
+  }
+
+  unpause() {
+    this.paused = false;
+  }
 }
 
-ui.init(() => {
+function main() {
   const divTitle = document.createElement("div");
   document.body.appendChild(divTitle);
   divTitle.className = "title-container";
@@ -102,11 +116,14 @@ ui.init(() => {
   divTitle.appendChild(h2);
 
   const data = require("./data");
+  window.initData = data;
   const app = new App(data);
   document.body.appendChild(app.domElement);
   window.app = app;
-});
-},{"./data":1,"./ui":8,"ff-net":12}],3:[function(require,module,exports){
+}
+
+main();
+},{"./data":1,"./ui":8,"ff-net":9}],3:[function(require,module,exports){
 const LossPlot = require("./LossPlot");
 
 class ControlPanel {
@@ -214,7 +231,7 @@ module.exports = ControlPanel;
 
 },{"./LossPlot":7}],4:[function(require,module,exports){
 const ffnet = require("ff-net");
-const Color = ffnet.common.Color;
+const Color = ffnet.ui.Color;
 const DataPoint = require("./DataPoint");
 const DragBehavior = require("./DragBehavior");
 
@@ -337,20 +354,25 @@ class DataCanvas {
     return data;
   }
 
+  loadFromData(data) {
+    this.dataPoints = [];
+    data.forEach((item) => {
+      this.addDataPoint(item.x, item.y, item.label);
+    });
+  }
+
   static fromData(data) {
     const dataCanvas = new DataCanvas();
-    data.forEach((item) => {
-      dataCanvas.addDataPoint(item.x, item.y, item.label);
-    });
+    dataCanvas.loadFromData(data);
     return dataCanvas;
   }
 }
 
 module.exports = DataCanvas;
 
-},{"./DataPoint":5,"./DragBehavior":6,"ff-net":12}],5:[function(require,module,exports){
+},{"./DataPoint":5,"./DragBehavior":6,"ff-net":9}],5:[function(require,module,exports){
 const ffnet = require("ff-net");
-const Color = ffnet.common.Color;
+const Color = ffnet.ui.Color;
 
 class DataPoint {
   constructor(canvas, x, y, label) {
@@ -393,7 +415,7 @@ class DataPoint {
 }
 
 module.exports = DataPoint;
-},{"ff-net":12}],6:[function(require,module,exports){
+},{"ff-net":9}],6:[function(require,module,exports){
 class DragBehavior {
   constructor(canvas) {
     this.canvas = canvas;
@@ -495,96 +517,27 @@ class LossPlot {
       ctx.stroke();
     });
   }
+
+  clear() {
+    this.data = [];
+  }
 }
 
 module.exports = LossPlot;
 },{}],8:[function(require,module,exports){
-function init(onReady) {
-  const link = document.createElement("link");
-  link.onload = onReady;
-  link.rel = "stylesheet";
-  link.type = "text/css";
-  link.href = "css/main.css";
-  document.head.appendChild(link);
-}
-
 module.exports = {
-  init: init,
   ControlPanel: require("./ControlPanel"),
   DataCanvas: require("./DataCanvas")
 };
 },{"./ControlPanel":3,"./DataCanvas":4}],9:[function(require,module,exports){
-class Color {
-  // r, g, b, a are numbers between 0 and 1
-  constructor(r, g, b, a) {
-    if (a == null) a = 1;
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
-  }
-  
-  blend(c, t) {
-    if (Math.abs(t) > 1) throw new Error("t must be a number between -1 and 1");
-    
-    let source, target;
-    if (t >= 0) {
-      source = this;
-      target = c;
-    } else {
-      source = c;
-      target = this;
-    }
-    
-    return new Color(
-      source.r * (1 - t) + target.r * t,
-      source.g * (1 - t) + target.g * t,
-      source.b * (1 - t) + target.b * t
-    );
-  }
-
-  toString() {
-    const r = Math.floor(255 * this.r);
-    const g = Math.floor(255 * this.g);
-    const b = Math.floor(255 * this.b);
-    const a = this.a;
-    return `rgba(${r}, ${g}, ${b}, ${a})`;
-  }
-}
-
-Color.white = new Color(1, 1, 1);
-Color.black = new Color(0, 0, 0);
-
-Color.red = new Color(226 / 255, 86 / 255, 86 / 255);
-Color.blue = new Color(135 / 255, 173 / 255, 236 / 255);
-
-Color.lightBlue = new Color(186 / 255, 224 / 255, 251 / 255);
-Color.lightRed = new Color(252 / 255, 163 / 255, 163 / 255);
-
-module.exports = Color;
-},{}],10:[function(require,module,exports){
-module.exports = {
-  Color: require("./Color"),
-  svg: require("./svg")
-};
-},{"./Color":9,"./svg":11}],11:[function(require,module,exports){
-const svg = {};
-
-svg.createElement = function(element) {
-  return document.createElementNS("http://www.w3.org/2000/svg", element);
-}
-
-module.exports = svg;
-
-},{}],12:[function(require,module,exports){
 const nn = require("./nn");
 
 module.exports = {
-  common: require("./common"),
+  ui: require("./ui"),
   nn: nn,
   Sequential: nn.Sequential
 };
-},{"./common":10,"./nn":17}],13:[function(require,module,exports){
+},{"./nn":14,"./ui":16}],10:[function(require,module,exports){
 class Link {
   constructor(neuralNet, n0, nf, weight) {
     this.neuralNet = neuralNet;
@@ -601,15 +554,16 @@ class Link {
     this.dWeight = 0;
     
     const headless = neuralNet.headless;
+    this.headless = headless;
     if (!headless) {
-      const svg = require("../common/svg");
+      const svg = require("../ui/svg");
       this.svgElement = svg.createElement("path");
       this.render();
     }
   }
 
   render() {
-    const Color = require("../common/Color");
+    const Color = require("../ui/Color");
 
     const path = this.svgElement;
     const p0 = this.n0.getPosition();
@@ -669,7 +623,7 @@ class Link {
 
 module.exports = Link;
 
-},{"../common/Color":9,"../common/svg":11}],14:[function(require,module,exports){
+},{"../ui/Color":15,"../ui/svg":17}],11:[function(require,module,exports){
 const radius = 12;
 const strokeWidth = 2;
 
@@ -696,9 +650,10 @@ class Neuron {
     this.dBias = 0;
     
     const headless = group.parent.headless;
+    this.headless = headless;
     
     if (!headless) {
-      const svg = require("../common/svg");
+      const svg = require("../ui/svg");
       const svgElement = this.svgElement = svg.createElement("circle");
       svgElement.setAttribute("r", radius);
     }
@@ -735,7 +690,7 @@ class Neuron {
   }
 
   render() {
-    const Color = require("../common/Color");
+    const Color = require("../ui/Color");
     
     const circle = this.svgElement;
     const position = this.getPosition();
@@ -818,7 +773,7 @@ class Neuron {
 
 module.exports = Neuron;
 
-},{"../common/Color":9,"../common/svg":11}],15:[function(require,module,exports){
+},{"../ui/Color":15,"../ui/svg":17}],12:[function(require,module,exports){
 const Neuron = require("./Neuron");
 
 class NeuronGroup {
@@ -828,7 +783,7 @@ class NeuronGroup {
 
     this.headless = parent.headless;
   }
-
+  
   render() {
     this.neurons.forEach((neuron) => {
       neuron.render();
@@ -882,7 +837,7 @@ class NeuronGroup {
 
 module.exports = NeuronGroup;
 
-},{"./Neuron":14}],16:[function(require,module,exports){
+},{"./Neuron":11}],13:[function(require,module,exports){
 const Link = require("./Link");
 const NeuronGroup = require("./NeuronGroup");
 
@@ -892,9 +847,10 @@ class Sequential {
     this.links = [];
     this.neuronGroups = [];
 
-    this.headless = args.headless ?? true;
-    if (!this.headless) {
-      const svg = require("../common/svg");
+    const headless = args.headless ?? true;
+    this.headless = headless;
+    if (!headless) {
+      const svg = require("../ui/svg");
 
       this.svgElement = svg.createElement("g");
     
@@ -906,8 +862,50 @@ class Sequential {
     }
   }
 
+  clear() {
+    if (!this.headless) {
+      while (this.svgLinks.firstChild != null) {
+        this.svgLinks.removeChild(this.svgLinks.firstChild);
+      }
+
+      while (this.svgNeurons.firstChild != null) {
+        this.svgNeurons.removeChild(this.svgNeurons.firstChild);
+      }
+    }
+
+    this.links = [];
+    this.neuronGroups = [];
+    this.neurons = [];
+  }
+
+  numNeuronGroups() {
+    return this.neuronGroups.length;
+  }
+
   numLayers() {
     return Math.max(0, this.neuronGroups.length - 1);
+  }
+
+  numNeurons() {
+    return this.neurons.length;
+  }
+
+  numLinks() {
+    return this.links.length;
+  }
+
+  getInputNeuronGroup() {
+    if (this.neuronGroups.length == 0) {
+      throw new Error("no neuron groups available");
+    }
+    return this.neuronGroups[0];
+  }
+
+  getOutputNeuronGroup() {
+    if (this.neuronGroups.length == 0) {
+      throw new Error("no neuron groups available");
+    }
+    return this.neuronGroups[this.neuronGroups.length - 1];
   }
 
   addNeuronGroup(neurons) {
@@ -1050,6 +1048,18 @@ class Sequential {
     }
   }
 
+  loadData(data) {
+    this.clear();
+
+    data.neuronGroups.forEach((groupData) => {
+      NeuronGroup.fromData(this, groupData);
+    });
+  
+    data.links.forEach((linkData) => {
+      Link.fromData(this, linkData);
+    });
+  }
+
   static fromData(args = {}) {
     const data = args.data;
     const headless = args.headless;
@@ -1058,13 +1068,7 @@ class Sequential {
       headless: headless
     });
     
-    data.neuronGroups.forEach((groupData) => {
-      NeuronGroup.fromData(sequential, groupData);
-    });
-  
-    data.links.forEach((linkData) => {
-      Link.fromData(sequential, linkData);
-    });
+    sequential.loadData(data);
     
     return sequential;
   }
@@ -1072,8 +1076,71 @@ class Sequential {
 
 module.exports = Sequential;
 
-},{"../common/svg":11,"./Link":13,"./NeuronGroup":15}],17:[function(require,module,exports){
+},{"../ui/svg":17,"./Link":10,"./NeuronGroup":12}],14:[function(require,module,exports){
 module.exports = {
   Sequential: require("./Sequential")
 };
-},{"./Sequential":16}]},{},[2]);
+},{"./Sequential":13}],15:[function(require,module,exports){
+class Color {
+  // r, g, b, a are numbers between 0 and 1
+  constructor(r, g, b, a) {
+    if (a == null) a = 1;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
+  }
+  
+  blend(c, t) {
+    if (Math.abs(t) > 1) throw new Error("t must be a number between -1 and 1");
+    
+    let source, target;
+    if (t >= 0) {
+      source = this;
+      target = c;
+    } else {
+      source = c;
+      target = this;
+    }
+    
+    return new Color(
+      source.r * (1 - t) + target.r * t,
+      source.g * (1 - t) + target.g * t,
+      source.b * (1 - t) + target.b * t
+    );
+  }
+
+  toString() {
+    const r = Math.floor(255 * this.r);
+    const g = Math.floor(255 * this.g);
+    const b = Math.floor(255 * this.b);
+    const a = this.a;
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
+  }
+}
+
+Color.white = new Color(1, 1, 1);
+Color.black = new Color(0, 0, 0);
+
+Color.red = new Color(226 / 255, 86 / 255, 86 / 255);
+Color.blue = new Color(135 / 255, 173 / 255, 236 / 255);
+
+Color.lightBlue = new Color(186 / 255, 224 / 255, 251 / 255);
+Color.lightRed = new Color(252 / 255, 163 / 255, 163 / 255);
+
+module.exports = Color;
+},{}],16:[function(require,module,exports){
+module.exports = {
+  Color: require("./Color"),
+  svg: require("./svg")
+};
+},{"./Color":15,"./svg":17}],17:[function(require,module,exports){
+const svg = {};
+
+svg.createElement = function(element) {
+  return document.createElementNS("http://www.w3.org/2000/svg", element);
+}
+
+module.exports = svg;
+
+},{}]},{},[2]);
