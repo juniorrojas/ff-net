@@ -7,8 +7,9 @@ class Sequential {
     this.links = [];
     this.neuronGroups = [];
 
-    this.headless = args.headless ?? true;
-    if (!this.headless) {
+    const headless = args.headless ?? true;
+    this.headless = headless;
+    if (!headless) {
       const svg = require("../ui/svg");
 
       this.svgElement = svg.createElement("g");
@@ -19,6 +20,20 @@ class Sequential {
       this.svgNeurons = svg.createElement("g");
       this.svgElement.appendChild(this.svgNeurons);
     }
+  }
+
+  clear() {
+    while (this.svgLinks.firstChild != null) {
+      this.svgLinks.removeChild(this.svgLinks.firstChild);
+    }
+
+    while (this.svgNeurons.firstChild != null) {
+      this.svgNeurons.removeChild(this.svgNeurons.firstChild);
+    }
+
+    this.links = [];
+    this.neuronGroups = [];
+    this.neurons = [];
   }
 
   numLayers() {
@@ -179,6 +194,18 @@ class Sequential {
     }
   }
 
+  loadData(data) {
+    this.clear();
+
+    data.neuronGroups.forEach((groupData) => {
+      NeuronGroup.fromData(this, groupData);
+    });
+  
+    data.links.forEach((linkData) => {
+      Link.fromData(this, linkData);
+    });
+  }
+
   static fromData(args = {}) {
     const data = args.data;
     const headless = args.headless;
@@ -187,13 +214,7 @@ class Sequential {
       headless: headless
     });
     
-    data.neuronGroups.forEach((groupData) => {
-      NeuronGroup.fromData(sequential, groupData);
-    });
-  
-    data.links.forEach((linkData) => {
-      Link.fromData(sequential, linkData);
-    });
+    sequential.loadData(data);
     
     return sequential;
   }

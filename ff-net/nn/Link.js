@@ -14,6 +14,7 @@ class Link {
     this.dWeight = 0;
     
     const headless = neuralNet.headless;
+    this.headless = headless;
     if (!headless) {
       const svg = require("../ui/svg");
       this.svgElement = svg.createElement("path");

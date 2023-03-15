@@ -111,6 +111,7 @@ ui.init(() => {
   divTitle.appendChild(h2);
 
   const data = require("./data");
+  window.initData = data;
   const app = new App(data);
   document.body.appendChild(app.domElement);
   window.app = app;
