@@ -15,7 +15,7 @@ class App {
     container.appendChild(row);
     row.className = "content-container-row";
     
-    let svgModel = svg.createElement("svg");
+    const svgModel = svg.createElement("svg");
     svgModel.class = "content-container-cell";
     svgModel.id = "neural-net";
     row.appendChild(svgModel);
