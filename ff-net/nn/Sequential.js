@@ -23,17 +23,23 @@ class Sequential {
   }
 
   clear() {
-    while (this.svgLinks.firstChild != null) {
-      this.svgLinks.removeChild(this.svgLinks.firstChild);
-    }
+    if (!this.headless) {
+      while (this.svgLinks.firstChild != null) {
+        this.svgLinks.removeChild(this.svgLinks.firstChild);
+      }
 
-    while (this.svgNeurons.firstChild != null) {
-      this.svgNeurons.removeChild(this.svgNeurons.firstChild);
+      while (this.svgNeurons.firstChild != null) {
+        this.svgNeurons.removeChild(this.svgNeurons.firstChild);
+      }
     }
 
     this.links = [];
     this.neuronGroups = [];
     this.neurons = [];
+  }
+
+  numNeuronGroups() {
+    return this.neuronGroups.length;
   }
 
   numLayers() {
