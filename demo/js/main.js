@@ -62,12 +62,14 @@ class App {
       const regularizationLoss = trainOutput.regularizationLoss;
       
       model.render();
-      dataCanvas.render((x, y) => {
+      const classify = (x, y) => {
         model.neuronGroups[0].neurons[0].activation = x;
         model.neuronGroups[0].neurons[1].activation = y;
         model.forward();
         return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
-      });
+      }
+      window.classify = classify;
+      dataCanvas.render(classify);
       this.controlPanel.update({
         totalLoss: dataLoss + regularizationLoss,
         dataLoss: dataLoss,

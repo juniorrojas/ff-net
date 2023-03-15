@@ -30,7 +30,11 @@ test("main", async () => {
       const model = app.model;
       model.loadData(window.initData.model);
       model.render();
-      
+
+      const dataCanvas = app.dataCanvas;
+      dataCanvas.loadFromData(window.initData.dataPoints)
+      dataCanvas.render(window.classify);
+
       const lossPlot = app.controlPanel.lossPlot;
       lossPlot.clear();
       lossPlot.render();
