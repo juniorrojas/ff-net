@@ -38,6 +38,12 @@ test("main", async () => {
       const lossPlot = app.controlPanel.lossPlot;
       lossPlot.clear();
       lossPlot.render();
+
+      app.controlPanel.update({
+        dataLoss: 0,
+        regularizationLoss: 0,
+        totalLoss: 0
+      })
     });
     const screenshot = await window.screenshot();
     expect(screenshot).toMatchImageSnapshot();
