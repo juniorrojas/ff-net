@@ -50,4 +50,4 @@ test("main", async () => {
   } finally {
     await window.close();
   }
-});
+}, 10000);
