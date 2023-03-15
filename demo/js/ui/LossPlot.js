@@ -45,6 +45,10 @@ class LossPlot {
       ctx.stroke();
     });
   }
+
+  clear() {
+    this.data = [];
+  }
 }
 
 module.exports = LossPlot;
