@@ -1,4 +1,6 @@
 const utils = require("./utils");
+const { toMatchImageSnapshot } = require("jest-image-snapshot");
+expect.extend({ toMatchImageSnapshot });
 
 test("main", async () => {
   const window = new utils.Window({
@@ -22,6 +24,8 @@ test("main", async () => {
       }
       await waitInit();
     });
+    const screenshot = await window.screenshot();
+    expect(screenshot).toMatchImageSnapshot();
   } finally {
     await window.close();
   }
