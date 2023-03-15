@@ -28,9 +28,15 @@ jobs:
           npm ci
           npm run build
           npm test
-      - name: Upload diff output
+      # - name: Upload diff output
+      #   if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: __diff_output__
+      #     path: demo/test/__image_snapshots__/__diff_output__/
+      - name: Upload snapshot
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: __diff_output__
-          path: demo/test/__image_snapshots__/__diff_output__/
+          path: demo/test/__image_snapshots__/
