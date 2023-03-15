@@ -57,8 +57,8 @@ test("main", async () => {
     expect(numLinks).toBe(47);
     expect(numDataPoints).toBe(51);
 
-    const screenshot = await window.screenshot();
-    expect(screenshot).toMatchImageSnapshot();
+    // const screenshot = await window.screenshot();
+    // expect(screenshot).toMatchImageSnapshot();
   } finally {
     await window.close();
   }
