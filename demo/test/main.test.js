@@ -46,9 +46,15 @@ test("main", async () => {
       })
     });
 
-    const numDataPoints = await window.evaluate(() => {
-      return app.dataCanvas.dataPoints.length;
+    const { numDataPoints, numNeurons, numLinks } = await window.evaluate(() => {
+      return {
+        numDataPoints: app.dataCanvas.dataPoints.length,
+        numNeurons: app.model.numNeurons(),
+        numLinks: app.model.numLinks()
+      }
     });
+    expect(numNeurons).toBe(15);
+    expect(numLinks).toBe(47);
     expect(numDataPoints).toBe(51);
 
     // const screenshot = await window.screenshot();
