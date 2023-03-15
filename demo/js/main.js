@@ -98,7 +98,7 @@ class App {
   }
 }
 
-ui.init(() => {
+function main() {
   const divTitle = document.createElement("div");
   document.body.appendChild(divTitle);
   divTitle.className = "title-container";
@@ -117,4 +117,6 @@ ui.init(() => {
   const app = new App(data);
   document.body.appendChild(app.domElement);
   window.app = app;
-});
+}
+
+main();
