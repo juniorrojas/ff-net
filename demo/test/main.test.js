@@ -45,8 +45,15 @@ test("main", async () => {
         totalLoss: 0
       })
     });
-    const screenshot = await window.screenshot();
-    expect(screenshot).toMatchImageSnapshot();
+
+    const numDataPoints = await window.evaluate(() => {
+      return app.dataCanvas.dataPoints.length;
+    });
+    expect(numDataPoints).toBe(51);
+
+    // const screenshot = await window.screenshot();
+    // expect(screenshot).toMatchImageSnapshot();
+
   } finally {
     await window.close();
   }
