@@ -85,9 +85,12 @@ class Sequential {
     if (this.neuronGroups.length == 0) {
       throw new Error("cannot add fully connected layer if no neuron groups exist");
     }
-    const inputGroup = this.neuronGroups[this.neuronGroups.length - 1];
+    if (neurons == null) {
+      throw new Error("number of output neurons required to create fully connected layer");
+    }
+    const inputGroup = this.getOutputNeuronGroup();
     this.addNeuronGroup(neurons);
-    const outputGroup = this.neuronGroups[this.neuronGroups.length - 1];
+    const outputGroup = this.getOutputNeuronGroup();
     inputGroup.neurons.forEach((inputNeuron) => {
       outputGroup.neurons.forEach((outputNeuron) => {
         this.addLink(inputNeuron, outputNeuron);
