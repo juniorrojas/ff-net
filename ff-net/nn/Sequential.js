@@ -1,5 +1,6 @@
 const Link = require("./Link");
 const NeuronGroup = require("./NeuronGroup");
+const Layer = require("./Layer");
 
 class Sequential {
   constructor(args = {}) {
@@ -94,8 +95,15 @@ class Sequential {
     inputGroup.neurons.forEach((inputNeuron) => {
       outputGroup.neurons.forEach((outputNeuron) => {
         this.addLink(inputNeuron, outputNeuron);
-      })
+      });
     });
+
+    const layer = new Layer({
+      inputNeuronGroup: inputGroup,
+      outputNeuronGroup: outputGroup
+    });;
+    // TODO store list of layers
+    return layer;
   }
 
   addLink(n0, nf, weight) {
