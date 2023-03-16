@@ -174,15 +174,17 @@ class Sequential {
 
     let regularizationLoss, dataLoss;
 
+    const inputNeuronGroup = model.getInputNeuronGroup();
+    const outputNeuronGroup = model.getOutputNeuronGroup();
     for (let i = 0; i < iters; i++) {
       dataLoss = 0;
       dataCanvas.dataPoints.forEach((dataPoint) => {
         this.reset();
-        this.neuronGroups[0].neurons[0].activation = dataPoint.x;
-        this.neuronGroups[0].neurons[1].activation = dataPoint.y;
+        inputNeuronGroup.neurons[0].activation = dataPoint.x;
+        inputNeuronGroup.neurons[1].activation = dataPoint.y;
         this.forward();
         
-        const neuron = this.neuronGroups[this.neuronGroups.length - 1].neurons[0];
+        const neuron = outputNeuronGroup.neurons[0];
         const output = neuron.activation;
         const d = dataPoint.label - output;
         dataLoss += 0.5 * d * d;
