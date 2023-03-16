@@ -32,14 +32,6 @@ class NeuronGroup {
     return neuron;
   }
 
-  getNeuronAt(i) {
-    return this.neurons[i];
-  }
-
-  getNeuronCount() {
-    return this.neurons.length;
-  }
-
   getIndex() {
     return this.parent.neuronGroups.indexOf(this);
   }
