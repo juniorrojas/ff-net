@@ -174,8 +174,8 @@ class Sequential {
 
     let regularizationLoss, dataLoss;
 
-    const inputNeuronGroup = model.getInputNeuronGroup();
-    const outputNeuronGroup = model.getOutputNeuronGroup();
+    const inputNeuronGroup = this.getInputNeuronGroup();
+    const outputNeuronGroup = this.getOutputNeuronGroup();
     for (let i = 0; i < iters; i++) {
       dataLoss = 0;
       dataCanvas.dataPoints.forEach((dataPoint) => {
