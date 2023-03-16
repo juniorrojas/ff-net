@@ -180,6 +180,7 @@ class Sequential {
       dataLoss = 0;
       dataCanvas.dataPoints.forEach((dataPoint) => {
         this.reset();
+        // TODO generalize, do not assume 2D input
         inputNeuronGroup.neurons[0].activation = dataPoint.x;
         inputNeuronGroup.neurons[1].activation = dataPoint.y;
         this.forward();
