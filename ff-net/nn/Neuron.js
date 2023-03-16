@@ -95,9 +95,9 @@ class Neuron {
 
   getPosition() {
     const neuralNet = this.group.parent;
-    const neuronCount = this.group.neurons.length;
+    const numNeurons = this.group.neurons.length;
     const neuronGroupCount = neuralNet.neuronGroups.length;
-    const maxNeuronCountPerGroup = 5;
+    const maxNumNeuronsPerGroup = 5;
     
     const container = neuralNet.svgElement.parentNode;
     if (container == null) return {x: 0, y: 0};
@@ -109,15 +109,15 @@ class Neuron {
     const cx = width / 2;
     
     const dx = (width - (radius + strokeWidth) * 2) / (neuronGroupCount - 1);
-    const dy = (height - (radius + strokeWidth) * 2) / (maxNeuronCountPerGroup - 1);
+    const dy = (height - (radius + strokeWidth) * 2) / (maxNumNeuronsPerGroup - 1);
     
     const x = cx + (this.group.getIndex() - (neuronGroupCount - 1) / 2) * dx;
     
     let y;
-    if (neuronCount == 0) {
+    if (numNeurons == 0) {
       y = cy;
     } else {
-      y = cy + (this.getIndex() - (neuronCount - 1) / 2) * dy;
+      y = cy + (this.getIndex() - (numNeurons - 1) / 2) * dy;
     }
     
     return {
