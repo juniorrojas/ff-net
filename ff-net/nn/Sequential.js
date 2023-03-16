@@ -101,7 +101,7 @@ class Sequential {
     const layer = new Layer({
       inputNeuronGroup: inputGroup,
       outputNeuronGroup: outputGroup
-    });;
+    });
     // TODO store list of layers
     return layer;
   }
