@@ -7,6 +7,7 @@ class Sequential {
     this.neurons = [];
     this.links = [];
     this.neuronGroups = [];
+    this.layers = [];
 
     const headless = args.headless ?? true;
     this.headless = headless;
@@ -36,6 +37,7 @@ class Sequential {
 
     this.links = [];
     this.neuronGroups = [];
+    this.layers = [];
     this.neurons = [];
   }
 
@@ -44,7 +46,7 @@ class Sequential {
   }
 
   numLayers() {
-    return Math.max(0, this.neuronGroups.length - 1);
+    return this.layers.length;
   }
 
   numNeurons() {
@@ -102,7 +104,7 @@ class Sequential {
       inputNeuronGroup: inputGroup,
       outputNeuronGroup: outputGroup
     });
-    // TODO store list of layers
+    this.layers.push(layer);
     return layer;
   }
 
