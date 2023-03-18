@@ -32,11 +32,7 @@ class NeuronGroup {
     return neuron;
   }
 
-  getNeuronAt(i) {
-    return this.neurons[i];
-  }
-
-  getNeuronCount() {
+  numNeurons() {
     return this.neurons.length;
   }
 

@@ -1,11 +1,13 @@
 const Link = require("./Link");
 const NeuronGroup = require("./NeuronGroup");
+const Layer = require("./Layer");
 
 class Sequential {
   constructor(args = {}) {
     this.neurons = [];
     this.links = [];
     this.neuronGroups = [];
+    this.layers = [];
 
     const headless = args.headless ?? true;
     this.headless = headless;
@@ -35,6 +37,7 @@ class Sequential {
 
     this.links = [];
     this.neuronGroups = [];
+    this.layers = [];
     this.neurons = [];
   }
 
@@ -43,7 +46,7 @@ class Sequential {
   }
 
   numLayers() {
-    return Math.max(0, this.neuronGroups.length - 1);
+    return this.layers.length;
   }
 
   numNeurons() {
@@ -85,14 +88,24 @@ class Sequential {
     if (this.neuronGroups.length == 0) {
       throw new Error("cannot add fully connected layer if no neuron groups exist");
     }
-    const inputGroup = this.neuronGroups[this.neuronGroups.length - 1];
+    if (neurons == null) {
+      throw new Error("number of output neurons required to create fully connected layer");
+    }
+    const inputGroup = this.getOutputNeuronGroup();
     this.addNeuronGroup(neurons);
-    const outputGroup = this.neuronGroups[this.neuronGroups.length - 1];
+    const outputGroup = this.getOutputNeuronGroup();
     inputGroup.neurons.forEach((inputNeuron) => {
       outputGroup.neurons.forEach((outputNeuron) => {
         this.addLink(inputNeuron, outputNeuron);
-      })
+      });
     });
+
+    const layer = new Layer({
+      inputNeuronGroup: inputGroup,
+      outputNeuronGroup: outputGroup
+    });
+    this.layers.push(layer);
+    return layer;
   }
 
   addLink(n0, nf, weight) {
@@ -174,15 +187,18 @@ class Sequential {
 
     let regularizationLoss, dataLoss;
 
+    const inputNeuronGroup = this.getInputNeuronGroup();
+    const outputNeuronGroup = this.getOutputNeuronGroup();
     for (let i = 0; i < iters; i++) {
       dataLoss = 0;
       dataCanvas.dataPoints.forEach((dataPoint) => {
         this.reset();
-        this.neuronGroups[0].neurons[0].activation = dataPoint.x;
-        this.neuronGroups[0].neurons[1].activation = dataPoint.y;
+        // TODO generalize, do not assume 2D input
+        inputNeuronGroup.neurons[0].activation = dataPoint.x;
+        inputNeuronGroup.neurons[1].activation = dataPoint.y;
         this.forward();
         
-        const neuron = this.neuronGroups[this.neuronGroups.length - 1].neurons[0];
+        const neuron = outputNeuronGroup.neurons[0];
         const output = neuron.activation;
         const d = dataPoint.label - output;
         dataLoss += 0.5 * d * d;
