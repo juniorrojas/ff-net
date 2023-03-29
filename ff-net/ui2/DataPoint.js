@@ -1,5 +1,4 @@
-const ffnet = require("ff-net");
-const Color = ffnet.ui.Color;
+const Color = require("../ui/Color");
 
 class DataPoint {
   constructor(canvas, x, y, label) {
