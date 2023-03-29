@@ -1,7 +1,7 @@
 const ffnet = require("ff-net");
 const nn = ffnet.nn;
-const svg = ffnet.ui.svg;
-const ui = ffnet.ui2;
+const svg = ffnet.common.svg;
+const ui = ffnet.ui;
 
 class App {
   constructor(data) {

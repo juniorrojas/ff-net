@@ -1,4 +1,4 @@
 module.exports = {
-  Color: require("./Color"),
-  svg: require("./svg")
+  ControlPanel: require("./ControlPanel"),
+  DataCanvas: require("./DataCanvas")
 };

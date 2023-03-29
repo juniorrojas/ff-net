@@ -16,14 +16,14 @@ class Link {
     const headless = neuralNet.headless;
     this.headless = headless;
     if (!headless) {
-      const svg = require("../ui/svg");
+      const svg = require("../common/svg");
       this.svgElement = svg.createElement("path");
       this.render();
     }
   }
 
   render() {
-    const Color = require("../ui/Color");
+    const Color = require("../common/Color");
 
     const path = this.svgElement;
     const p0 = this.n0.getPosition();

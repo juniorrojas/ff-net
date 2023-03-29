@@ -1,4 +1,4 @@
-const Color = require("../ui/Color");
+const Color = require("../common/Color");
 
 class DataPoint {
   constructor(canvas, x, y, label) {

@@ -10,7 +10,7 @@ class Sequential {
     const headless = args.headless ?? true;
     this.headless = headless;
     if (!headless) {
-      const svg = require("../ui/svg");
+      const svg = require("../common/svg");
 
       this.svgElement = svg.createElement("g");
     

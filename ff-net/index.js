@@ -2,7 +2,7 @@ const nn = require("./nn");
 
 module.exports = {
   ui: require("./ui"),
-  ui2: require("./ui2"),
+  common: require("./common"),
   nn: nn,
   Sequential: nn.Sequential
 };

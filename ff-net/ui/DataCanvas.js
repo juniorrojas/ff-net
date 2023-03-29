@@ -1,4 +1,4 @@
-const Color = require("../ui/Color");
+const Color = require("../common/Color");
 const DataPoint = require("./DataPoint");
 const DragBehavior = require("./DragBehavior");
 
