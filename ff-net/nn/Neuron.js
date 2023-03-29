@@ -27,7 +27,7 @@ class Neuron {
     this.headless = headless;
     
     if (!headless) {
-      const svg = require("../ui/svg");
+      const svg = require("../common/svg");
       const svgElement = this.svgElement = svg.createElement("circle");
       svgElement.setAttribute("r", radius);
     }
@@ -64,7 +64,7 @@ class Neuron {
   }
 
   render() {
-    const Color = require("../ui/Color");
+    const Color = require("../common/Color");
     
     const circle = this.svgElement;
     const position = this.getPosition();
