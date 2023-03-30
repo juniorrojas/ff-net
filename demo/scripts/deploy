@@ -56,17 +56,17 @@ def populate_deploy_path(project_path, deploy_path):
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("--repo", type=str)
+    arg_parser.add_argument("--remote-url", type=str)
     arg_parser.add_argument("--branch", type=str, default="gh-pages")
     arg_parser.add_argument("--push", action="store_true")
     args = arg_parser.parse_args()
 
-    if args.repo is not None:
-        repo = args.repo
+    if args.remote_url is not None:
+        remote_url = args.remote_url
     else:
-        repo = deployutils.infer_remote_url()
-        if repo is None:
-            print(red("github remote could not be inferred, run the script with --repo <remote-url>"), file=sys.stderr)
+        remote_url = deployutils.infer_remote_url()
+        if remote_url is None:
+            print(red("github remote could not be inferred, run the script with --remote_url <remote-url>"), file=sys.stderr)
             exit(1)
     
     deploy_branch = args.branch
@@ -74,11 +74,11 @@ if __name__ == "__main__":
     project_path = this_dirpath.parent
     deploy_path = project_path.joinpath("deploy.out")
     
-    deployutils.git_clone(repo, remote, deploy_path, deploy_branch)
+    deployutils.git_clone(remote_url, remote, deploy_path, deploy_branch)
     populate_deploy_path(project_path, deploy_path)
     
     if args.push:
-        a = input(f"Deploy to {repo}@{deploy_branch}? [y/_] ")
+        a = input(f"Deploy to {remote_url}@{deploy_branch}? [y/_] ")
         if a != "y":
             exit(1)
         
