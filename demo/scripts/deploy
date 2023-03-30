@@ -29,28 +29,7 @@ def green(text):
 def red(text):
     return color_text(TextColor.red, text)
 
-if __name__ == "__main__":
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("--repo", type=str)
-    arg_parser.add_argument("--branch", type=str, default="gh-pages")
-    arg_parser.add_argument("--push", action="store_true")
-    args = arg_parser.parse_args()
-
-    if args.repo is not None:
-        repo = args.repo
-    else:
-        repo = deployutils.infer_remote_url()
-        if repo is None:
-            print(red("github remote could not be inferred, run the script with --repo <remote-url>"), file=sys.stderr)
-            exit(1)
-    
-    deploy_branch = args.branch
-    remote = "origin"
-    project_path = this_dirpath.parent
-    deploy_path = project_path.joinpath("deploy.out")
-    
-    deployutils.git_clone(repo, remote, deploy_path, deploy_branch)
-
+def populate_deploy_path(project_path, deploy_path):
     for filename in os.listdir(deploy_path):
         if filename == ".git":
             continue
@@ -74,20 +53,46 @@ if __name__ == "__main__":
         deploy_path.joinpath("css")
     )
 
-    print(green(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
+    print(yellow(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
+
+def push_deploy(deploy_path, remote, deploy_branch):
+    e = subprocess.call(["git", "add", "."])
+    if e != 0:
+        exit(e)
+    e = subprocess.call(["git", "commit", "-m", "Deploy"])
+    if e != 0:
+        exit(e)
+    e = subprocess.call(["git", "push", remote, deploy_branch])
+    if e != 0:
+        exit(e)
+
+
+if __name__ == "__main__":
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument("--repo", type=str)
+    arg_parser.add_argument("--branch", type=str, default="gh-pages")
+    arg_parser.add_argument("--push", action="store_true")
+    args = arg_parser.parse_args()
+
+    if args.repo is not None:
+        repo = args.repo
+    else:
+        repo = deployutils.infer_remote_url()
+        if repo is None:
+            print(red("github remote could not be inferred, run the script with --repo <remote-url>"), file=sys.stderr)
+            exit(1)
     
-    # TODO make sure pwd is deploy_path before running this
+    deploy_branch = args.branch
+    remote = "origin"
+    project_path = this_dirpath.parent
+    deploy_path = project_path.joinpath("deploy.out")
+    
+    deployutils.git_clone(repo, remote, deploy_path, deploy_branch)
+    populate_deploy_path(project_path, deploy_path)
+    
     if args.push:
         a = input(f"Deploy to {repo}@{deploy_branch}? [y/_] ")
         if a != "y":
             exit(1)
-
-        e = subprocess.call(["git", "add", "."])
-        if e != 0:
-            exit(e)
-        e = subprocess.call(["git", "commit", "-m", "Deploy"])
-        if e != 0:
-            exit(e)
-        e = subprocess.call(["git", "push", remote, deploy_branch])
-        if e != 0:
-            exit(e)
+        
+        push_deploy(deploy_path, remote, deploy_branch)
