@@ -61,15 +61,15 @@ def infer_remote_url():
 
     return None
 
-def git_clone(repo, remote, deploy_path, deploy_branch):
+def git_clone(remote_url, remote, deploy_path, deploy_branch):
     cleandir(deploy_path)
-    print(yellow(f"Cloning git repo {repo}"), file=sys.stderr)
+    print(yellow(f"Cloning git repo {remote_url}"), file=sys.stderr)
 
     os.chdir(deploy_path)
     e = subprocess.call(["git", "init"])
     if e != 0:
         raise RuntimeError("git init failed")
-    e = subprocess.call(["git", "remote", "add", remote, repo])
+    e = subprocess.call(["git", "remote", "add", remote, remote_url])
     if e != 0:
         raise RuntimeError("git remote add failed")
     e = subprocess.call(["git", "pull", remote, deploy_branch])
