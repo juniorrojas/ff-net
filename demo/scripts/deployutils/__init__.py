@@ -4,6 +4,7 @@ this_filepath = Path(os.path.abspath(__file__))
 this_dirpath = this_filepath.parent
 import configparser
 import sys
+import subprocess
 
 class TextColor:
     green = "\033[92m"
@@ -53,3 +54,25 @@ def infer_remote_url():
                 return remote_url
 
     return None
+
+def git_clone(repo, remote, deploy_path, deploy_branch):
+    print(yellow(f"Cloning git repo {repo}"), file=sys.stderr)
+
+    os.chdir(deploy_path)
+    e = subprocess.call(["git", "init"])
+    if e != 0:
+        exit(e)
+    e = subprocess.call(["git", "remote", "add", remote, repo])
+    if e != 0:
+        exit(e)
+    e = subprocess.call(["git", "pull", remote, deploy_branch])
+    if e != 0:
+        # we assume git pull failed because the branch doesn't exist,
+        # this is the case the first time you try to deploy
+        e = subprocess.call(["git", "checkout", "-b", deploy_branch])
+        if e != 0:
+            exit(e)
+    else:
+        e = subprocess.call(["git", "checkout", deploy_branch])
+        if e != 0:
+            exit(e)
