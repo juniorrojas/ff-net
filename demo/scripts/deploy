@@ -10,25 +10,8 @@ import shutil
 import sys
 import argparse
 
-class TextColor:
-    green = "\033[92m"
-    yellow = "\033[93m"
-    red = "\033[91m"
-    end = "\033[0m"
-
-def color_text(color, text):
-    return f"{color}{text}{TextColor.end}"
-
-def yellow(text):
-    return color_text(TextColor.yellow, text)
-
-def green(text):
-    return color_text(TextColor.green, text)
-
-def red(text):
-    return color_text(TextColor.red, text)
-
 def populate_deploy_path(project_path, deploy_path):
+    # remove all existing files in deploy_path (from last deployment), except .git
     for filename in os.listdir(deploy_path):
         if filename == ".git":
             continue
@@ -52,7 +35,7 @@ def populate_deploy_path(project_path, deploy_path):
         deploy_path.joinpath("css")
     )
 
-    print(yellow(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
+    return deploy_index_filename
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
@@ -66,20 +49,15 @@ if __name__ == "__main__":
     else:
         remote_url = deployutils.infer_remote_url()
         if remote_url is None:
-            print(red("github remote could not be inferred, run the script with --remote_url <remote-url>"), file=sys.stderr)
+            print("github remote could not be inferred, run the script with --remote_url <remote-url>", file=sys.stderr)
             exit(1)
-    
-    deploy_branch = args.branch
-    remote = "origin"
+
     project_path = this_dirpath.parent
-    deploy_path = project_path.joinpath("deploy.out")
-    
-    deployutils.git_clone(remote_url, remote, deploy_path, deploy_branch)
-    populate_deploy_path(project_path, deploy_path)
-    
-    if args.push:
-        a = input(f"Deploy to {remote_url}@{deploy_branch}? [y/_] ")
-        if a != "y":
-            exit(1)
-        
-        deployutils.git_push_deploy(deploy_path, remote, deploy_branch)
+
+    deployutils.run(
+        project_path,
+        remote_url,
+        deploy_branch=args.branch,
+        push=args.push,
+        populate_deploy_path=populate_deploy_path
+    )

@@ -39,7 +39,7 @@ def infer_remote_url():
     repo_dirname = infer_repo_dirname()
     config.read(os.path.join(repo_dirname, ".git", "config"))
     sections = config.sections()
-    
+
     # TODO handle case when .git/config contains multiple remote sections
     for section in sections:
         is_remote = "remote" in section
@@ -87,3 +87,20 @@ def git_push_deploy(deploy_path, remote, deploy_branch):
     e = subprocess.call(["git", "push", remote, deploy_branch])
     if e != 0:
         raise RuntimeError("git push failed")
+    
+def run(project_path, remote_url, deploy_branch, push=False, populate_deploy_path=None):
+    assert populate_deploy_path is not None
+    
+    remote = "origin"    
+    deploy_path = project_path.joinpath("deploy.out")
+    
+    git_clone(remote_url, remote, deploy_path, deploy_branch)
+    deploy_index_filename = populate_deploy_path(project_path, deploy_path)
+    print(yellow(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
+    
+    if push:
+        a = input(f"Deploy to {remote_url}@{deploy_branch}? [y/_] ")
+        if a != "y":
+            return
+        
+        git_push_deploy(deploy_path, remote, deploy_branch)
