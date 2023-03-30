@@ -8,7 +8,6 @@ sys.path.insert(0, str(this_dirpath))
 import deployutils
 import shutil
 import sys
-import subprocess
 import argparse
 
 class TextColor:
@@ -55,18 +54,6 @@ def populate_deploy_path(project_path, deploy_path):
 
     print(yellow(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
 
-def push_deploy(deploy_path, remote, deploy_branch):
-    e = subprocess.call(["git", "add", "."])
-    if e != 0:
-        exit(e)
-    e = subprocess.call(["git", "commit", "-m", "Deploy"])
-    if e != 0:
-        exit(e)
-    e = subprocess.call(["git", "push", remote, deploy_branch])
-    if e != 0:
-        exit(e)
-
-
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument("--repo", type=str)
@@ -95,4 +82,4 @@ if __name__ == "__main__":
         if a != "y":
             exit(1)
         
-        push_deploy(deploy_path, remote, deploy_branch)
+        deployutils.git_push_deploy(deploy_path, remote, deploy_branch)

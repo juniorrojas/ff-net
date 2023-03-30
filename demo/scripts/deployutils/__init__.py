@@ -83,3 +83,17 @@ def git_clone(repo, remote, deploy_path, deploy_branch):
         e = subprocess.call(["git", "checkout", deploy_branch])
         if e != 0:
             raise RuntimeError("git checkout failed")
+        
+def git_push_deploy(deploy_path, remote, deploy_branch):
+    os.chdir(deploy_path)
+
+    e = subprocess.call(["git", "add", "."])
+    if e != 0:
+        raise RuntimeError("git add failed")
+    e = subprocess.call(["git", "commit", "-m", "Deploy"])
+    if e != 0:
+        # assume there is nothing new to commit
+        return
+    e = subprocess.call(["git", "push", remote, deploy_branch])
+    if e != 0:
+        raise RuntimeError("git push failed")
