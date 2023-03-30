@@ -1,10 +1,8 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-module.exports={"dataPoints":[{"x":0.08,"y":0.24,"label":1},{"x":0.2,"y":0.27,"label":1},{"x":0.05,"y":0.3,"label":1},{"x":0.1,"y":0.1,"label":1},{"x":0.4,"y":0.4,"label":0},{"x":0.6,"y":0.4,"label":0},{"x":0.65,"y":0.7,"label":0},{"x":0.7,"y":0.3,"label":0},{"x":0.35,"y":0.65,"label":0},{"x":0.3,"y":0.5,"label":0},{"x":0.7,"y":0.5,"label":0},{"x":0.75,"y":0.55,"label":0},{"x":0.7,"y":0.6,"label":0},{"x":0.65,"y":0.34,"label":0},{"x":0.8,"y":0.65,"label":0},{"x":0.5,"y":0.7,"label":0},{"x":0.5,"y":0.66,"label":0},{"x":0.56,"y":0.66,"label":0},{"x":0.46,"y":0.36,"label":0},{"x":0.46,"y":0.26,"label":0},{"x":0.36,"y":0.26,"label":0},{"x":0.26,"y":0.36,"label":0},{"x":0.56,"y":0.28,"label":0},{"x":0.33,"y":0.54,"label":0},{"x":0.23,"y":0.52,"label":0},{"x":0.26,"y":0.16,"label":1},{"x":0.06,"y":0.46,"label":1},{"x":0.13,"y":0.66,"label":1},{"x":0.2,"y":0.8,"label":1},{"x":0.5,"y":0.5,"label":1},{"x":0.45,"y":0.5,"label":1},{"x":0.5,"y":0.45,"label":1},{"x":0.45,"y":0.45,"label":1},{"x":0.55,"y":0.55,"label":1},{"x":0.5,"y":0.55,"label":1},{"x":0.5,"y":0.2,"label":1},{"x":0.4,"y":0.1,"label":1},{"x":0.6,"y":0.1,"label":1},{"x":0.75,"y":0.15,"label":1},{"x":0.88,"y":0.22,"label":1},{"x":0.9,"y":0.35,"label":1},{"x":0.9,"y":0.49,"label":1},{"x":0.88,"y":0.62,"label":1},{"x":0.9,"y":0.9,"label":1},{"x":0.9,"y":0.8,"label":1},{"x":0.75,"y":0.85,"label":1},{"x":0.55,"y":0.92,"label":1},{"x":0.6,"y":0.95,"label":1},{"x":0.06,"y":0.57,"label":1},{"x":0.09,"y":0.8,"label":1},{"x":0.4,"y":0.9,"label":1}],"model":{"neuronGroups":[{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5}]}],"links":[{"n0":[0,0],"nf":[1,0],"weight":2.2559318523672673},{"n0":[0,0],"nf":[1,1],"weight":3.7705902078344162},{"n0":[0,0],"nf":[1,2],"weight":-5.673868837964195},{"n0":[0,0],"nf":[1,3],"weight":-2.552116396138559},{"n0":[0,0],"nf":[1,4],"weight":-4.765897189158554},{"n0":[0,1],"nf":[1,0],"weight":2.522847383501193},{"n0":[0,1],"nf":[1,1],"weight":-2.9902303588384505},{"n0":[0,1],"nf":[1,2],"weight":2.749623598598969},{"n0":[0,1],"nf":[1,3],"weight":-2.0657459601688077},{"n0":[0,1],"nf":[1,4],"weight":2.311040191441733},{"n0":[1,0],"nf":[2,0],"weight":-2.8083933750840506},{"n0":[1,0],"nf":[2,1],"weight":2.368208438212055},{"n0":[1,0],"nf":[2,2],"weight":2.792010178964303},{"n0":[1,0],"nf":[2,3],"weight":2.1204797088106764},{"n0":[1,0],"nf":[2,4],"weight":3.0855603411983634},{"n0":[1,1],"nf":[2,0],"weight":-2.1619760012233913},{"n0":[1,1],"nf":[2,1],"weight":2.7735676578848043},{"n0":[1,1],"nf":[2,2],"weight":-4.795321974592097},{"n0":[1,1],"nf":[2,3],"weight":-3.1618858651724424},{"n0":[1,1],"nf":[2,4],"weight":2.642537468325151},{"n0":[1,2],"nf":[2,0],"weight":5.111269168104936},{"n0":[1,2],"nf":[2,1],"weight":1.8060793114773712},{"n0":[1,2],"nf":[2,2],"weight":1.2874475479043777},{"n0":[1,2],"nf":[2,3],"weight":3.715659708889894},{"n0":[1,2],"nf":[2,4],"weight":-5.479057778095251},{"n0":[1,3],"nf":[2,0],"weight":4.279970838297447},{"n0":[1,3],"nf":[2,1],"weight":-3.8573191202934085},{"n0":[1,3],"nf":[2,2],"weight":-4.346636276004062},{"n0":[1,3],"nf":[2,3],"weight":1.8026421918582567},{"n0":[1,3],"nf":[2,4],"weight":3.9687935202147346},{"n0":[1,4],"nf":[2,0],"weight":-3.5216391228147197},{"n0":[1,4],"nf":[2,1],"weight":4.599458665307638},{"n0":[1,4],"nf":[2,2],"weight":-4.752572287153145},{"n0":[1,4],"nf":[2,3],"weight":-3.810827524569661},{"n0":[1,4],"nf":[2,4],"weight":3.0650028924296953},{"n0":[2,0],"nf":[3,0],"weight":-4.300364295192499},{"n0":[2,0],"nf":[3,1],"weight":-2.9036061692080217},{"n0":[2,1],"nf":[3,0],"weight":4.132576329093505},{"n0":[2,1],"nf":[3,1],"weight":-3.817976850598705},{"n0":[2,2],"nf":[3,0],"weight":4.606542085589321},{"n0":[2,2],"nf":[3,1],"weight":2.8220313920923323},{"n0":[2,3],"nf":[3,0],"weight":2.3423002019828885},{"n0":[2,3],"nf":[3,1],"weight":2.098573708791525},{"n0":[2,4],"nf":[3,0],"weight":4.4760505444141625},{"n0":[2,4],"nf":[3,1],"weight":3.95752484391276},{"n0":[3,0],"nf":[4,0],"weight":-0.7265226578414495},{"n0":[3,1],"nf":[4,0],"weight":-4.316679309853457}]}}
-},{}],2:[function(require,module,exports){
 const ffnet = require("ff-net");
 const nn = ffnet.nn;
-const svg = ffnet.ui.svg;
-const ui = require("./ui");
+const svg = ffnet.common.svg;
+const ui = ffnet.ui;
 
 class App {
   constructor(data) {
@@ -101,6 +99,12 @@ class App {
   }
 }
 
+module.exports = App;
+},{"ff-net":7}],2:[function(require,module,exports){
+module.exports={"dataPoints":[{"x":0.08,"y":0.24,"label":1},{"x":0.2,"y":0.27,"label":1},{"x":0.05,"y":0.3,"label":1},{"x":0.1,"y":0.1,"label":1},{"x":0.4,"y":0.4,"label":0},{"x":0.6,"y":0.4,"label":0},{"x":0.65,"y":0.7,"label":0},{"x":0.7,"y":0.3,"label":0},{"x":0.35,"y":0.65,"label":0},{"x":0.3,"y":0.5,"label":0},{"x":0.7,"y":0.5,"label":0},{"x":0.75,"y":0.55,"label":0},{"x":0.7,"y":0.6,"label":0},{"x":0.65,"y":0.34,"label":0},{"x":0.8,"y":0.65,"label":0},{"x":0.5,"y":0.7,"label":0},{"x":0.5,"y":0.66,"label":0},{"x":0.56,"y":0.66,"label":0},{"x":0.46,"y":0.36,"label":0},{"x":0.46,"y":0.26,"label":0},{"x":0.36,"y":0.26,"label":0},{"x":0.26,"y":0.36,"label":0},{"x":0.56,"y":0.28,"label":0},{"x":0.33,"y":0.54,"label":0},{"x":0.23,"y":0.52,"label":0},{"x":0.26,"y":0.16,"label":1},{"x":0.06,"y":0.46,"label":1},{"x":0.13,"y":0.66,"label":1},{"x":0.2,"y":0.8,"label":1},{"x":0.5,"y":0.5,"label":1},{"x":0.45,"y":0.5,"label":1},{"x":0.5,"y":0.45,"label":1},{"x":0.45,"y":0.45,"label":1},{"x":0.55,"y":0.55,"label":1},{"x":0.5,"y":0.55,"label":1},{"x":0.5,"y":0.2,"label":1},{"x":0.4,"y":0.1,"label":1},{"x":0.6,"y":0.1,"label":1},{"x":0.75,"y":0.15,"label":1},{"x":0.88,"y":0.22,"label":1},{"x":0.9,"y":0.35,"label":1},{"x":0.9,"y":0.49,"label":1},{"x":0.88,"y":0.62,"label":1},{"x":0.9,"y":0.9,"label":1},{"x":0.9,"y":0.8,"label":1},{"x":0.75,"y":0.85,"label":1},{"x":0.55,"y":0.92,"label":1},{"x":0.6,"y":0.95,"label":1},{"x":0.06,"y":0.57,"label":1},{"x":0.09,"y":0.8,"label":1},{"x":0.4,"y":0.9,"label":1}],"model":{"neuronGroups":[{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5}]}],"links":[{"n0":[0,0],"nf":[1,0],"weight":2.2559318523672673},{"n0":[0,0],"nf":[1,1],"weight":3.7705902078344162},{"n0":[0,0],"nf":[1,2],"weight":-5.673868837964195},{"n0":[0,0],"nf":[1,3],"weight":-2.552116396138559},{"n0":[0,0],"nf":[1,4],"weight":-4.765897189158554},{"n0":[0,1],"nf":[1,0],"weight":2.522847383501193},{"n0":[0,1],"nf":[1,1],"weight":-2.9902303588384505},{"n0":[0,1],"nf":[1,2],"weight":2.749623598598969},{"n0":[0,1],"nf":[1,3],"weight":-2.0657459601688077},{"n0":[0,1],"nf":[1,4],"weight":2.311040191441733},{"n0":[1,0],"nf":[2,0],"weight":-2.8083933750840506},{"n0":[1,0],"nf":[2,1],"weight":2.368208438212055},{"n0":[1,0],"nf":[2,2],"weight":2.792010178964303},{"n0":[1,0],"nf":[2,3],"weight":2.1204797088106764},{"n0":[1,0],"nf":[2,4],"weight":3.0855603411983634},{"n0":[1,1],"nf":[2,0],"weight":-2.1619760012233913},{"n0":[1,1],"nf":[2,1],"weight":2.7735676578848043},{"n0":[1,1],"nf":[2,2],"weight":-4.795321974592097},{"n0":[1,1],"nf":[2,3],"weight":-3.1618858651724424},{"n0":[1,1],"nf":[2,4],"weight":2.642537468325151},{"n0":[1,2],"nf":[2,0],"weight":5.111269168104936},{"n0":[1,2],"nf":[2,1],"weight":1.8060793114773712},{"n0":[1,2],"nf":[2,2],"weight":1.2874475479043777},{"n0":[1,2],"nf":[2,3],"weight":3.715659708889894},{"n0":[1,2],"nf":[2,4],"weight":-5.479057778095251},{"n0":[1,3],"nf":[2,0],"weight":4.279970838297447},{"n0":[1,3],"nf":[2,1],"weight":-3.8573191202934085},{"n0":[1,3],"nf":[2,2],"weight":-4.346636276004062},{"n0":[1,3],"nf":[2,3],"weight":1.8026421918582567},{"n0":[1,3],"nf":[2,4],"weight":3.9687935202147346},{"n0":[1,4],"nf":[2,0],"weight":-3.5216391228147197},{"n0":[1,4],"nf":[2,1],"weight":4.599458665307638},{"n0":[1,4],"nf":[2,2],"weight":-4.752572287153145},{"n0":[1,4],"nf":[2,3],"weight":-3.810827524569661},{"n0":[1,4],"nf":[2,4],"weight":3.0650028924296953},{"n0":[2,0],"nf":[3,0],"weight":-4.300364295192499},{"n0":[2,0],"nf":[3,1],"weight":-2.9036061692080217},{"n0":[2,1],"nf":[3,0],"weight":4.132576329093505},{"n0":[2,1],"nf":[3,1],"weight":-3.817976850598705},{"n0":[2,2],"nf":[3,0],"weight":4.606542085589321},{"n0":[2,2],"nf":[3,1],"weight":2.8220313920923323},{"n0":[2,3],"nf":[3,0],"weight":2.3423002019828885},{"n0":[2,3],"nf":[3,1],"weight":2.098573708791525},{"n0":[2,4],"nf":[3,0],"weight":4.4760505444141625},{"n0":[2,4],"nf":[3,1],"weight":3.95752484391276},{"n0":[3,0],"nf":[4,0],"weight":-0.7265226578414495},{"n0":[3,1],"nf":[4,0],"weight":-4.316679309853457}]}}
+},{}],3:[function(require,module,exports){
+const App = require("./App");
+
 function main() {
   const divTitle = document.createElement("div");
   document.body.appendChild(divTitle);
@@ -123,421 +127,79 @@ function main() {
 }
 
 main();
-},{"./data":1,"./ui":8,"ff-net":9}],3:[function(require,module,exports){
-const LossPlot = require("./LossPlot");
-
-class ControlPanel {
-  constructor(args = {}) {
-    this.app = args.app;
-    
-    this.learningRate = 0.2;
-    this.regularization = 0.000009;
-    
-    const div = this.domElement = document.createElement("div");
-    div.className = "control-panel";
-    
-    this.rows = [];
-    this.rowsByLabel = {};
-    
-    let row;
-
-    row = this.addRow("full");
-    const btnRandomize = document.createElement("div");
-    btnRandomize.textContent = "randomize network parameters";
-    btnRandomize.className = "btn";
-    row.cells[0].appendChild(btnRandomize);
-    const model = args.neuralNet;
-    btnRandomize.addEventListener("click", () => {
-      model.randomizeParameters();
-    });
-    
-    const uiLearningRate = this.addRow("slider", "learning rate");
-    uiLearningRate.control.min = 1;
-    uiLearningRate.control.max = 80;
-    uiLearningRate.control.value = Math.round(this.learningRate * 100);
-    uiLearningRate.control.addEventListener("change", () => {
-      this.learningRate = uiLearningRate.control.value / 100;
-    });
-    
-    const uiRegularization = this.addRow("slider", "regularization");
-    uiRegularization.control.min = 0;
-    uiRegularization.control.max = 100;
-    uiRegularization.control.value = Math.round(this.regularization * 1000000);
-    uiRegularization.control.addEventListener("change", () => {
-      this.regularization = uiRegularization.control.value / 1000000;
-    });
-    
-    row = this.addRow("text", "loss");
-    row.control.className = "formatted-number";
-      
-    row = this.addRow("full");
-    const lossPlot = this.lossPlot = new LossPlot();
-    row.cells[0].appendChild(lossPlot.domElement);
+},{"./App":1,"./data":2}],4:[function(require,module,exports){
+class Color {
+  // r, g, b, a are numbers between 0 and 1
+  constructor(r, g, b, a) {
+    if (a == null) a = 1;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
   }
-
-  addCell(row) {
-    const cell = document.createElement("div");
-    cell.className = "control-cell";
-    row.appendChild(cell);
-    row.cells.push(cell);
-    return cell;
-  }
-
-  addRow(type, label) {
-    const row = document.createElement("div");
-    row.cells = [];
-    row.className = "control-row";
-    this.domElement.appendChild(row);
-    this.rows.push(row);
-    this.rowsByLabel[label] = row;
+  
+  blend(c, t) {
+    if (Math.abs(t) > 1) throw new Error("t must be a number between -1 and 1");
     
-    let cell;
-    
-    if (type == "full") {
-      cell = document.createElement("div");
-      cell.className = "control-cell-full";
-      row.appendChild(cell);
-      row.cells.push(cell);
+    let source, target;
+    if (t >= 0) {
+      source = this;
+      target = c;
     } else {
-      cell = this.addCell(row);
-      cell.textContent = label;
-      
-      cell = this.addCell(row);
-      let control;
-      switch (type) {
-        case "slider":
-          control = document.createElement("input");
-          control.type = "range";
-          break;
-        case "text":
-          control = cell;
-          break;
-      }
-      if (control != cell && control != null) cell.appendChild(control);
-      
-      row.control = control;
+      source = c;
+      target = this;
     }
     
-    return row;
-  }
-
-  update(args) {
-    this.rowsByLabel["loss"].control.textContent = args.totalLoss.toFixed(10);
-    this.lossPlot.update(args.dataLoss, args.regularizationLoss);
-  }
-}
-
-module.exports = ControlPanel;
-
-},{"./LossPlot":7}],4:[function(require,module,exports){
-const ffnet = require("ff-net");
-const Color = ffnet.ui.Color;
-const DataPoint = require("./DataPoint");
-const DragBehavior = require("./DragBehavior");
-
-class DataCanvas {
-  constructor() {
-    this.dataPoints = [];
-    const canvas = this.domElement = document.createElement("canvas");
-    canvas.width = 250;
-    canvas.height = 250;
-    this.ctx = canvas.getContext("2d");
-
-    this.width = 50;
-    this.height = 50;
-    this.pixelColors = [];
-    for (let i = 0; i < this.width; i++) {
-      this.pixelColors.push([]);
-      for (let j = 0; j < this.height; j++) {
-        this.pixelColors[i].push(0);
-      }
-    }
-
-    this.dragBehavior = new DragBehavior(canvas);
-    this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
-    this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
-  }
-
-  addDataPoint(x, y, label) {
-    const dataPoint = new DataPoint(this, x, y, label);
-    this.dataPoints.push(dataPoint);
-    return dataPoint;
-  }
-
-  render(classify) {
-    const ctx = this.ctx;
-    const canvas = this.domElement;
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
-
-    const width = this.width;
-    const height = this.height;
-
-    for (let i = 0; i < width; i++) {
-      for (let j = 0; j < height; j++) {
-        const label = classify(i / width, j / height);
-        const color = Color.lightRed.blend(Color.lightBlue, label);
-        this.pixelColors[i][j] = color;
-      }
-    }
-
-    const fWidth = canvasWidth / width;
-    const fHeight = canvasHeight / height;
-    const canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    for (let i = 0; i < canvasImageData.data.length / 4; i++) {
-      const y = Math.floor(i / canvasWidth);
-      const x = i % canvasWidth;
-      const ii = Math.floor(x / fWidth);
-      const jj = Math.floor(y / fHeight);
-      const color = this.pixelColors[ii][jj];
-      canvasImageData.data[4 * i] = Math.round(color.r * 255);
-      canvasImageData.data[4 * i + 1] = Math.round(color.g * 255);
-      canvasImageData.data[4 * i + 2] = Math.round(color.b * 255);
-      canvasImageData.data[4 * i + 3] = 255;
-    }
-    ctx.putImageData(canvasImageData, 0, 0);
-
-    this.dataPoints.forEach((dataPoint) => dataPoint.render());
-  }
-
-  computeCursor(event) {
-    const rect = this.domElement.getBoundingClientRect();
-    let clientX, clientY;
-    if (event.touches == null) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-    } else {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    }
-    const left = clientX - rect.left;
-    const top = clientY - rect.top;
-    const cursor = {x: left, y: top};
-    event.cursor = cursor;
-  }
-
-  processDragBegin(event) {
-    for (let i = 0; i < this.dataPoints.length; i++) {
-      const dataPoint = this.dataPoints[i];
-
-      const dx = event.cursor.x - dataPoint.x * this.domElement.width;
-      const dy = event.cursor.y - dataPoint.y * this.domElement.height;
-
-      const radius = dataPoint.radius;
-      const selectionRadius = radius * 3;
-
-      if (dx * dx + dy * dy <= selectionRadius * selectionRadius) {
-        const dragState = this.dragBehavior.dragState = {};
-        dragState.dataPoint = dataPoint;
-        dragState.offset = {x: dx, y: dy};
-        break;
-      }
-    };
-  }
-
-  processDragProgress(event) {
-    const dataPoint = this.dragBehavior.dragState.dataPoint;
-    const offset = this.dragBehavior.dragState.offset;
-
-    dataPoint.x = (event.cursor.x - offset.x) / this.domElement.width;
-    dataPoint.y = (event.cursor.y - offset.y) / this.domElement.height;
-
-    if (dataPoint.x < 0) dataPoint.x = 0;
-    else if (dataPoint.x > 1) dataPoint.x = 1;
-    if (dataPoint.y < 0) dataPoint.y = 0;
-    else if (dataPoint.y > 1) dataPoint.y = 1;
-  }
-
-  toData() {
-    const data = this.dataPoints.map((dataPoint) => dataPoint.toData());
-    return data;
-  }
-
-  loadFromData(data) {
-    this.dataPoints = [];
-    data.forEach((item) => {
-      this.addDataPoint(item.x, item.y, item.label);
-    });
-  }
-
-  static fromData(data) {
-    const dataCanvas = new DataCanvas();
-    dataCanvas.loadFromData(data);
-    return dataCanvas;
-  }
-}
-
-module.exports = DataCanvas;
-
-},{"./DataPoint":5,"./DragBehavior":6,"ff-net":9}],5:[function(require,module,exports){
-const ffnet = require("ff-net");
-const Color = ffnet.ui.Color;
-
-class DataPoint {
-  constructor(canvas, x, y, label) {
-    this.canvas = canvas;
-    this.x = x;
-    this.y = y;
-    this.label = label;
-    this.radius = 5;
-  }
-
-  render() {
-    const ctx = this.canvas.ctx;
-    const width = this.canvas.domElement.width;
-    const height = this.canvas.domElement.height;
-    
-    let fillColor;
-    if (this.label == 0) fillColor = Color.red;
-    else fillColor = Color.blue;
-    const strokeColor = fillColor.blend(Color.black, 0.6);
-    
-    ctx.beginPath();
-    ctx.fillStyle = fillColor.toString();
-    ctx.strokeStyle = strokeColor.toString();
-    ctx.arc(
-      this.x * width, this.y * height,
-      this.radius,
-      0, 2 * Math.PI
+    return new Color(
+      source.r * (1 - t) + target.r * t,
+      source.g * (1 - t) + target.g * t,
+      source.b * (1 - t) + target.b * t
     );
-    ctx.fill();
-    ctx.stroke();
   }
 
-  toData() {
-    return {
-      x: this.x,
-      y: this.y,
-      label: this.label
-    }
+  toString() {
+    const r = Math.floor(255 * this.r);
+    const g = Math.floor(255 * this.g);
+    const b = Math.floor(255 * this.b);
+    const a = this.a;
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
   }
 }
 
-module.exports = DataPoint;
-},{"ff-net":9}],6:[function(require,module,exports){
-class DragBehavior {
-  constructor(canvas) {
-    this.canvas = canvas;
+Color.white = new Color(1, 1, 1);
+Color.black = new Color(0, 0, 0);
 
-    this._onDragBegin = this.onDragBegin.bind(this);
-    canvas.addEventListener("mousedown", this._onDragBegin, {passive: false});
-    canvas.addEventListener("touchstart", this._onDragBegin, {passive: false});
-    
-    this._onDragProgress = this.onDragProgress.bind(this);
-    canvas.addEventListener("mousemove", this._onDragProgress, {passive: false});
-    canvas.addEventListener("touchmove", this._onDragProgress, {passive: false});
+Color.red = new Color(226 / 255, 86 / 255, 86 / 255);
+Color.blue = new Color(135 / 255, 173 / 255, 236 / 255);
 
-    this._onDragEnd = this.onDragEnd.bind(this);
-    window.addEventListener("mouseup", this._onDragEnd);
-    window.addEventListener("touchend", this._onDragEnd);
-    window.addEventListener("touchcancel", this._onDragEnd);
-  }
+Color.lightBlue = new Color(186 / 255, 224 / 255, 251 / 255);
+Color.lightRed = new Color(252 / 255, 163 / 255, 163 / 255);
 
-  computeCursor(event) {
-    const rect = this.canvas.getBoundingClientRect();
-    let clientX, clientY;
-    if (event.touches == null) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-    } else {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    }
-    const left = clientX - rect.left;
-    const top = clientY - rect.top;
-    const cursor = {x: left, y: top};
-    event.cursor = cursor;
-  }
-
-  onDragBegin(event) {
-    event.preventDefault();
-    this.computeCursor(event);
-    this.processDragBegin(event);
-  }
-
-  onDragProgress(event) {
-    if (this.dragState == null) return;
-    event.preventDefault();
-    this.computeCursor(event);
-    this.processDragProgress(event);
-  }
-
-  onDragEnd(event) {
-    this.dragState = null;
-  }
-}
-
-module.exports = DragBehavior;
-},{}],7:[function(require,module,exports){
-const minTopLoss = 4;
-
-class LossPlot {
-  constructor() {
-    const canvas = this.domElement = document.createElement("canvas");
-    canvas.className = "loss-plot-canvas";
-    this.ctx = canvas.getContext("2d");	
-    this.maxDataLength = canvas.width;
-    this.data = [];
-    this.topLoss = minTopLoss;
-  }
-
-  update(dataLoss, regularizationLoss) {
-    if (this.data.length == this.maxDataLength) this.data.shift();
-
-    const totalLoss = dataLoss + regularizationLoss;
-    this.data.push({
-      dataLoss: dataLoss,
-      regularizationLoss: regularizationLoss,
-      totalLoss: totalLoss
-    });
-
-    const totalLosses = this.data.map((item) => item.totalLoss)
-    const maxTotalLoss = Math.max.apply(null, totalLosses);
-    if (maxTotalLoss > minTopLoss) this.topLoss = maxTotalLoss;
-    else this.topLoss = minTopLoss;
-
-    this.render();
-  }
-
-  render() {
-    const ctx = this.ctx;
-    const width = this.domElement.width;
-    const height = this.domElement.height;
-    ctx.clearRect(0, 0, width, height);
-    
-    this.data.forEach((item, i) => {
-      const totalLoss = item.totalLoss;
-      const x = i / (this.maxDataLength - 1) * width;
-      const y = height * (1 - totalLoss / this.topLoss);
-      ctx.beginPath();
-      ctx.strokeStyle = "rgb(255, 221, 78)";
-      ctx.moveTo(x, height);
-      ctx.lineTo(x, y);
-      ctx.stroke();
-    });
-  }
-
-  clear() {
-    this.data = [];
-  }
-}
-
-module.exports = LossPlot;
-},{}],8:[function(require,module,exports){
+module.exports = Color;
+},{}],5:[function(require,module,exports){
 module.exports = {
-  ControlPanel: require("./ControlPanel"),
-  DataCanvas: require("./DataCanvas")
+  Color: require("./Color"),
+  svg: require("./svg")
 };
-},{"./ControlPanel":3,"./DataCanvas":4}],9:[function(require,module,exports){
+},{"./Color":4,"./svg":6}],6:[function(require,module,exports){
+const svg = {};
+
+svg.createElement = function(element) {
+  return document.createElementNS("http://www.w3.org/2000/svg", element);
+}
+
+module.exports = svg;
+
+},{}],7:[function(require,module,exports){
 const nn = require("./nn");
 
 module.exports = {
   ui: require("./ui"),
+  common: require("./common"),
   nn: nn,
   Sequential: nn.Sequential
 };
-},{"./nn":14,"./ui":16}],10:[function(require,module,exports){
+},{"./common":5,"./nn":12,"./ui":18}],8:[function(require,module,exports){
 class Link {
   constructor(neuralNet, n0, nf, weight) {
     this.neuralNet = neuralNet;
@@ -556,14 +218,14 @@ class Link {
     const headless = neuralNet.headless;
     this.headless = headless;
     if (!headless) {
-      const svg = require("../ui/svg");
+      const svg = require("../common/svg");
       this.svgElement = svg.createElement("path");
       this.render();
     }
   }
 
   render() {
-    const Color = require("../ui/Color");
+    const Color = require("../common/Color");
 
     const path = this.svgElement;
     const p0 = this.n0.getPosition();
@@ -623,7 +285,7 @@ class Link {
 
 module.exports = Link;
 
-},{"../ui/Color":15,"../ui/svg":17}],11:[function(require,module,exports){
+},{"../common/Color":4,"../common/svg":6}],9:[function(require,module,exports){
 const radius = 12;
 const strokeWidth = 2;
 
@@ -653,7 +315,7 @@ class Neuron {
     this.headless = headless;
     
     if (!headless) {
-      const svg = require("../ui/svg");
+      const svg = require("../common/svg");
       const svgElement = this.svgElement = svg.createElement("circle");
       svgElement.setAttribute("r", radius);
     }
@@ -690,7 +352,7 @@ class Neuron {
   }
 
   render() {
-    const Color = require("../ui/Color");
+    const Color = require("../common/Color");
     
     const circle = this.svgElement;
     const position = this.getPosition();
@@ -773,7 +435,7 @@ class Neuron {
 
 module.exports = Neuron;
 
-},{"../ui/Color":15,"../ui/svg":17}],12:[function(require,module,exports){
+},{"../common/Color":4,"../common/svg":6}],10:[function(require,module,exports){
 const Neuron = require("./Neuron");
 
 class NeuronGroup {
@@ -837,7 +499,7 @@ class NeuronGroup {
 
 module.exports = NeuronGroup;
 
-},{"./Neuron":11}],13:[function(require,module,exports){
+},{"./Neuron":9}],11:[function(require,module,exports){
 const Link = require("./Link");
 const NeuronGroup = require("./NeuronGroup");
 
@@ -850,7 +512,7 @@ class Sequential {
     const headless = args.headless ?? true;
     this.headless = headless;
     if (!headless) {
-      const svg = require("../ui/svg");
+      const svg = require("../common/svg");
 
       this.svgElement = svg.createElement("g");
     
@@ -1076,71 +738,412 @@ class Sequential {
 
 module.exports = Sequential;
 
-},{"../ui/svg":17,"./Link":10,"./NeuronGroup":12}],14:[function(require,module,exports){
+},{"../common/svg":6,"./Link":8,"./NeuronGroup":10}],12:[function(require,module,exports){
 module.exports = {
   Sequential: require("./Sequential")
 };
-},{"./Sequential":13}],15:[function(require,module,exports){
-class Color {
-  // r, g, b, a are numbers between 0 and 1
-  constructor(r, g, b, a) {
-    if (a == null) a = 1;
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
-  }
-  
-  blend(c, t) {
-    if (Math.abs(t) > 1) throw new Error("t must be a number between -1 and 1");
+},{"./Sequential":11}],13:[function(require,module,exports){
+const LossPlot = require("./LossPlot");
+
+class ControlPanel {
+  constructor(args = {}) {
+    this.app = args.app;
     
-    let source, target;
-    if (t >= 0) {
-      source = this;
-      target = c;
+    this.learningRate = 0.2;
+    this.regularization = 0.000009;
+    
+    const div = this.domElement = document.createElement("div");
+    div.className = "control-panel";
+    
+    this.rows = [];
+    this.rowsByLabel = {};
+    
+    let row;
+
+    row = this.addRow("full");
+    const btnRandomize = document.createElement("div");
+    btnRandomize.textContent = "randomize network parameters";
+    btnRandomize.className = "btn";
+    row.cells[0].appendChild(btnRandomize);
+    const model = args.neuralNet;
+    btnRandomize.addEventListener("click", () => {
+      model.randomizeParameters();
+    });
+    
+    const uiLearningRate = this.addRow("slider", "learning rate");
+    uiLearningRate.control.min = 1;
+    uiLearningRate.control.max = 80;
+    uiLearningRate.control.value = Math.round(this.learningRate * 100);
+    uiLearningRate.control.addEventListener("change", () => {
+      this.learningRate = uiLearningRate.control.value / 100;
+    });
+    
+    const uiRegularization = this.addRow("slider", "regularization");
+    uiRegularization.control.min = 0;
+    uiRegularization.control.max = 100;
+    uiRegularization.control.value = Math.round(this.regularization * 1000000);
+    uiRegularization.control.addEventListener("change", () => {
+      this.regularization = uiRegularization.control.value / 1000000;
+    });
+    
+    row = this.addRow("text", "loss");
+    row.control.className = "formatted-number";
+      
+    row = this.addRow("full");
+    const lossPlot = this.lossPlot = new LossPlot();
+    row.cells[0].appendChild(lossPlot.domElement);
+  }
+
+  addCell(row) {
+    const cell = document.createElement("div");
+    cell.className = "control-cell";
+    row.appendChild(cell);
+    row.cells.push(cell);
+    return cell;
+  }
+
+  addRow(type, label) {
+    const row = document.createElement("div");
+    row.cells = [];
+    row.className = "control-row";
+    this.domElement.appendChild(row);
+    this.rows.push(row);
+    this.rowsByLabel[label] = row;
+    
+    let cell;
+    
+    if (type == "full") {
+      cell = document.createElement("div");
+      cell.className = "control-cell-full";
+      row.appendChild(cell);
+      row.cells.push(cell);
     } else {
-      source = c;
-      target = this;
+      cell = this.addCell(row);
+      cell.textContent = label;
+      
+      cell = this.addCell(row);
+      let control;
+      switch (type) {
+        case "slider":
+          control = document.createElement("input");
+          control.type = "range";
+          break;
+        case "text":
+          control = cell;
+          break;
+      }
+      if (control != cell && control != null) cell.appendChild(control);
+      
+      row.control = control;
     }
     
-    return new Color(
-      source.r * (1 - t) + target.r * t,
-      source.g * (1 - t) + target.g * t,
-      source.b * (1 - t) + target.b * t
+    return row;
+  }
+
+  update(args) {
+    this.rowsByLabel["loss"].control.textContent = args.totalLoss.toFixed(10);
+    this.lossPlot.update(args.dataLoss, args.regularizationLoss);
+  }
+}
+
+module.exports = ControlPanel;
+
+},{"./LossPlot":17}],14:[function(require,module,exports){
+const Color = require("../common/Color");
+const DataPoint = require("./DataPoint");
+const DragBehavior = require("./DragBehavior");
+
+class DataCanvas {
+  constructor() {
+    this.dataPoints = [];
+    const canvas = this.domElement = document.createElement("canvas");
+    canvas.width = 250;
+    canvas.height = 250;
+    this.ctx = canvas.getContext("2d");
+
+    this.width = 50;
+    this.height = 50;
+    this.pixelColors = [];
+    for (let i = 0; i < this.width; i++) {
+      this.pixelColors.push([]);
+      for (let j = 0; j < this.height; j++) {
+        this.pixelColors[i].push(0);
+      }
+    }
+
+    this.dragBehavior = new DragBehavior(canvas);
+    this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
+    this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
+  }
+
+  addDataPoint(x, y, label) {
+    const dataPoint = new DataPoint(this, x, y, label);
+    this.dataPoints.push(dataPoint);
+    return dataPoint;
+  }
+
+  render(classify) {
+    const ctx = this.ctx;
+    const canvas = this.domElement;
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    const width = this.width;
+    const height = this.height;
+
+    for (let i = 0; i < width; i++) {
+      for (let j = 0; j < height; j++) {
+        const label = classify(i / width, j / height);
+        const color = Color.lightRed.blend(Color.lightBlue, label);
+        this.pixelColors[i][j] = color;
+      }
+    }
+
+    const fWidth = canvasWidth / width;
+    const fHeight = canvasHeight / height;
+    const canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    for (let i = 0; i < canvasImageData.data.length / 4; i++) {
+      const y = Math.floor(i / canvasWidth);
+      const x = i % canvasWidth;
+      const ii = Math.floor(x / fWidth);
+      const jj = Math.floor(y / fHeight);
+      const color = this.pixelColors[ii][jj];
+      canvasImageData.data[4 * i] = Math.round(color.r * 255);
+      canvasImageData.data[4 * i + 1] = Math.round(color.g * 255);
+      canvasImageData.data[4 * i + 2] = Math.round(color.b * 255);
+      canvasImageData.data[4 * i + 3] = 255;
+    }
+    ctx.putImageData(canvasImageData, 0, 0);
+
+    this.dataPoints.forEach((dataPoint) => dataPoint.render());
+  }
+
+  computeCursor(event) {
+    const rect = this.domElement.getBoundingClientRect();
+    let clientX, clientY;
+    if (event.touches == null) {
+      clientX = event.clientX;
+      clientY = event.clientY;
+    } else {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    }
+    const left = clientX - rect.left;
+    const top = clientY - rect.top;
+    const cursor = {x: left, y: top};
+    event.cursor = cursor;
+  }
+
+  processDragBegin(event) {
+    for (let i = 0; i < this.dataPoints.length; i++) {
+      const dataPoint = this.dataPoints[i];
+
+      const dx = event.cursor.x - dataPoint.x * this.domElement.width;
+      const dy = event.cursor.y - dataPoint.y * this.domElement.height;
+
+      const radius = dataPoint.radius;
+      const selectionRadius = radius * 3;
+
+      if (dx * dx + dy * dy <= selectionRadius * selectionRadius) {
+        const dragState = this.dragBehavior.dragState = {};
+        dragState.dataPoint = dataPoint;
+        dragState.offset = {x: dx, y: dy};
+        break;
+      }
+    };
+  }
+
+  processDragProgress(event) {
+    const dataPoint = this.dragBehavior.dragState.dataPoint;
+    const offset = this.dragBehavior.dragState.offset;
+
+    dataPoint.x = (event.cursor.x - offset.x) / this.domElement.width;
+    dataPoint.y = (event.cursor.y - offset.y) / this.domElement.height;
+
+    if (dataPoint.x < 0) dataPoint.x = 0;
+    else if (dataPoint.x > 1) dataPoint.x = 1;
+    if (dataPoint.y < 0) dataPoint.y = 0;
+    else if (dataPoint.y > 1) dataPoint.y = 1;
+  }
+
+  toData() {
+    const data = this.dataPoints.map((dataPoint) => dataPoint.toData());
+    return data;
+  }
+
+  loadFromData(data) {
+    this.dataPoints = [];
+    data.forEach((item) => {
+      this.addDataPoint(item.x, item.y, item.label);
+    });
+  }
+
+  static fromData(data) {
+    const dataCanvas = new DataCanvas();
+    dataCanvas.loadFromData(data);
+    return dataCanvas;
+  }
+}
+
+module.exports = DataCanvas;
+
+},{"../common/Color":4,"./DataPoint":15,"./DragBehavior":16}],15:[function(require,module,exports){
+const Color = require("../common/Color");
+
+class DataPoint {
+  constructor(canvas, x, y, label) {
+    this.canvas = canvas;
+    this.x = x;
+    this.y = y;
+    this.label = label;
+    this.radius = 5;
+  }
+
+  render() {
+    const ctx = this.canvas.ctx;
+    const width = this.canvas.domElement.width;
+    const height = this.canvas.domElement.height;
+    
+    let fillColor;
+    if (this.label == 0) fillColor = Color.red;
+    else fillColor = Color.blue;
+    const strokeColor = fillColor.blend(Color.black, 0.6);
+    
+    ctx.beginPath();
+    ctx.fillStyle = fillColor.toString();
+    ctx.strokeStyle = strokeColor.toString();
+    ctx.arc(
+      this.x * width, this.y * height,
+      this.radius,
+      0, 2 * Math.PI
     );
+    ctx.fill();
+    ctx.stroke();
   }
 
-  toString() {
-    const r = Math.floor(255 * this.r);
-    const g = Math.floor(255 * this.g);
-    const b = Math.floor(255 * this.b);
-    const a = this.a;
-    return `rgba(${r}, ${g}, ${b}, ${a})`;
+  toData() {
+    return {
+      x: this.x,
+      y: this.y,
+      label: this.label
+    }
   }
 }
 
-Color.white = new Color(1, 1, 1);
-Color.black = new Color(0, 0, 0);
+module.exports = DataPoint;
+},{"../common/Color":4}],16:[function(require,module,exports){
+class DragBehavior {
+  constructor(canvas) {
+    this.canvas = canvas;
 
-Color.red = new Color(226 / 255, 86 / 255, 86 / 255);
-Color.blue = new Color(135 / 255, 173 / 255, 236 / 255);
+    this._onDragBegin = this.onDragBegin.bind(this);
+    canvas.addEventListener("mousedown", this._onDragBegin, {passive: false});
+    canvas.addEventListener("touchstart", this._onDragBegin, {passive: false});
+    
+    this._onDragProgress = this.onDragProgress.bind(this);
+    canvas.addEventListener("mousemove", this._onDragProgress, {passive: false});
+    canvas.addEventListener("touchmove", this._onDragProgress, {passive: false});
 
-Color.lightBlue = new Color(186 / 255, 224 / 255, 251 / 255);
-Color.lightRed = new Color(252 / 255, 163 / 255, 163 / 255);
+    this._onDragEnd = this.onDragEnd.bind(this);
+    window.addEventListener("mouseup", this._onDragEnd);
+    window.addEventListener("touchend", this._onDragEnd);
+    window.addEventListener("touchcancel", this._onDragEnd);
+  }
 
-module.exports = Color;
-},{}],16:[function(require,module,exports){
+  computeCursor(event) {
+    const rect = this.canvas.getBoundingClientRect();
+    let clientX, clientY;
+    if (event.touches == null) {
+      clientX = event.clientX;
+      clientY = event.clientY;
+    } else {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    }
+    const left = clientX - rect.left;
+    const top = clientY - rect.top;
+    const cursor = {x: left, y: top};
+    event.cursor = cursor;
+  }
+
+  onDragBegin(event) {
+    event.preventDefault();
+    this.computeCursor(event);
+    this.processDragBegin(event);
+  }
+
+  onDragProgress(event) {
+    if (this.dragState == null) return;
+    event.preventDefault();
+    this.computeCursor(event);
+    this.processDragProgress(event);
+  }
+
+  onDragEnd(event) {
+    this.dragState = null;
+  }
+}
+
+module.exports = DragBehavior;
+},{}],17:[function(require,module,exports){
+const minTopLoss = 4;
+
+class LossPlot {
+  constructor() {
+    const canvas = this.domElement = document.createElement("canvas");
+    canvas.className = "loss-plot-canvas";
+    this.ctx = canvas.getContext("2d");	
+    this.maxDataLength = canvas.width;
+    this.data = [];
+    this.topLoss = minTopLoss;
+  }
+
+  update(dataLoss, regularizationLoss) {
+    if (this.data.length == this.maxDataLength) this.data.shift();
+
+    const totalLoss = dataLoss + regularizationLoss;
+    this.data.push({
+      dataLoss: dataLoss,
+      regularizationLoss: regularizationLoss,
+      totalLoss: totalLoss
+    });
+
+    const totalLosses = this.data.map((item) => item.totalLoss)
+    const maxTotalLoss = Math.max.apply(null, totalLosses);
+    if (maxTotalLoss > minTopLoss) this.topLoss = maxTotalLoss;
+    else this.topLoss = minTopLoss;
+
+    this.render();
+  }
+
+  render() {
+    const ctx = this.ctx;
+    const width = this.domElement.width;
+    const height = this.domElement.height;
+    ctx.clearRect(0, 0, width, height);
+    
+    this.data.forEach((item, i) => {
+      const totalLoss = item.totalLoss;
+      const x = i / (this.maxDataLength - 1) * width;
+      const y = height * (1 - totalLoss / this.topLoss);
+      ctx.beginPath();
+      ctx.strokeStyle = "rgb(255, 221, 78)";
+      ctx.moveTo(x, height);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    });
+  }
+
+  clear() {
+    this.data = [];
+  }
+}
+
+module.exports = LossPlot;
+},{}],18:[function(require,module,exports){
 module.exports = {
-  Color: require("./Color"),
-  svg: require("./svg")
+  ControlPanel: require("./ControlPanel"),
+  DataCanvas: require("./DataCanvas")
 };
-},{"./Color":15,"./svg":17}],17:[function(require,module,exports){
-const svg = {};
-
-svg.createElement = function(element) {
-  return document.createElementNS("http://www.w3.org/2000/svg", element);
-}
-
-module.exports = svg;
-
-},{}]},{},[2]);
+},{"./ControlPanel":13,"./DataCanvas":14}]},{},[3]);
