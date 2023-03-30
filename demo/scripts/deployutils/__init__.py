@@ -88,14 +88,24 @@ def git_push_deploy(deploy_path, remote, deploy_branch):
     if e != 0:
         raise RuntimeError("git push failed")
     
-def run(project_path, remote_url, deploy_branch, push=False, populate_deploy_path=None):
+def run(src_path, remote_url, deploy_branch, push=False, populate_deploy_path=None):
     assert populate_deploy_path is not None
     
     remote = "origin"    
-    deploy_path = project_path.joinpath("deploy.out")
+    deploy_path = src_path.joinpath("deploy.out")
     
     git_clone(remote_url, remote, deploy_path, deploy_branch)
-    deploy_index_filename = populate_deploy_path(project_path, deploy_path)
+
+    # remove all existing files in deploy_path (from last deployment), except .git
+    for filename in os.listdir(deploy_path):
+        if filename == ".git":
+            continue
+        if os.path.isdir(filename):
+            shutil.rmtree(filename)
+        else:
+            os.remove(filename)
+    
+    deploy_index_filename = populate_deploy_path(src_path, deploy_path)
     print(yellow(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
     
     if push:

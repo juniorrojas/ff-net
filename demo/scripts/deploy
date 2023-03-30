@@ -11,15 +11,6 @@ import sys
 import argparse
 
 def populate_deploy_path(project_path, deploy_path):
-    # remove all existing files in deploy_path (from last deployment), except .git
-    for filename in os.listdir(deploy_path):
-        if filename == ".git":
-            continue
-        if os.path.isdir(filename):
-            shutil.rmtree(filename)
-        else:
-            os.remove(filename)
-
     deploy_index_filename = str(deploy_path.joinpath("index.html"))
 
     shutil.copy(
@@ -52,10 +43,10 @@ if __name__ == "__main__":
             print("github remote could not be inferred, run the script with --remote_url <remote-url>", file=sys.stderr)
             exit(1)
 
-    project_path = this_dirpath.parent
+    src_path = this_dirpath.parent
 
     deployutils.run(
-        project_path,
+        src_path,
         remote_url,
         deploy_branch=args.branch,
         push=args.push,
