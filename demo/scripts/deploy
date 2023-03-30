@@ -29,11 +29,6 @@ def green(text):
 def red(text):
     return color_text(TextColor.red, text)
 
-def cleandir(d):
-    if os.path.exists(d):
-        shutil.rmtree(d)
-    os.makedirs(d)
-
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument("--repo", type=str)
@@ -50,12 +45,10 @@ if __name__ == "__main__":
             exit(1)
     
     deploy_branch = args.branch
-
     remote = "origin"
-
     project_path = this_dirpath.parent
     deploy_path = project_path.joinpath("deploy.out")
-    cleandir(deploy_path)
+    
     deployutils.git_clone(repo, remote, deploy_path, deploy_branch)
 
     for filename in os.listdir(deploy_path):
@@ -82,7 +75,8 @@ if __name__ == "__main__":
     )
 
     print(green(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
-
+    
+    # TODO make sure pwd is deploy_path before running this
     if args.push:
         a = input(f"Deploy to {repo}@{deploy_branch}? [y/_] ")
         if a != "y":

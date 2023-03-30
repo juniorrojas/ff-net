@@ -4,6 +4,7 @@ this_filepath = Path(os.path.abspath(__file__))
 this_dirpath = this_filepath.parent
 import configparser
 import sys
+import shutil
 import subprocess
 
 class TextColor:
@@ -19,6 +20,11 @@ def yellow(text):
 
 def green(text):
     return color_text(TextColor.green, text)
+
+def cleandir(d):
+    if os.path.exists(d):
+        shutil.rmtree(d)
+    os.makedirs(d)
 
 def infer_repo_dirname():
     current_dirpath = Path(os.path.abspath(os.getcwd()))
@@ -56,6 +62,7 @@ def infer_remote_url():
     return None
 
 def git_clone(repo, remote, deploy_path, deploy_branch):
+    cleandir(deploy_path)
     print(yellow(f"Cloning git repo {repo}"), file=sys.stderr)
 
     os.chdir(deploy_path)
