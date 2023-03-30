@@ -68,18 +68,18 @@ def git_clone(repo, remote, deploy_path, deploy_branch):
     os.chdir(deploy_path)
     e = subprocess.call(["git", "init"])
     if e != 0:
-        exit(e)
+        raise RuntimeError("git init failed")
     e = subprocess.call(["git", "remote", "add", remote, repo])
     if e != 0:
-        exit(e)
+        raise RuntimeError("git remote add failed")
     e = subprocess.call(["git", "pull", remote, deploy_branch])
     if e != 0:
         # we assume git pull failed because the branch doesn't exist,
         # this is the case the first time you try to deploy
         e = subprocess.call(["git", "checkout", "-b", deploy_branch])
         if e != 0:
-            exit(e)
+            raise RuntimeError("git checkout failed")
     else:
         e = subprocess.call(["git", "checkout", deploy_branch])
         if e != 0:
-            exit(e)
+            raise RuntimeError("git checkout failed")
