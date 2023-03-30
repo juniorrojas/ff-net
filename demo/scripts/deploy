@@ -3,118 +3,14 @@ from pathlib import Path
 import os
 this_filepath = Path(os.path.abspath(__file__))
 this_dirpath = this_filepath.parent
+import sys
+sys.path.insert(0, str(this_dirpath))
+import deployutils
 import shutil
 import sys
-import subprocess
 import argparse
-import configparser
 
-class TextColor:
-    green = "\033[92m"
-    yellow = "\033[93m"
-    end = "\033[0m"
-
-def color_text(color, text):
-    return f"{color}{text}{TextColor.end}"
-
-def yellow(text):
-    return color_text(TextColor.yellow, text)
-
-def green(text):
-    return color_text(TextColor.green, text)
-
-def cleandir(d):
-    if os.path.exists(d):
-        shutil.rmtree(d)
-    os.makedirs(d)
-
-def infer_repo_dirname():
-    current_dirpath = Path(os.path.abspath(os.getcwd()))
-    while not os.path.exists(current_dirpath.joinpath(".git")):
-        if current_dirpath.parent == current_dirpath:
-            raise RuntimeError("could not infer repo name")
-        current_dirpath = current_dirpath.parent
-    return str(current_dirpath)
-
-def infer_remote_url():
-    config = configparser.ConfigParser()
-    repo_dirname = infer_repo_dirname()
-    config.read(os.path.join(repo_dirname, ".git", "config"))
-    sections = config.sections()
-    # TODO handle case when .git/config contains multiple remote sections
-    for section in sections:
-        is_remote = False
-        try:
-            section.index("remote")
-            is_remote = True
-        except:
-            pass
-        if is_remote:
-            is_github_remote = False
-            remote_url = config.get(section, "url")
-            print(yellow(f"Inferred remote: {remote_url}"), file=sys.stderr)
-            try:
-                remote_url.index("github") # TODO the criterion to determine if a remote url is on github could be better
-                is_github_remote = True
-            except:
-                pass
-            if is_github_remote:
-                return remote_url
-
-    return None
-
-if __name__ == "__main__":
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("--repo", type=str)
-    arg_parser.add_argument("--branch", type=str, default="gh-pages")
-    arg_parser.add_argument("--push", action="store_true")
-    args = arg_parser.parse_args()
-
-    if args.repo is not None:
-        repo = args.repo
-    else:
-        repo = infer_remote_url()
-        if repo is None:
-            print("github remote could not be inferred, run the script with --repo <remote-url>", file=sys.stderr)
-            exit(1)
-    
-    deploy_branch = args.branch
-
-    remote = "origin"
-
-    project_path = this_dirpath.parent
-    deploy_path = project_path.joinpath("deploy.out")
-    cleandir(deploy_path)
-
-    print(yellow(f"Cloning git repo {repo}"), file=sys.stderr)
-
-    os.chdir(deploy_path)
-    e = subprocess.call(["git", "init"])
-    if e != 0:
-        exit(e)
-    e = subprocess.call(["git", "remote", "add", remote, repo])
-    if e != 0:
-        exit(e)
-    e = subprocess.call(["git", "pull", remote, deploy_branch])
-    if e != 0:
-        # we assume git pull failed because the branch doesn't exist,
-        # this is the case the first time you try to deploy
-        e = subprocess.call(["git", "checkout", "-b", deploy_branch])
-        if e != 0:
-            exit(e)
-    else:
-        e = subprocess.call(["git", "checkout", deploy_branch])
-        if e != 0:
-            exit(e)
-
-    for filename in os.listdir(deploy_path):
-        if filename == ".git":
-            continue
-        if os.path.isdir(filename):
-            shutil.rmtree(filename)
-        else:
-            os.remove(filename)
-
+def populate_deploy_path(project_path, deploy_path):
     deploy_index_filename = str(deploy_path.joinpath("index.html"))
 
     shutil.copy(
@@ -130,19 +26,29 @@ if __name__ == "__main__":
         deploy_path.joinpath("css")
     )
 
-    print(green(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
+    return deploy_index_filename
 
-    if args.push:
-        a = input(f"Deploy to {repo}@{deploy_branch}? [y/_] ")
-        if a != "y":
+if __name__ == "__main__":
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument("--remote-url", type=str)
+    arg_parser.add_argument("--branch", type=str, default="gh-pages")
+    arg_parser.add_argument("--push", action="store_true")
+    args = arg_parser.parse_args()
+
+    if args.remote_url is not None:
+        remote_url = args.remote_url
+    else:
+        remote_url = deployutils.infer_remote_url()
+        if remote_url is None:
+            print("github remote could not be inferred, run the script with --remote_url <remote-url>", file=sys.stderr)
             exit(1)
 
-        e = subprocess.call(["git", "add", "."])
-        if e != 0:
-            exit(e)
-        e = subprocess.call(["git", "commit", "-m", "Deploy"])
-        if e != 0:
-            exit(e)
-        e = subprocess.call(["git", "push", remote, deploy_branch])
-        if e != 0:
-            exit(e)
+    src_path = this_dirpath.parent
+
+    deployutils.run(
+        src_path,
+        remote_url,
+        deploy_branch=args.branch,
+        push=args.push,
+        populate_deploy_path=populate_deploy_path
+    )
