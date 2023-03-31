@@ -107,7 +107,7 @@ class ControlPanel {
 
   update(args) {
     if (args.dataLoss == null) {
-    throw new Error("dataLoss required to update panel");
+      throw new Error("dataLoss required to update panel");
     }
     if (args.regularizationLoss == null) {
       throw new Error("regularizationLoss required to update panel");
