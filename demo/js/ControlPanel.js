@@ -1,5 +1,6 @@
 const ffnet = require("ff-net");
 const LossPlot = ffnet.ui.LossPlot;
+const Slider = require("./Slider");
 
 class ControlPanel {
   constructor(args = {}) {
@@ -26,20 +27,14 @@ class ControlPanel {
       model.randomizeParameters();
     });
     
-    const uiLearningRate = this.addRow("slider", "learning rate");
-    uiLearningRate.control.min = 1;
-    uiLearningRate.control.max = 80;
-    uiLearningRate.control.value = Math.round(this.learningRate * 100);
-    uiLearningRate.control.addEventListener("change", () => {
-      this.learningRate = uiLearningRate.control.value / 100;
+    const uiLearningRate = this.addRow("slider", "learning rate", { min: 1/100, max: 80/100, step: 1/100 });
+    uiLearningRate.control.domElement.addEventListener("input", () => {
+      this.learningRate = parseFloat(uiLearningRate.control.domElement.value);
     });
     
-    const uiRegularization = this.addRow("slider", "regularization");
-    uiRegularization.control.min = 0;
-    uiRegularization.control.max = 100;
-    uiRegularization.control.value = Math.round(this.regularization * 1000000);
-    uiRegularization.control.addEventListener("change", () => {
-      this.regularization = uiRegularization.control.value / 1000000;
+    const uiRegularization = this.addRow("slider", "regularization", { min: 0, max: 100/1000000, step: 1/1000000 });
+    uiRegularization.control.domElement.addEventListener("input", () => {
+      this.regularization = parseFloat(uiRegularization.control.domElement.value);
     });
     
     row = this.addRow("text", "loss");
@@ -59,7 +54,7 @@ class ControlPanel {
     return cell;
   }
 
-  addRow(type, label) {
+  addRow(type, label, controlArgs = {}) {
     const row = document.createElement("div");
     row.cells = [];
     row.className = "control-row";
@@ -82,14 +77,13 @@ class ControlPanel {
       let control;
       switch (type) {
         case "slider":
-          control = document.createElement("input");
-          control.type = "range";
+          control = new Slider(controlArgs);
           break;
         case "text":
           control = cell;
           break;
       }
-      if (control != cell && control != null) cell.appendChild(control);
+      if (control != cell && control != null) cell.appendChild(control.domElement);
       
       row.control = control;
     }
