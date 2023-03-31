@@ -42,3 +42,17 @@ test("add layers", () => {
   expect(model.numNeurons()).toBe(0);
   expect(model.numLinks()).toBe(0);
 });
+
+test("torch codegen", () => {
+  const model = new ffnet.Sequential();
+  model.addNeuronGroup(2);
+  model.addFullyConnectedLayer(32);
+  model.addFullyConnectedLayer(4);
+  const expectedSrc = `nn.Sequential(
+  nn.Linear(2, 32),
+  nn.Sigmoid(),
+  nn.Linear(32, 4),
+  nn.Sigmoid(),
+)`;
+  expect(model.codegenTorch()).toEqual(expectedSrc);
+});

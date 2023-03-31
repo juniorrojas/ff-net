@@ -236,6 +236,16 @@ class Sequential {
     });
   }
 
+  codegenTorch() {
+    let s = "";
+    s += "nn.Sequential(\n";
+    this.layers.forEach(layer => {
+      s += layer.codegenTorch();
+    });
+    s += ")";
+    return s;
+  }
+
   static fromData(args = {}) {
     const data = args.data;
     const headless = args.headless;

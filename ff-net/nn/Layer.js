@@ -9,6 +9,15 @@ class Layer {
     this.inputNeuronGroup = args.inputNeuronGroup;
     this.outputNeuronGroup = args.outputNeuronGroup;
   }
+
+  codegenTorch() {
+    const inputSize = this.inputNeuronGroup.numNeurons();
+    const outputSize = this.outputNeuronGroup.numNeurons();
+    let s = "";
+    s += `  nn.Linear(${inputSize}, ${outputSize}),\n`;
+    s += `  nn.Sigmoid(),\n`;
+    return s;
+  }
 }
 
 module.exports = Layer;
