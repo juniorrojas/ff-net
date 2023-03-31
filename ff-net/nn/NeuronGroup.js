@@ -51,8 +51,7 @@ class NeuronGroup {
   }
 
   getActivations() {
-    const x = this.neurons.map(neuron => neuron.activation);
-    return x;
+    return this.neurons.map(neuron => neuron.activation);
   }
 
   toData() {
