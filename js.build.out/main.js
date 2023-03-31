@@ -29,7 +29,7 @@ class App {
     svgModel.appendChild(model.svgElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
-    dataCanvas.domElement.className += " content-container-cell";
+    dataCanvas.domElement.classList.add("content-container-cell");
     dataCanvas.domElement.id = "data-canvas";
     row.appendChild(dataCanvas.domElement);
     
@@ -41,7 +41,7 @@ class App {
       app: this,
       neuralNet: model
     });
-    controlPanel.domElement.className += " content-container-cell";
+    controlPanel.domElement.classList.add("content-container-cell");
     row.appendChild(controlPanel.domElement);
 
     this.paused = false;
@@ -65,10 +65,9 @@ class App {
       
       model.render();
       const classify = (x, y) => {
-        model.neuronGroups[0].neurons[0].activation = x;
-        model.neuronGroups[0].neurons[1].activation = y;
+        model.getInputNeuronGroup().setActivations([x, y]);
         model.forward();
-        return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
+        return model.getOutputNeuronGroup().neurons[0].activation;
       }
       this.classify = classify;
       dataCanvas.render(classify);
@@ -113,7 +112,7 @@ class ControlPanel {
     this.regularization = 0.000009;
     
     const div = this.domElement = document.createElement("div");
-    div.className = "control-panel";
+    div.classList.add("control-panel");
     
     this.rows = [];
     this.rowsByLabel = {};
@@ -602,6 +601,20 @@ class NeuronGroup {
     return this.parent.neuronGroups.indexOf(this);
   }
 
+  setActivations(arr) {
+    const n = this.numNeurons();
+    if (arr.length != n) {
+      throw new Error(`expected ${n} values, found ${arr.length}`);
+    }
+    for (let i = 0; i < n; i++) {
+      this.neurons[i].activation = arr[i];
+    }
+  }
+
+  getActivations() {
+    return this.neurons.map(neuron => neuron.activation);
+  }
+
   toData() {
     const data = {
       neurons: this.neurons.map((neuron) => neuron.toData())
@@ -884,15 +897,15 @@ const DataPoint = require("./DataPoint");
 const DragBehavior = require("./DragBehavior");
 
 class DataCanvas {
-  constructor() {
+  constructor(args = {}) {
     this.dataPoints = [];
     const canvas = this.domElement = document.createElement("canvas");
-    canvas.width = 250;
-    canvas.height = 250;
+    canvas.width = args.domWidth ?? 250;
+    canvas.height = args.domHeight ?? 250;
     this.ctx = canvas.getContext("2d");
 
-    this.width = 50;
-    this.height = 50;
+    this.width = args.dataWidth ?? 50;
+    this.height = args.dataHeight ?? 50;
     this.pixelColors = [];
     for (let i = 0; i < this.width; i++) {
       this.pixelColors.push([]);
@@ -939,30 +952,15 @@ class DataCanvas {
       const ii = Math.floor(x / fWidth);
       const jj = Math.floor(y / fHeight);
       const color = this.pixelColors[ii][jj];
-      canvasImageData.data[4 * i] = Math.round(color.r * 255);
-      canvasImageData.data[4 * i + 1] = Math.round(color.g * 255);
-      canvasImageData.data[4 * i + 2] = Math.round(color.b * 255);
-      canvasImageData.data[4 * i + 3] = 255;
+      const offset = 4 * i
+      canvasImageData.data[offset    ] = Math.round(color.r * 255);
+      canvasImageData.data[offset + 1] = Math.round(color.g * 255);
+      canvasImageData.data[offset + 2] = Math.round(color.b * 255);
+      canvasImageData.data[offset + 3] = 255;
     }
     ctx.putImageData(canvasImageData, 0, 0);
 
     this.dataPoints.forEach((dataPoint) => dataPoint.render());
-  }
-
-  computeCursor(event) {
-    const rect = this.domElement.getBoundingClientRect();
-    let clientX, clientY;
-    if (event.touches == null) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-    } else {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    }
-    const left = clientX - rect.left;
-    const top = clientY - rect.top;
-    const cursor = {x: left, y: top};
-    event.cursor = cursor;
   }
 
   processDragBegin(event) {
@@ -1112,6 +1110,10 @@ class DragBehavior {
 
   onDragEnd(event) {
     this.dragState = null;
+  }
+
+  dragging() {
+    return this.dragState != null;
   }
 }
 
