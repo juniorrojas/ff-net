@@ -50,6 +50,11 @@ class NeuronGroup {
     }
   }
 
+  get() {
+    const x = this.neurons.map(neuron => neuron.activation);
+    return x;
+  }
+
   toData() {
     const data = {
       neurons: this.neurons.map((neuron) => neuron.toData())
