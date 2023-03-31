@@ -98,7 +98,7 @@ class ControlPanel {
 
   update(args) {
     this.rowsByLabel["loss"].control.textContent = args.totalLoss.toFixed(10);
-    this.lossPlot.update(args.dataLoss, args.regularizationLoss);
+    this.lossPlot.update(args.dataLoss + args.regularizationLoss);
   }
 }
 

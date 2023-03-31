@@ -12,13 +12,10 @@ class LossPlot {
     this.topLoss = this.minTopLoss;
   }
 
-  update(dataLoss, regularizationLoss) {
+  update(totalLoss) {
     if (this.data.length == this.maxDataLength) this.data.shift();
-
-    const totalLoss = dataLoss + regularizationLoss;
+    
     this.data.push({
-      dataLoss: dataLoss,
-      regularizationLoss: regularizationLoss,
       totalLoss: totalLoss
     });
 
