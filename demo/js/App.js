@@ -28,7 +28,7 @@ class App {
     svgModel.appendChild(model.svgElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
-    dataCanvas.domElement.className += " content-container-cell";
+    dataCanvas.domElement.classList.add("content-container-cell");
     dataCanvas.domElement.id = "data-canvas";
     row.appendChild(dataCanvas.domElement);
     
@@ -40,7 +40,7 @@ class App {
       app: this,
       neuralNet: model
     });
-    controlPanel.domElement.className += " content-container-cell";
+    controlPanel.domElement.classList.add("content-container-cell");
     row.appendChild(controlPanel.domElement);
 
     this.paused = false;
@@ -64,10 +64,9 @@ class App {
       
       model.render();
       const classify = (x, y) => {
-        model.neuronGroups[0].neurons[0].activation = x;
-        model.neuronGroups[0].neurons[1].activation = y;
+        model.getInputNeuronGroup().setActivations([x, y]);
         model.forward();
-        return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
+        return model.getOutputNeuronGroup().neurons[0].activation;
       }
       this.classify = classify;
       dataCanvas.render(classify);

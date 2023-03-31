@@ -48,6 +48,10 @@ class DragBehavior {
   onDragEnd(event) {
     this.dragState = null;
   }
+
+  dragging() {
+    return this.dragState != null;
+  }
 }
 
 module.exports = DragBehavior;

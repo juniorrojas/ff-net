@@ -3,15 +3,15 @@ const DataPoint = require("./DataPoint");
 const DragBehavior = require("./DragBehavior");
 
 class DataCanvas {
-  constructor() {
+  constructor(args = {}) {
     this.dataPoints = [];
     const canvas = this.domElement = document.createElement("canvas");
-    canvas.width = 250;
-    canvas.height = 250;
+    canvas.width = args.domWidth ?? 250;
+    canvas.height = args.domHeight ?? 250;
     this.ctx = canvas.getContext("2d");
 
-    this.width = 50;
-    this.height = 50;
+    this.width = args.dataWidth ?? 50;
+    this.height = args.dataHeight ?? 50;
     this.pixelColors = [];
     for (let i = 0; i < this.width; i++) {
       this.pixelColors.push([]);
@@ -58,30 +58,15 @@ class DataCanvas {
       const ii = Math.floor(x / fWidth);
       const jj = Math.floor(y / fHeight);
       const color = this.pixelColors[ii][jj];
-      canvasImageData.data[4 * i] = Math.round(color.r * 255);
-      canvasImageData.data[4 * i + 1] = Math.round(color.g * 255);
-      canvasImageData.data[4 * i + 2] = Math.round(color.b * 255);
-      canvasImageData.data[4 * i + 3] = 255;
+      const offset = 4 * i
+      canvasImageData.data[offset    ] = Math.round(color.r * 255);
+      canvasImageData.data[offset + 1] = Math.round(color.g * 255);
+      canvasImageData.data[offset + 2] = Math.round(color.b * 255);
+      canvasImageData.data[offset + 3] = 255;
     }
     ctx.putImageData(canvasImageData, 0, 0);
 
     this.dataPoints.forEach((dataPoint) => dataPoint.render());
-  }
-
-  computeCursor(event) {
-    const rect = this.domElement.getBoundingClientRect();
-    let clientX, clientY;
-    if (event.touches == null) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-    } else {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    }
-    const left = clientX - rect.left;
-    const top = clientY - rect.top;
-    const cursor = {x: left, y: top};
-    event.cursor = cursor;
   }
 
   processDragBegin(event) {
