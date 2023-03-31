@@ -40,6 +40,16 @@ class NeuronGroup {
     return this.parent.neuronGroups.indexOf(this);
   }
 
+  set(arr) {
+    const n = this.numNeurons();
+    if (arr.length != n) {
+      throw new Error(`expected ${n} values, found ${arr.length}`);
+    }
+    for (let i = 0; i < n; i++) {
+      this.neurons[i].activation = arr[i];
+    }
+  }
+
   toData() {
     const data = {
       neurons: this.neurons.map((neuron) => neuron.toData())

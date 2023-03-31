@@ -58,10 +58,11 @@ class DataCanvas {
       const ii = Math.floor(x / fWidth);
       const jj = Math.floor(y / fHeight);
       const color = this.pixelColors[ii][jj];
-      canvasImageData.data[4 * i] = Math.round(color.r * 255);
-      canvasImageData.data[4 * i + 1] = Math.round(color.g * 255);
-      canvasImageData.data[4 * i + 2] = Math.round(color.b * 255);
-      canvasImageData.data[4 * i + 3] = 255;
+      const offset = 4 * i
+      canvasImageData.data[offset    ] = Math.round(color.r * 255);
+      canvasImageData.data[offset + 1] = Math.round(color.g * 255);
+      canvasImageData.data[offset + 2] = Math.round(color.b * 255);
+      canvasImageData.data[offset + 3] = 255;
     }
     ctx.putImageData(canvasImageData, 0, 0);
 
