@@ -1,4 +1,5 @@
-const LossPlot = require("./LossPlot");
+const ffnet = require("ff-net");
+const LossPlot = ffnet.ui.LossPlot;
 
 class ControlPanel {
   constructor(args = {}) {

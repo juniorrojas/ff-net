@@ -1,4 +1,5 @@
 const ffnet = require("ff-net");
+const ControlPanel = require("./ControlPanel");
 const nn = ffnet.nn;
 const svg = ffnet.common.svg;
 const ui = ffnet.ui;
@@ -35,7 +36,7 @@ class App {
     container.appendChild(row);
     row.className = "content-container-row";
     
-    const controlPanel = this.controlPanel = new ui.ControlPanel({
+    const controlPanel = this.controlPanel = new ControlPanel({
       app: this,
       neuralNet: model
     });
