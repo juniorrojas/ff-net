@@ -1,29 +1,28 @@
-const minTopLoss = 4;
-
 class LossPlot {
-  constructor() {
+  constructor(args = {}) {
+    const width = args.width ?? 500;
+    const height = args.height ?? 100;
     const canvas = this.domElement = document.createElement("canvas");
-    canvas.className = "loss-plot-canvas";
+    canvas.width = width;
+    canvas.height = height;
     this.ctx = canvas.getContext("2d");	
-    this.maxDataLength = canvas.width;
+    this.maxDataLength = width;
     this.data = [];
-    this.topLoss = minTopLoss;
+    this.minTopLoss = args.minTopLoss ?? 4;
+    this.topLoss = this.minTopLoss;
   }
 
-  update(dataLoss, regularizationLoss) {
+  push(totalLoss) {
     if (this.data.length == this.maxDataLength) this.data.shift();
-
-    const totalLoss = dataLoss + regularizationLoss;
+    
     this.data.push({
-      dataLoss: dataLoss,
-      regularizationLoss: regularizationLoss,
       totalLoss: totalLoss
     });
 
     const totalLosses = this.data.map((item) => item.totalLoss)
     const maxTotalLoss = Math.max.apply(null, totalLosses);
-    if (maxTotalLoss > minTopLoss) this.topLoss = maxTotalLoss;
-    else this.topLoss = minTopLoss;
+    if (maxTotalLoss > this.minTopLoss) this.topLoss = maxTotalLoss;
+    else this.topLoss = this.minTopLoss;
 
     this.render();
   }
@@ -40,6 +39,7 @@ class LossPlot {
       const y = height * (1 - totalLoss / this.topLoss);
       ctx.beginPath();
       ctx.strokeStyle = "rgb(255, 221, 78)";
+      ctx.lineWidth = 2;
       ctx.moveTo(x, height);
       ctx.lineTo(x, y);
       ctx.stroke();
