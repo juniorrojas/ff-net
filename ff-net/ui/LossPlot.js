@@ -1,13 +1,12 @@
-const minTopLoss = 4;
-
 class LossPlot {
-  constructor() {
+  constructor(args = {}) {
     const canvas = this.domElement = document.createElement("canvas");
     canvas.className = "loss-plot-canvas";
     this.ctx = canvas.getContext("2d");	
     this.maxDataLength = canvas.width;
     this.data = [];
-    this.topLoss = minTopLoss;
+    this.minTopLoss = args.minTopLoss ?? 4;
+    this.topLoss = this.minTopLoss;
   }
 
   update(dataLoss, regularizationLoss) {
@@ -22,8 +21,8 @@ class LossPlot {
 
     const totalLosses = this.data.map((item) => item.totalLoss)
     const maxTotalLoss = Math.max.apply(null, totalLosses);
-    if (maxTotalLoss > minTopLoss) this.topLoss = maxTotalLoss;
-    else this.topLoss = minTopLoss;
+    if (maxTotalLoss > this.minTopLoss) this.topLoss = maxTotalLoss;
+    else this.topLoss = this.minTopLoss;
 
     this.render();
   }

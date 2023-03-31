@@ -1,4 +1,5 @@
 module.exports = {
   ControlPanel: require("./ControlPanel"),
-  DataCanvas: require("./DataCanvas")
+  DataCanvas: require("./DataCanvas"),
+  LossPlot: require("./LossPlot")
 };
