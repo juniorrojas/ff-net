@@ -29,7 +29,11 @@ class ControlPanel {
     
     const uiLearningRate = this.addRow(
       "slider", "learning rate",
-      { min: 0.01, max: 0.8, step: 0.01 }
+      {
+        min: 0.01,
+        max: 0.8,
+        step: 0.01
+      }
     );
     uiLearningRate.control.domElement.addEventListener("input", () => {
       this.learningRate = parseFloat(uiLearningRate.control.domElement.value);
@@ -37,7 +41,11 @@ class ControlPanel {
     
     const uiRegularization = this.addRow(
       "slider", "regularization",
-      { min: 0, max: 0.0001, step: 0.000001 }
+      {
+        min: 0,
+        max: 0.0001,
+        step: 0.000001
+      }
     );
     uiRegularization.control.domElement.addEventListener("input", () => {
       this.regularization = parseFloat(uiRegularization.control.domElement.value);
@@ -99,7 +107,7 @@ class ControlPanel {
 
   update(args) {
     this.rowsByLabel["loss"].control.textContent = args.totalLoss.toFixed(10);
-    this.lossPlot.push(args.dataLoss + args.regularizationLoss);
+    this.lossPlot.push(args.totalLoss);
   }
 }
 
