@@ -69,22 +69,6 @@ class DataCanvas {
     this.dataPoints.forEach((dataPoint) => dataPoint.render());
   }
 
-  computeCursor(event) {
-    const rect = this.domElement.getBoundingClientRect();
-    let clientX, clientY;
-    if (event.touches == null) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-    } else {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    }
-    const left = clientX - rect.left;
-    const top = clientY - rect.top;
-    const cursor = {x: left, y: top};
-    event.cursor = cursor;
-  }
-
   processDragBegin(event) {
     for (let i = 0; i < this.dataPoints.length; i++) {
       const dataPoint = this.dataPoints[i];
