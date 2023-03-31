@@ -106,8 +106,15 @@ class ControlPanel {
   }
 
   update(args) {
-    this.rowsByLabel["loss"].control.textContent = args.totalLoss.toFixed(10);
-    this.lossPlot.push(args.totalLoss);
+    if (args.dataLoss == null) {
+    throw new Error("dataLoss required to update panel");
+    }
+    if (args.regularizationLoss == null) {
+      throw new Error("regularizationLoss required to update panel");
+    }
+    const totalLoss = args.dataLoss + args.regularizationLoss;
+    this.rowsByLabel["loss"].control.textContent = totalLoss.toFixed(10);
+    this.lossPlot.push(totalLoss);
   }
 }
 

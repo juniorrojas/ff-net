@@ -39,8 +39,7 @@ test("main", async () => {
 
       app.controlPanel.update({
         dataLoss: 0,
-        regularizationLoss: 0,
-        totalLoss: 0
+        regularizationLoss: 0
       })
     });
 
