@@ -27,19 +27,25 @@ class ControlPanel {
       model.randomizeParameters();
     });
     
-    const uiLearningRate = this.addRow("slider", "learning rate", { min: 1/100, max: 80/100, step: 1/100 });
+    const uiLearningRate = this.addRow(
+      "slider", "learning rate",
+      { min: 0.01, max: 0.8, step: 0.01 }
+    );
     uiLearningRate.control.domElement.addEventListener("input", () => {
       this.learningRate = parseFloat(uiLearningRate.control.domElement.value);
     });
     
-    const uiRegularization = this.addRow("slider", "regularization", { min: 0, max: 100/1000000, step: 1/1000000 });
+    const uiRegularization = this.addRow(
+      "slider", "regularization",
+      { min: 0, max: 0.0001, step: 0.000001 }
+    );
     uiRegularization.control.domElement.addEventListener("input", () => {
       this.regularization = parseFloat(uiRegularization.control.domElement.value);
     });
     
     row = this.addRow("text", "loss");
     row.control.className = "formatted-number";
-      
+    
     row = this.addRow("full");
     const lossPlot = this.lossPlot = new LossPlot();
     lossPlot.domElement.className = "loss-plot-canvas";
