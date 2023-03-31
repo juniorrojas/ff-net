@@ -3,15 +3,15 @@ const DataPoint = require("./DataPoint");
 const DragBehavior = require("./DragBehavior");
 
 class DataCanvas {
-  constructor() {
+  constructor(args = {}) {
     this.dataPoints = [];
     const canvas = this.domElement = document.createElement("canvas");
-    canvas.width = 250;
-    canvas.height = 250;
+    canvas.width = args.domWidth ?? 250;
+    canvas.height = args.domHeight ?? 250;
     this.ctx = canvas.getContext("2d");
 
-    this.width = 50;
-    this.height = 50;
+    this.width = args.dataWidth ?? 50;
+    this.height = args.dataHeight ?? 50;
     this.pixelColors = [];
     for (let i = 0; i < this.width; i++) {
       this.pixelColors.push([]);
