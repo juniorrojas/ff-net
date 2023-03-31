@@ -46,6 +46,7 @@ class ControlPanel {
       
     row = this.addRow("full");
     const lossPlot = this.lossPlot = new LossPlot();
+    lossPlot.className = "loss-plot-canvas";
     row.cells[0].appendChild(lossPlot.domElement);
   }
 

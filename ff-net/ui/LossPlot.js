@@ -1,9 +1,12 @@
 class LossPlot {
   constructor(args = {}) {
+    const width = args.width ?? 500;
+    const height = args.height ?? 100;
     const canvas = this.domElement = document.createElement("canvas");
-    canvas.className = "loss-plot-canvas";
+    canvas.width = width;
+    canvas.height = height;
     this.ctx = canvas.getContext("2d");	
-    this.maxDataLength = canvas.width;
+    this.maxDataLength = width;
     this.data = [];
     this.minTopLoss = args.minTopLoss ?? 4;
     this.topLoss = this.minTopLoss;
