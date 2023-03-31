@@ -9,7 +9,7 @@ class ControlPanel {
     this.regularization = 0.000009;
     
     const div = this.domElement = document.createElement("div");
-    div.className = "control-panel";
+    div.classList.add("control-panel");
     
     this.rows = [];
     this.rowsByLabel = {};

@@ -28,7 +28,7 @@ class App {
     svgModel.appendChild(model.svgElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
-    dataCanvas.domElement.className += " content-container-cell";
+    dataCanvas.domElement.classList.add("content-container-cell");
     dataCanvas.domElement.id = "data-canvas";
     row.appendChild(dataCanvas.domElement);
     
@@ -40,7 +40,7 @@ class App {
       app: this,
       neuralNet: model
     });
-    controlPanel.domElement.className += " content-container-cell";
+    controlPanel.domElement.classList.add("content-container-cell");
     row.appendChild(controlPanel.domElement);
 
     this.paused = false;
