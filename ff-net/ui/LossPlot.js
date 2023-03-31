@@ -12,7 +12,7 @@ class LossPlot {
     this.topLoss = this.minTopLoss;
   }
 
-  update(totalLoss) {
+  push(totalLoss) {
     if (this.data.length == this.maxDataLength) this.data.shift();
     
     this.data.push({
@@ -39,6 +39,7 @@ class LossPlot {
       const y = height * (1 - totalLoss / this.topLoss);
       ctx.beginPath();
       ctx.strokeStyle = "rgb(255, 221, 78)";
+      ctx.lineWidth = 2;
       ctx.moveTo(x, height);
       ctx.lineTo(x, y);
       ctx.stroke();
