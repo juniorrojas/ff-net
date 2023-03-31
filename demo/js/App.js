@@ -66,7 +66,7 @@ class App {
       const classify = (x, y) => {
         model.getInputNeuronGroup().set([x, y]);
         model.forward();
-        return model.neuronGroups[model.neuronGroups.length - 1].neurons[0].activation;
+        return model.getOutputNeuronGroup().neurons[0].activation;
       }
       this.classify = classify;
       dataCanvas.render(classify);
