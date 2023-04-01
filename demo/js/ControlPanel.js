@@ -1,5 +1,6 @@
 const ffnet = require("ff-net");
 const LossPlot = ffnet.ui.LossPlot;
+const Slider = require("./Slider");
 
 class ControlPanel {
   constructor(args = {}) {
@@ -26,25 +27,33 @@ class ControlPanel {
       model.randomizeParameters();
     });
     
-    const uiLearningRate = this.addRow("slider", "learning rate");
-    uiLearningRate.control.min = 1;
-    uiLearningRate.control.max = 80;
-    uiLearningRate.control.value = Math.round(this.learningRate * 100);
-    uiLearningRate.control.addEventListener("change", () => {
-      this.learningRate = uiLearningRate.control.value / 100;
+    const uiLearningRate = this.addRow(
+      "slider", "learning rate",
+      {
+        min: 0.01,
+        max: 0.8,
+        step: 0.01
+      }
+    );
+    uiLearningRate.control.domElement.addEventListener("input", () => {
+      this.learningRate = parseFloat(uiLearningRate.control.domElement.value);
     });
     
-    const uiRegularization = this.addRow("slider", "regularization");
-    uiRegularization.control.min = 0;
-    uiRegularization.control.max = 100;
-    uiRegularization.control.value = Math.round(this.regularization * 1000000);
-    uiRegularization.control.addEventListener("change", () => {
-      this.regularization = uiRegularization.control.value / 1000000;
+    const uiRegularization = this.addRow(
+      "slider", "regularization",
+      {
+        min: 0,
+        max: 0.0001,
+        step: 0.000001
+      }
+    );
+    uiRegularization.control.domElement.addEventListener("input", () => {
+      this.regularization = parseFloat(uiRegularization.control.domElement.value);
     });
     
     row = this.addRow("text", "loss");
     row.control.className = "formatted-number";
-      
+    
     row = this.addRow("full");
     const lossPlot = this.lossPlot = new LossPlot();
     lossPlot.domElement.className = "loss-plot-canvas";
@@ -59,7 +68,7 @@ class ControlPanel {
     return cell;
   }
 
-  addRow(type, label) {
+  addRow(type, label, controlArgs = {}) {
     const row = document.createElement("div");
     row.cells = [];
     row.className = "control-row";
@@ -82,14 +91,13 @@ class ControlPanel {
       let control;
       switch (type) {
         case "slider":
-          control = document.createElement("input");
-          control.type = "range";
+          control = new Slider(controlArgs);
           break;
         case "text":
           control = cell;
           break;
       }
-      if (control != cell && control != null) cell.appendChild(control);
+      if (control != cell && control != null) cell.appendChild(control.domElement);
       
       row.control = control;
     }
@@ -98,8 +106,15 @@ class ControlPanel {
   }
 
   update(args) {
-    this.rowsByLabel["loss"].control.textContent = args.totalLoss.toFixed(10);
-    this.lossPlot.push(args.dataLoss + args.regularizationLoss);
+    if (args.dataLoss == null) {
+      throw new Error("dataLoss required to update panel");
+    }
+    if (args.regularizationLoss == null) {
+      throw new Error("regularizationLoss required to update panel");
+    }
+    const totalLoss = args.dataLoss + args.regularizationLoss;
+    this.rowsByLabel["loss"].control.textContent = totalLoss.toFixed(10);
+    this.lossPlot.push(totalLoss);
   }
 }
 

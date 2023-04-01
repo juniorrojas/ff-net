@@ -71,7 +71,6 @@ class App {
       this.classify = classify;
       dataCanvas.render(classify);
       this.controlPanel.update({
-        totalLoss: dataLoss + regularizationLoss,
         dataLoss: dataLoss,
         regularizationLoss: regularizationLoss
       });
