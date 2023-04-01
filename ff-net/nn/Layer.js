@@ -10,6 +10,14 @@ class Layer {
     this.outputNeuronGroup = args.outputNeuronGroup;
   }
 
+  getBiasArray() {
+    const b = [];
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      b.push(neuron.bias);
+    });
+    return b;
+  }
+
   getWeightArray() {
     const inputSize = this.inputNeuronGroup.numNeurons();
     const outputSize = this.outputNeuronGroup.numNeurons();

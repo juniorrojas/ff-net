@@ -5,6 +5,7 @@ test("array utils", () => {
   model.addNeuronGroup(2);
   const layer = model.addFullyConnectedLayer(3);
   expect(model.numLinks()).toBe(6);
+  
   model.links.forEach((link, i) => {
     link.weight = i;
   });
@@ -12,5 +13,14 @@ test("array utils", () => {
     [0, 3],
     [1, 4],
     [2, 5]
+  ]);
+
+  model.getOutputNeuronGroup().neurons.forEach((neuron, i) => {
+    neuron.bias = (i + 1) * 10;
+  });
+  expect(layer.getBiasArray()).toEqual([
+    10,
+    20,
+    30
   ]);
 });
