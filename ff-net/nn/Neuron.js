@@ -59,6 +59,17 @@ class Neuron {
     return regularizationError;
   }
 
+  getLinkToNeuron(dstNeuron) {
+    // TODO use a map to avoid linear search
+    for (let i = 0; i < this.links.length; i++) {
+      const link = this.links[i];
+      if (link.nf == dstNeuron) {
+        return link;
+      }
+    }
+    return null;
+  }
+
   applyGradient(learningRate) {
     this.bias -= learningRate * this.dBias;
   }
