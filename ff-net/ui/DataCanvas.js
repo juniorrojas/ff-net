@@ -4,8 +4,6 @@ const DragBehavior = require("./DragBehavior");
 
 class DataCanvas {
   constructor(args = {}) {
-    this.dataPoints = [];
-
     const headless = this.headless = args.headless ?? false;
 
     if (!headless) {
@@ -15,18 +13,17 @@ class DataCanvas {
 
       const ctx = canvas.getContext("2d", { willReadFrequently: true });
       this.ctx = ctx;
-    }
 
-    this.dataWidth = args.dataWidth ?? 50;
-    this.dataHeight = args.dataHeight ?? 50;
-    this.clearPixels();
-
-    if (!headless) {
-      const canvas = this.domElement;
       this.dragBehavior = new DragBehavior(canvas);
       this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
       this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
     }
+
+    this.dataWidth = args.dataWidth ?? 50;
+    this.dataHeight = args.dataHeight ?? 50;
+    
+    this.dataPoints = [];
+    this.clearPixels();
 
     this.xyToPixel = (x, y) => {
       return 0.5;
