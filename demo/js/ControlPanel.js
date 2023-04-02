@@ -32,7 +32,8 @@ class ControlPanel {
       {
         min: 0.01,
         max: 0.8,
-        step: 0.01
+        step: 0.01,
+        value: this.learningRate
       }
     );
     uiLearningRate.control.domElement.addEventListener("input", () => {
@@ -44,7 +45,8 @@ class ControlPanel {
       {
         min: 0,
         max: 0.0001,
-        step: 0.000001
+        step: 0.000001,
+        value: this.regularization
       }
     );
     uiRegularization.control.domElement.addEventListener("input", () => {

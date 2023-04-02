@@ -167,11 +167,12 @@ class Sequential {
     for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
-        regularizationLoss += neuron.backward(args);
+        // regularizationLoss +=
+        neuron.backward(args);
       });
     }
     
-    return regularizationLoss;
+    // return regularizationLoss;
   }
 
   backwardRegularization(args = {}) {
@@ -221,12 +222,20 @@ class Sequential {
         const neuron = outputNeuronGroup.neurons[0];
         const output = neuron.activation;
         const d = dataPoint.label - output;
+        // forwardData
         dataLoss += 0.5 * d * d;
         neuron.activationGrad = -d;
-
-        regularizationLoss = this.backward({
+        regularizationLoss = this.forwardRegularization({
           regularization: regularization
         });
+
+        this.backward({
+          // regularization: regularization
+        });
+        this.backwardRegularization({
+          regularization: regularization
+        });
+
         this.optimStep(lr);
       });
     }
