@@ -184,7 +184,7 @@ class Sequential {
   train(args) {
     // TODO decouple data from canvas
     const dataCanvas = args.dataCanvas;
-    const learningRate = args.learningRate;
+    const lr = args.lr;
     const regularization = args.regularization;
     const iters = args.iters;
 
@@ -208,7 +208,7 @@ class Sequential {
         neuron.dActivation = -d;
 
         regularizationLoss = this.backward({
-          lr: learningRate,
+          lr: lr,
           regularization: regularization
         });
       });
