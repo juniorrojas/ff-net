@@ -61,11 +61,11 @@ class DataCanvas {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    const width = this.dataWidth;
-    const height = this.dataHeight;
+    const dataWidth = this.dataWidth;
+    const dataHeight = this.dataHeight;
 
-    const fWidth = canvasWidth / width;
-    const fHeight = canvasHeight / height;
+    const fWidth = canvasWidth / dataWidth;
+    const fHeight = canvasHeight / dataHeight;
 
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -73,18 +73,21 @@ class DataCanvas {
     const numPixels = canvasImageData.data.length / 4;
 
     for (let i = 0; i < numPixels; i++) {
-      const y = Math.floor(i / canvasWidth);
       const x = i % canvasWidth;
-      const ii = Math.floor(x / fWidth);
-      const jj = Math.floor(y / fHeight);
-      const p = this.pixels[ii][jj];
+      const y = Math.floor(i / canvasWidth);
+      
+      const dataX = Math.floor(x / fWidth);
+      const dataY = Math.floor(y / fHeight);
+
+      const p = this.pixels[dataX][dataY];
       const color = Color.lightRed.blend(Color.lightBlue, p);
-      const offset = 4 * i
+      const offset = 4 * i;
       canvasImageData.data[offset    ] = Math.round(color.r * 255);
       canvasImageData.data[offset + 1] = Math.round(color.g * 255);
       canvasImageData.data[offset + 2] = Math.round(color.b * 255);
       canvasImageData.data[offset + 3] = 255;
     }
+    
     ctx.putImageData(canvasImageData, 0, 0);
   }
 
