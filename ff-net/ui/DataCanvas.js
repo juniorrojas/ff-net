@@ -100,9 +100,7 @@ class DataCanvas {
 
   render() {
     this.updatePixels();
-    if (!this.headless) {
-      this.flushPixels(); 
-    }
+    this.flushPixels(); 
     this.dataPoints.forEach((dataPoint) => dataPoint.render());
   }
 
