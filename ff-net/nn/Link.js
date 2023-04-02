@@ -54,6 +54,9 @@ class Link {
   }
 
   optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
+    }
     this.weight -= lr * this.weightGrad;
   }
 

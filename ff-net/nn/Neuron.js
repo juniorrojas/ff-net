@@ -44,7 +44,6 @@ class Neuron {
   }
 
   backward(args = {}) {
-    const regularization = args.regularization ?? 0;
     let regularizationError = 0;
 
     this.links.forEach((link) => {
@@ -73,6 +72,9 @@ class Neuron {
   }
 
   optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
+    }
     this.bias -= lr * this.biasGrad;
   }
 

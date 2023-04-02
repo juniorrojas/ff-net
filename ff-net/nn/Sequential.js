@@ -152,8 +152,6 @@ class Sequential {
   }
 
   backward(args = {}) {
-    const lr = args.lr ?? 0;
-
     let regularizationLoss = 0;
     
     for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
@@ -163,11 +161,14 @@ class Sequential {
       });
     }
     
-    this.optimStep(lr);
     return regularizationLoss;
   }
 
   optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
+    }
+
     this.links.forEach((link) => {
       link.optimStep(lr);
     });
@@ -207,9 +208,9 @@ class Sequential {
         neuron.activationGrad = -d;
 
         regularizationLoss = this.backward({
-          lr: lr,
           regularization: regularization
         });
+        this.optimStep(lr);
       });
     }
 

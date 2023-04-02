@@ -1,6 +1,6 @@
 const ffnet = require("ff-net");
 
-test("backward", () => {
+test("single layer backward", () => {
   const model = new ffnet.Sequential({
     headless: true
   });
@@ -39,4 +39,10 @@ test("backward", () => {
   expect(outputNeuron.preActivationGrad).toBe(0.25);
   expect(link.weightGrad).toBe(0);
   expect(outputNeuron.biasGrad).toBe(0.25);
+});
+
+test("backward", () => {
+  const model = new nn.Sequential({
+    headless: true
+  });
 });
