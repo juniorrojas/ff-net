@@ -34,11 +34,11 @@ class DataCanvas {
   }
 
   clearPixels() {
-    this.pixelColors = [];
+    this.pixels = [];
     for (let i = 0; i < this.dataWidth; i++) {
-      this.pixelColors.push([]);
+      this.pixels.push([]);
       for (let j = 0; j < this.dataHeight; j++) {
-        this.pixelColors[i].push(0);
+        this.pixels[i].push(0);
       }
     }
   }
@@ -53,7 +53,7 @@ class DataCanvas {
           throw new Error(`pixel value must be between 0 and 1, found ${p}`);
         }
         const color = Color.lightRed.blend(Color.lightBlue, p);
-        this.pixelColors[i][j] = color;
+        this.pixels[i][j] = color;
       }
     }
   }
@@ -78,7 +78,7 @@ class DataCanvas {
       const x = i % canvasWidth;
       const ii = Math.floor(x / fWidth);
       const jj = Math.floor(y / fHeight);
-      const color = this.pixelColors[ii][jj];
+      const color = this.pixels[ii][jj];
       const offset = 4 * i
       canvasImageData.data[offset    ] = Math.round(color.r * 255);
       canvasImageData.data[offset + 1] = Math.round(color.g * 255);
