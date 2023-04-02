@@ -1,12 +1,13 @@
 const radius = 12;
 const strokeWidth = 2;
 
-function sigmoid(n) {
-  return 1 / (1 + Math.exp(-n));
+function sigmoid(x) {
+  return 1 / (1 + Math.exp(-x));
 }
 
-function dSigmoid(n) {
-  return sigmoid(n) * (1 - sigmoid(n));
+function sigmoidBackward(x, outputGrad) {
+  const s = sigmoid(x);
+  return s * (1 - s) * outputGrad;
 }
 
 class Neuron {
@@ -19,9 +20,9 @@ class Neuron {
     this.preActivation = 0;
     this.activation = sigmoid(this.bias);
 
-    this.dActivation = 0;
-    this.dPreActivation = 0;
-    this.dBias = 0;
+    this.activationGrad = 0;
+    this.preActivationGrad = 0;
+    this.biasGrad = 0;
     
     const headless = group.parent.headless;
     this.headless = headless;
@@ -42,36 +43,24 @@ class Neuron {
     this.activation = sigmoid(this.preActivation);
   }
 
-  backward(regularization) {
-    let regularizationError = 0;
-
+  backward(args = {}) {
     this.links.forEach((link) => {
-      this.dActivation += link.weight * link.dWeight;
+      this.activationGrad += link.weight * link.nf.preActivationGrad;
     });
     
-    this.dPreActivation = this.dActivation * dSigmoid(this.preActivation);
-    this.dBias = this.dPreActivation;
+    this.preActivationGrad = sigmoidBackward(this.preActivation, this.activationGrad);
+    this.biasGrad = this.preActivationGrad;
     
     this.backLinks.forEach((link) => {
-      regularizationError += link.backward(regularization);
+      link.backward(args);
     });
-    
-    return regularizationError;
   }
 
-  getLinkToNeuron(dstNeuron) {
-    // TODO use a map to avoid linear search
-    for (let i = 0; i < this.links.length; i++) {
-      const link = this.links[i];
-      if (link.nf == dstNeuron) {
-        return link;
-      }
+  optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
     }
-    return null;
-  }
-
-  applyGradient(learningRate) {
-    this.bias -= learningRate * this.dBias;
+    this.bias -= lr * this.biasGrad;
   }
 
   render() {
@@ -140,9 +129,9 @@ class Neuron {
   reset() {
     this.preActivation = 0;
     this.activation = sigmoid(this.bias);
-    this.dActivation = 0;
-    this.dPreActivation = 0;
-    this.dBias = 0;
+    this.activationGrad = 0;
+    this.preActivationGrad = 0;
+    this.biasGrad = 0;
   }
 
   toData() {

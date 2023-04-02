@@ -151,29 +151,44 @@ class Sequential {
     }
   }
 
-  backward(learningRate, regularization) {
-    let regularizationLoss = 0;
-    
+  backward(args = {}) {
     for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
-        regularizationLoss += neuron.backward(regularization);
+        neuron.backward(args);
       });
     }
-    
-    this.applyGradient(learningRate);
-    return regularizationLoss;
   }
 
-  applyGradient(learningRate) {
+  forwardRegularization(args = {}) {
+    const regularization = args.regularization ?? 0.0;
+    let loss = 0.0;
+    this.links.forEach(link => {
+      const w = link.weight;
+      loss += 0.5 * regularization * w * w;
+    });
+    return loss;
+  }
+
+  backwardRegularization(args = {}) {
+    this.links.forEach(link => {
+      link.backwardRegularization(args);
+    });
+  }
+
+  optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
+    }
+
     this.links.forEach((link) => {
-      link.applyGradient(learningRate);
+      link.optimStep(lr);
     });
     
     for (let i = 1; i < this.neuronGroups.length; i++) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
-        neuron.applyGradient(learningRate);
+        neuron.optimStep(lr);
       });
     }
   }
@@ -181,7 +196,7 @@ class Sequential {
   train(args) {
     // TODO decouple data from canvas
     const dataCanvas = args.dataCanvas;
-    const learningRate = args.learningRate;
+    const lr = args.lr;
     const regularization = args.regularization;
     const iters = args.iters;
 
@@ -201,13 +216,19 @@ class Sequential {
         const neuron = outputNeuronGroup.neurons[0];
         const output = neuron.activation;
         const d = dataPoint.label - output;
+        // forwardData
         dataLoss += 0.5 * d * d;
-        neuron.dActivation = -d;
+        neuron.activationGrad = -d;
+        regularizationLoss = this.forwardRegularization({
+          regularization: regularization
+        });
 
-        regularizationLoss = this.backward(
-          learningRate,
-          regularization
-        );
+        this.backward();
+        this.backwardRegularization({
+          regularization: regularization
+        });
+
+        this.optimStep(lr);
       });
     }
 

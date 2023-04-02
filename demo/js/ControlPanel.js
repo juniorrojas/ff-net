@@ -6,8 +6,8 @@ class ControlPanel {
   constructor(args = {}) {
     this.app = args.app;
     
-    this.learningRate = 0.2;
-    this.regularization = 0.000009;
+    this.learningRate = 0.08;
+    this.regularization = 0.00002;
     
     const div = this.domElement = document.createElement("div");
     div.classList.add("control-panel");
@@ -30,9 +30,10 @@ class ControlPanel {
     const uiLearningRate = this.addRow(
       "slider", "learning rate",
       {
-        min: 0.01,
-        max: 0.8,
-        step: 0.01
+        min: 0.005,
+        max: 0.5,
+        step: 0.01,
+        value: this.learningRate
       }
     );
     uiLearningRate.control.domElement.addEventListener("input", () => {
@@ -44,7 +45,8 @@ class ControlPanel {
       {
         min: 0,
         max: 0.0001,
-        step: 0.000001
+        step: 0.000001,
+        value: this.regularization
       }
     );
     uiRegularization.control.domElement.addEventListener("input", () => {

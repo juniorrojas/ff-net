@@ -18,26 +18,58 @@ class Layer {
     return b;
   }
 
-  getWeightArray() {
-    const inputSize = this.inputNeuronGroup.numNeurons();
-    const outputSize = this.outputNeuronGroup.numNeurons();
+  getBiasGradArray() {
+    const b = [];
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      b.push(neuron.biasGrad);
+    });
+    return b;
+  }
 
+  setBiasFromArray(arr) {
+    const outputNeurons = this.outputNeuronGroup.neurons;
+    if (arr.length != outputNeurons.length) {
+      throw new Error(`invalid bias size, found ${arr.length}, expected ${outputNeurons.length}`);
+    }
+    outputNeurons.forEach((neuron, i) => {
+      neuron.bias = arr[i];
+    });
+  }
+
+  getWeightArray() {
     const w = [];
-    for (let i = 0; i < outputSize; i++) {
-      const dstNeuron = this.outputNeuronGroup.neurons[i];
+
+    this.outputNeuronGroup.neurons.forEach(neuron => {
       const wi = [];
       w.push(wi);
-      for (let j = 0; j < inputSize; j++) {
-        const srcNeuron = this.inputNeuronGroup.neurons[j];
-        const link = srcNeuron.getLinkToNeuron(dstNeuron);
-        if (link == null) {
-          throw new Error("link not found");
-        }
+      neuron.backLinks.forEach(link => {
         wi.push(link.weight);
-      }
-    }
+      });      
+    });
 
     return w;
+  }
+
+  getWeightGradArray() {
+    const w = [];
+
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      const wi = [];
+      w.push(wi);
+      neuron.backLinks.forEach(link => {
+        wi.push(link.weightGrad);
+      });      
+    });
+
+    return w;
+  }
+
+  setWeightFromArray(arr) {
+    this.inputNeuronGroup.neurons.forEach((inputNeuron, j) => {
+      inputNeuron.links.forEach((link, i) => {
+        link.weight = arr[i][j];
+      });
+    });
   }
 }
 

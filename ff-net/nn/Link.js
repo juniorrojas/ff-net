@@ -11,7 +11,7 @@ class Link {
     
     if (weight == null) this.weight = 1;
     else this.weight = weight;
-    this.dWeight = 0;
+    this.weightGrad = 0;
     
     const headless = neuralNet.headless;
     this.headless = headless;
@@ -43,17 +43,25 @@ class Link {
     path.setAttribute("stroke", color);
   }
 
-  backward(regularization) {
-    let regularizationError = 0;
-    this.dWeight = this.n0.activation * this.nf.dPreActivation;
-    // regularization error = 0.5 * regularization * weight^2
-    this.dWeight += regularization * this.weight;
-    regularizationError += 0.5 * regularization * this.weight * this.weight;
-    return regularizationError;
+  backward(args = {}) {
+    this.weightGrad = this.n0.activation * this.nf.preActivationGrad;
   }
 
-  applyGradient(learningRate) {
-    this.weight -= learningRate * this.dWeight;
+  forwardRegularization(args = {}) {
+    const regularization = args.regularization ?? 0.0;
+    return regularization * this.weight * this.weight * 0.5;
+  }
+  
+  backwardRegularization(args = {}) {
+    const regularization = args.regularization ?? 0.0;
+    this.weightGrad += regularization * this.weight;
+  }
+
+  optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
+    }
+    this.weight -= lr * this.weightGrad;
   }
 
   toData() {
