@@ -227,11 +227,13 @@ class Sequential {
         const d = dataPoint.label - output;
         // forwardData
         dataLoss += 0.5 * d * d;
+        
+        this.zeroGrad();
         neuron.activationGrad = -d;
+        
         regularizationLoss = this.forwardRegularization({
           regularization: regularization
         });
-
         this.backward();
         this.backwardRegularization({
           regularization: regularization

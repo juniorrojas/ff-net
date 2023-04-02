@@ -134,6 +134,12 @@ class Neuron {
     this.biasGrad = 0;
   }
 
+  zeroGrad() {
+    this.activationGrad = 0;
+    this.preActivationGrad = 0;
+    this.biasGrad = 0;
+  }
+
   toData() {
     return {
       bias: this.bias
