@@ -44,10 +44,7 @@ class Neuron {
   }
 
   backward(args = {}) {
-    // let regularizationError = 0;
-
     this.links.forEach((link) => {
-      // this.activationGrad += link.weight * link.weightGrad;
       this.activationGrad += link.weight * link.nf.preActivationGrad;
     });
     
@@ -55,11 +52,8 @@ class Neuron {
     this.biasGrad = this.preActivationGrad;
     
     this.backLinks.forEach((link) => {
-      // regularizationError += link.backward(args);
       link.backward(args);
     });
-    
-    // return regularizationError;
   }
 
   getLinkToNeuron(dstNeuron) {
