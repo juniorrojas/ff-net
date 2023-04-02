@@ -52,8 +52,8 @@ class Link {
     return regularizationError;
   }
 
-  applyGradient(learningRate) {
-    this.weight -= learningRate * this.dWeight;
+  optimStep(lr) {
+    this.weight -= lr * this.dWeight;
   }
 
   toData() {

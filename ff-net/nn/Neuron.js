@@ -70,8 +70,8 @@ class Neuron {
     return null;
   }
 
-  applyGradient(learningRate) {
-    this.bias -= learningRate * this.dBias;
+  optimStep(lr) {
+    this.bias -= lr * this.dBias;
   }
 
   render() {

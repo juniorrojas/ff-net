@@ -164,19 +164,19 @@ class Sequential {
       });
     }
     
-    this.applyGradient(lr);
+    this.optimStep(lr);
     return regularizationLoss;
   }
 
-  applyGradient(learningRate) {
+  optimStep(lr) {
     this.links.forEach((link) => {
-      link.applyGradient(learningRate);
+      link.optimStep(lr);
     });
     
     for (let i = 1; i < this.neuronGroups.length; i++) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
-        neuron.applyGradient(learningRate);
+        neuron.optimStep(lr);
       });
     }
   }
