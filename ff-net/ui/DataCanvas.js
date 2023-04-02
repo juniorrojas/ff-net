@@ -4,25 +4,91 @@ const DragBehavior = require("./DragBehavior");
 
 class DataCanvas {
   constructor(args = {}) {
-    this.dataPoints = [];
-    const canvas = this.domElement = document.createElement("canvas");
-    canvas.width = args.domWidth ?? 250;
-    canvas.height = args.domHeight ?? 250;
-    this.ctx = canvas.getContext("2d");
+    const headless = this.headless = args.headless ?? false;
 
-    this.width = args.dataWidth ?? 50;
-    this.height = args.dataHeight ?? 50;
-    this.pixelColors = [];
-    for (let i = 0; i < this.width; i++) {
-      this.pixelColors.push([]);
-      for (let j = 0; j < this.height; j++) {
-        this.pixelColors[i].push(0);
-      }
+    if (!headless) {
+      const canvas = this.domElement = document.createElement("canvas");
+      canvas.width = args.domWidth ?? 250;
+      canvas.height = args.domHeight ?? 250;
+
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      this.ctx = ctx;
+
+      this.dragBehavior = new DragBehavior(canvas);
+      this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
+      this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
     }
 
-    this.dragBehavior = new DragBehavior(canvas);
-    this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
-    this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
+    this.dataWidth = args.dataWidth ?? 50;
+    this.dataHeight = args.dataHeight ?? 50;
+    
+    this.dataPoints = [];
+    this.clearPixels();
+
+    this.xyToPixel = (x, y) => {
+      return 0.5;
+    }
+  }
+
+  clearPixels() {
+    this.pixels = [];
+    for (let i = 0; i < this.dataWidth; i++) {
+      this.pixels.push([]);
+      for (let j = 0; j < this.dataHeight; j++) {
+        this.pixels[i].push(0);
+      }
+    }
+  }
+
+  updatePixels() {
+    const width = this.dataWidth;
+    const height = this.dataHeight;
+    for (let i = 0; i < width; i++) {
+      for (let j = 0; j < height; j++) {
+        const p = this.xyToPixel(i / (width - 1), j / (height - 1));
+        if (p < 0 || p > 1) {
+          throw new Error(`pixel value must be between 0 and 1, found ${p}`);
+        }
+        this.pixels[i][j] = p;
+      }
+    }
+  }
+
+  flushPixels() {
+    const canvas = this.domElement;
+    const ctx = this.ctx;
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    const dataWidth = this.dataWidth;
+    const dataHeight = this.dataHeight;
+
+    const fWidth = canvasWidth / dataWidth;
+    const fHeight = canvasHeight / dataHeight;
+
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    const canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+    const numPixels = canvasImageData.data.length / 4;
+
+    for (let i = 0; i < numPixels; i++) {
+      const x = i % canvasWidth;
+      const y = Math.floor(i / canvasWidth);
+      
+      const dataX = Math.floor(x / fWidth);
+      const dataY = Math.floor(y / fHeight);
+
+      const p = this.pixels[dataX][dataY];
+      const color = Color.lightRed.blend(Color.lightBlue, p);
+      const offset = 4 * i;
+      canvasImageData.data[offset    ] = Math.round(color.r * 255);
+      canvasImageData.data[offset + 1] = Math.round(color.g * 255);
+      canvasImageData.data[offset + 2] = Math.round(color.b * 255);
+      canvasImageData.data[offset + 3] = 255;
+    }
+    
+    ctx.putImageData(canvasImageData, 0, 0);
   }
 
   addDataPoint(x, y, label) {
@@ -31,41 +97,13 @@ class DataCanvas {
     return dataPoint;
   }
 
-  render(classify) {
-    const ctx = this.ctx;
-    const canvas = this.domElement;
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+  clear() {
+    this.dataPoints = [];
+  }
 
-    const width = this.width;
-    const height = this.height;
-
-    for (let i = 0; i < width; i++) {
-      for (let j = 0; j < height; j++) {
-        const label = classify(i / width, j / height);
-        const color = Color.lightRed.blend(Color.lightBlue, label);
-        this.pixelColors[i][j] = color;
-      }
-    }
-
-    const fWidth = canvasWidth / width;
-    const fHeight = canvasHeight / height;
-    const canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    for (let i = 0; i < canvasImageData.data.length / 4; i++) {
-      const y = Math.floor(i / canvasWidth);
-      const x = i % canvasWidth;
-      const ii = Math.floor(x / fWidth);
-      const jj = Math.floor(y / fHeight);
-      const color = this.pixelColors[ii][jj];
-      const offset = 4 * i
-      canvasImageData.data[offset    ] = Math.round(color.r * 255);
-      canvasImageData.data[offset + 1] = Math.round(color.g * 255);
-      canvasImageData.data[offset + 2] = Math.round(color.b * 255);
-      canvasImageData.data[offset + 3] = 255;
-    }
-    ctx.putImageData(canvasImageData, 0, 0);
-
+  render() {
+    this.updatePixels();
+    this.flushPixels(); 
     this.dataPoints.forEach((dataPoint) => dataPoint.render());
   }
 
@@ -77,12 +115,12 @@ class DataCanvas {
       const dy = event.cursor.y - dataPoint.y * this.domElement.height;
 
       const radius = dataPoint.radius;
-      const selectionRadius = radius * 3;
+      const selectionRadius = radius * 1.5;
 
       if (dx * dx + dy * dy <= selectionRadius * selectionRadius) {
         const dragState = this.dragBehavior.dragState = {};
         dragState.dataPoint = dataPoint;
-        dragState.offset = {x: dx, y: dy};
+        dragState.offset = { x: dx, y: dy };
         break;
       }
     };

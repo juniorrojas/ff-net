@@ -44,6 +44,12 @@ class App {
     row.appendChild(controlPanel.domElement);
 
     this.paused = false;
+
+    dataCanvas.xyToPixel = (x, y) => {
+      model.getInputNeuronGroup().setActivations([x, y]);
+      model.forward();
+      return model.getOutputNeuronGroup().neurons[0].activation;
+    }
     
     this.update();
   }
@@ -61,13 +67,8 @@ class App {
       });
       
       model.render();
-      const classify = (x, y) => {
-        model.getInputNeuronGroup().setActivations([x, y]);
-        model.forward();
-        return model.getOutputNeuronGroup().neurons[0].activation;
-      }
-      this.classify = classify;
-      dataCanvas.render(classify);
+      dataCanvas.render();
+
       this.controlPanel.update({
         dataLoss: dataLoss,
         regularizationLoss: regularizationLoss
