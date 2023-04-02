@@ -40,9 +40,3 @@ test("single layer backward", () => {
   expect(link.weightGrad).toBe(0);
   expect(outputNeuron.biasGrad).toBe(0.25);
 });
-
-test("backward", () => {
-  const model = new nn.Sequential({
-    headless: true
-  });
-});
