@@ -28,7 +28,7 @@ class DataCanvas {
       this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
     }
 
-    this.fragmentShader = (x, y) => {
+    this.xyToPixel = (x, y) => {
       return 0.5;
     }
   }
@@ -48,12 +48,11 @@ class DataCanvas {
     const height = this.dataHeight;
     for (let i = 0; i < width; i++) {
       for (let j = 0; j < height; j++) {
-        const p = this.fragmentShader(i / width, j / height);
+        const p = this.xyToPixel(i / (width - 1), j / (height - 1));
         if (p < 0 || p > 1) {
           throw new Error(`pixel value must be between 0 and 1, found ${p}`);
         }
-        const color = Color.lightRed.blend(Color.lightBlue, p);
-        this.pixels[i][j] = color;
+        this.pixels[i][j] = p;
       }
     }
   }
@@ -71,14 +70,18 @@ class DataCanvas {
     const fWidth = canvasWidth / width;
     const fHeight = canvasHeight / height;
 
-    const canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    for (let i = 0; i < canvasImageData.data.length / 4; i++) {
+
+    const canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+    const numPixels = canvasImageData.data.length / 4;
+
+    for (let i = 0; i < numPixels; i++) {
       const y = Math.floor(i / canvasWidth);
       const x = i % canvasWidth;
       const ii = Math.floor(x / fWidth);
       const jj = Math.floor(y / fHeight);
-      const color = this.pixels[ii][jj];
+      const p = this.pixels[ii][jj];
+      const color = Color.lightRed.blend(Color.lightBlue, p);
       const offset = 4 * i
       canvasImageData.data[offset    ] = Math.round(color.r * 255);
       canvasImageData.data[offset + 1] = Math.round(color.g * 255);

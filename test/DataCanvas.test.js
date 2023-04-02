@@ -11,4 +11,13 @@ test("pixels", () => {
     [0, 0, 0],
     [0, 0, 0]
   ]);
+  dataCanvas.xyToPixel = (x, y) => {
+    return x;
+  };
+  dataCanvas.updatePixels();
+  expect(dataCanvas.pixels).toEqual([
+    [0, 0, 0],
+    [0.5, 0.5, 0.5],
+    [1, 1, 1]
+  ]);
 });

@@ -45,7 +45,7 @@ class App {
 
     this.paused = false;
 
-    dataCanvas.fragmentShader = (x, y) => {
+    dataCanvas.xyToPixel = (x, y) => {
       model.getInputNeuronGroup().setActivations([x, y]);
       model.forward();
       return model.getOutputNeuronGroup().neurons[0].activation;
