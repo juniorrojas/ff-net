@@ -7,7 +7,7 @@ class ControlPanel {
     this.app = args.app;
     
     this.learningRate = 0.2;
-    this.regularization = 0.000009;
+    this.regularization = 0.00002;
     
     const div = this.domElement = document.createElement("div");
     div.classList.add("control-panel");

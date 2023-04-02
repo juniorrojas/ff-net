@@ -44,14 +44,7 @@ class Link {
   }
 
   backward(args = {}) {
-    const regularization = args.regularization ?? 0;
-    let regularizationError = 0;
     this.weightGrad = this.n0.activation * this.nf.preActivationGrad;
-    // regularization error = 0.5 * regularization * w^2
-    const w = this.weight;
-    this.weightGrad += regularization * w;
-    regularizationError += 0.5 * regularization * w * w;
-    return regularizationError;
   }
 
   optimStep(lr) {
