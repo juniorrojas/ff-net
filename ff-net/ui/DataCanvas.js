@@ -112,7 +112,7 @@ class DataCanvas {
       const dy = event.cursor.y - dataPoint.y * this.domElement.height;
 
       const radius = dataPoint.radius;
-      const selectionRadius = radius * 3;
+      const selectionRadius = radius * 1.5;
 
       if (dx * dx + dy * dy <= selectionRadius * selectionRadius) {
         const dragState = this.dragBehavior.dragState = {};
