@@ -31,6 +31,10 @@ class DataCanvas {
     return dataPoint;
   }
 
+  clear() {
+    this.dataPoints = [];
+  }
+
   render(classify) {
     const ctx = this.ctx;
     const canvas = this.domElement;
