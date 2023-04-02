@@ -53,15 +53,13 @@ class App {
     if (!this.paused) {
       const model = this.model;
       const dataCanvas = this.dataCanvas;
-      const trainOutput = model.train({
-        learningRate: this.controlPanel.learningRate,
+
+      const { dataLoss, regularizationLoss } = model.train({
+        lr: this.controlPanel.learningRate,
         regularization: this.controlPanel.regularization,
         iters: 10,
         dataCanvas: dataCanvas
       });
-
-      const dataLoss = trainOutput.dataLoss;
-      const regularizationLoss = trainOutput.regularizationLoss;
       
       model.render();
       const classify = (x, y) => {
@@ -72,7 +70,6 @@ class App {
       this.classify = classify;
       dataCanvas.render(classify);
       this.controlPanel.update({
-        totalLoss: dataLoss + regularizationLoss,
         dataLoss: dataLoss,
         regularizationLoss: regularizationLoss
       });
@@ -100,16 +97,17 @@ class App {
 }
 
 module.exports = App;
-},{"./ControlPanel":2,"ff-net":8}],2:[function(require,module,exports){
+},{"./ControlPanel":2,"ff-net":9}],2:[function(require,module,exports){
 const ffnet = require("ff-net");
 const LossPlot = ffnet.ui.LossPlot;
+const Slider = require("./Slider");
 
 class ControlPanel {
   constructor(args = {}) {
     this.app = args.app;
     
-    this.learningRate = 0.2;
-    this.regularization = 0.000009;
+    this.learningRate = 0.08;
+    this.regularization = 0.00002;
     
     const div = this.domElement = document.createElement("div");
     div.classList.add("control-panel");
@@ -129,25 +127,35 @@ class ControlPanel {
       model.randomizeParameters();
     });
     
-    const uiLearningRate = this.addRow("slider", "learning rate");
-    uiLearningRate.control.min = 1;
-    uiLearningRate.control.max = 80;
-    uiLearningRate.control.value = Math.round(this.learningRate * 100);
-    uiLearningRate.control.addEventListener("change", () => {
-      this.learningRate = uiLearningRate.control.value / 100;
+    const uiLearningRate = this.addRow(
+      "slider", "learning rate",
+      {
+        min: 0.005,
+        max: 0.5,
+        step: 0.01,
+        value: this.learningRate
+      }
+    );
+    uiLearningRate.control.domElement.addEventListener("input", () => {
+      this.learningRate = parseFloat(uiLearningRate.control.domElement.value);
     });
     
-    const uiRegularization = this.addRow("slider", "regularization");
-    uiRegularization.control.min = 0;
-    uiRegularization.control.max = 100;
-    uiRegularization.control.value = Math.round(this.regularization * 1000000);
-    uiRegularization.control.addEventListener("change", () => {
-      this.regularization = uiRegularization.control.value / 1000000;
+    const uiRegularization = this.addRow(
+      "slider", "regularization",
+      {
+        min: 0,
+        max: 0.0001,
+        step: 0.000001,
+        value: this.regularization
+      }
+    );
+    uiRegularization.control.domElement.addEventListener("input", () => {
+      this.regularization = parseFloat(uiRegularization.control.domElement.value);
     });
     
     row = this.addRow("text", "loss");
     row.control.className = "formatted-number";
-      
+    
     row = this.addRow("full");
     const lossPlot = this.lossPlot = new LossPlot();
     lossPlot.domElement.className = "loss-plot-canvas";
@@ -162,7 +170,7 @@ class ControlPanel {
     return cell;
   }
 
-  addRow(type, label) {
+  addRow(type, label, controlArgs = {}) {
     const row = document.createElement("div");
     row.cells = [];
     row.className = "control-row";
@@ -185,14 +193,13 @@ class ControlPanel {
       let control;
       switch (type) {
         case "slider":
-          control = document.createElement("input");
-          control.type = "range";
+          control = new Slider(controlArgs);
           break;
         case "text":
           control = cell;
           break;
       }
-      if (control != cell && control != null) cell.appendChild(control);
+      if (control != cell && control != null) cell.appendChild(control.domElement);
       
       row.control = control;
     }
@@ -201,16 +208,39 @@ class ControlPanel {
   }
 
   update(args) {
-    this.rowsByLabel["loss"].control.textContent = args.totalLoss.toFixed(10);
-    this.lossPlot.push(args.dataLoss + args.regularizationLoss);
+    if (args.dataLoss == null) {
+      throw new Error("dataLoss required to update panel");
+    }
+    if (args.regularizationLoss == null) {
+      throw new Error("regularizationLoss required to update panel");
+    }
+    const totalLoss = args.dataLoss + args.regularizationLoss;
+    this.rowsByLabel["loss"].control.textContent = totalLoss.toFixed(10);
+    this.lossPlot.push(totalLoss);
   }
 }
 
 module.exports = ControlPanel;
 
-},{"ff-net":8}],3:[function(require,module,exports){
-module.exports={"dataPoints":[{"x":0.08,"y":0.24,"label":1},{"x":0.2,"y":0.27,"label":1},{"x":0.05,"y":0.3,"label":1},{"x":0.1,"y":0.1,"label":1},{"x":0.4,"y":0.4,"label":0},{"x":0.6,"y":0.4,"label":0},{"x":0.65,"y":0.7,"label":0},{"x":0.7,"y":0.3,"label":0},{"x":0.35,"y":0.65,"label":0},{"x":0.3,"y":0.5,"label":0},{"x":0.7,"y":0.5,"label":0},{"x":0.75,"y":0.55,"label":0},{"x":0.7,"y":0.6,"label":0},{"x":0.65,"y":0.34,"label":0},{"x":0.8,"y":0.65,"label":0},{"x":0.5,"y":0.7,"label":0},{"x":0.5,"y":0.66,"label":0},{"x":0.56,"y":0.66,"label":0},{"x":0.46,"y":0.36,"label":0},{"x":0.46,"y":0.26,"label":0},{"x":0.36,"y":0.26,"label":0},{"x":0.26,"y":0.36,"label":0},{"x":0.56,"y":0.28,"label":0},{"x":0.33,"y":0.54,"label":0},{"x":0.23,"y":0.52,"label":0},{"x":0.26,"y":0.16,"label":1},{"x":0.06,"y":0.46,"label":1},{"x":0.13,"y":0.66,"label":1},{"x":0.2,"y":0.8,"label":1},{"x":0.5,"y":0.5,"label":1},{"x":0.45,"y":0.5,"label":1},{"x":0.5,"y":0.45,"label":1},{"x":0.45,"y":0.45,"label":1},{"x":0.55,"y":0.55,"label":1},{"x":0.5,"y":0.55,"label":1},{"x":0.5,"y":0.2,"label":1},{"x":0.4,"y":0.1,"label":1},{"x":0.6,"y":0.1,"label":1},{"x":0.75,"y":0.15,"label":1},{"x":0.88,"y":0.22,"label":1},{"x":0.9,"y":0.35,"label":1},{"x":0.9,"y":0.49,"label":1},{"x":0.88,"y":0.62,"label":1},{"x":0.9,"y":0.9,"label":1},{"x":0.9,"y":0.8,"label":1},{"x":0.75,"y":0.85,"label":1},{"x":0.55,"y":0.92,"label":1},{"x":0.6,"y":0.95,"label":1},{"x":0.06,"y":0.57,"label":1},{"x":0.09,"y":0.8,"label":1},{"x":0.4,"y":0.9,"label":1}],"model":{"neuronGroups":[{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5}]}],"links":[{"n0":[0,0],"nf":[1,0],"weight":2.2559318523672673},{"n0":[0,0],"nf":[1,1],"weight":3.7705902078344162},{"n0":[0,0],"nf":[1,2],"weight":-5.673868837964195},{"n0":[0,0],"nf":[1,3],"weight":-2.552116396138559},{"n0":[0,0],"nf":[1,4],"weight":-4.765897189158554},{"n0":[0,1],"nf":[1,0],"weight":2.522847383501193},{"n0":[0,1],"nf":[1,1],"weight":-2.9902303588384505},{"n0":[0,1],"nf":[1,2],"weight":2.749623598598969},{"n0":[0,1],"nf":[1,3],"weight":-2.0657459601688077},{"n0":[0,1],"nf":[1,4],"weight":2.311040191441733},{"n0":[1,0],"nf":[2,0],"weight":-2.8083933750840506},{"n0":[1,0],"nf":[2,1],"weight":2.368208438212055},{"n0":[1,0],"nf":[2,2],"weight":2.792010178964303},{"n0":[1,0],"nf":[2,3],"weight":2.1204797088106764},{"n0":[1,0],"nf":[2,4],"weight":3.0855603411983634},{"n0":[1,1],"nf":[2,0],"weight":-2.1619760012233913},{"n0":[1,1],"nf":[2,1],"weight":2.7735676578848043},{"n0":[1,1],"nf":[2,2],"weight":-4.795321974592097},{"n0":[1,1],"nf":[2,3],"weight":-3.1618858651724424},{"n0":[1,1],"nf":[2,4],"weight":2.642537468325151},{"n0":[1,2],"nf":[2,0],"weight":5.111269168104936},{"n0":[1,2],"nf":[2,1],"weight":1.8060793114773712},{"n0":[1,2],"nf":[2,2],"weight":1.2874475479043777},{"n0":[1,2],"nf":[2,3],"weight":3.715659708889894},{"n0":[1,2],"nf":[2,4],"weight":-5.479057778095251},{"n0":[1,3],"nf":[2,0],"weight":4.279970838297447},{"n0":[1,3],"nf":[2,1],"weight":-3.8573191202934085},{"n0":[1,3],"nf":[2,2],"weight":-4.346636276004062},{"n0":[1,3],"nf":[2,3],"weight":1.8026421918582567},{"n0":[1,3],"nf":[2,4],"weight":3.9687935202147346},{"n0":[1,4],"nf":[2,0],"weight":-3.5216391228147197},{"n0":[1,4],"nf":[2,1],"weight":4.599458665307638},{"n0":[1,4],"nf":[2,2],"weight":-4.752572287153145},{"n0":[1,4],"nf":[2,3],"weight":-3.810827524569661},{"n0":[1,4],"nf":[2,4],"weight":3.0650028924296953},{"n0":[2,0],"nf":[3,0],"weight":-4.300364295192499},{"n0":[2,0],"nf":[3,1],"weight":-2.9036061692080217},{"n0":[2,1],"nf":[3,0],"weight":4.132576329093505},{"n0":[2,1],"nf":[3,1],"weight":-3.817976850598705},{"n0":[2,2],"nf":[3,0],"weight":4.606542085589321},{"n0":[2,2],"nf":[3,1],"weight":2.8220313920923323},{"n0":[2,3],"nf":[3,0],"weight":2.3423002019828885},{"n0":[2,3],"nf":[3,1],"weight":2.098573708791525},{"n0":[2,4],"nf":[3,0],"weight":4.4760505444141625},{"n0":[2,4],"nf":[3,1],"weight":3.95752484391276},{"n0":[3,0],"nf":[4,0],"weight":-0.7265226578414495},{"n0":[3,1],"nf":[4,0],"weight":-4.316679309853457}]}}
+},{"./Slider":3,"ff-net":9}],3:[function(require,module,exports){
+class Slider {
+  constructor(args = {}) {
+    const input = document.createElement("input");
+    this.domElement = input;
+    input.type = "range";
+    input.min = args.min ?? 0;
+    input.max = args.max ?? 100;
+    input.step = args.step ?? 1;
+    if (args.value != null) {
+      input.value = args.value;
+    }
+  }
+}
+
+module.exports = Slider;
 },{}],4:[function(require,module,exports){
+module.exports={"dataPoints":[{"x":0.08,"y":0.24,"label":1},{"x":0.2,"y":0.27,"label":1},{"x":0.05,"y":0.3,"label":1},{"x":0.1,"y":0.1,"label":1},{"x":0.4,"y":0.4,"label":0},{"x":0.6,"y":0.4,"label":0},{"x":0.65,"y":0.7,"label":0},{"x":0.7,"y":0.3,"label":0},{"x":0.35,"y":0.65,"label":0},{"x":0.3,"y":0.5,"label":0},{"x":0.7,"y":0.5,"label":0},{"x":0.75,"y":0.55,"label":0},{"x":0.7,"y":0.6,"label":0},{"x":0.65,"y":0.34,"label":0},{"x":0.8,"y":0.65,"label":0},{"x":0.5,"y":0.7,"label":0},{"x":0.5,"y":0.66,"label":0},{"x":0.56,"y":0.66,"label":0},{"x":0.46,"y":0.36,"label":0},{"x":0.46,"y":0.26,"label":0},{"x":0.36,"y":0.26,"label":0},{"x":0.26,"y":0.36,"label":0},{"x":0.56,"y":0.28,"label":0},{"x":0.33,"y":0.54,"label":0},{"x":0.23,"y":0.52,"label":0},{"x":0.26,"y":0.16,"label":1},{"x":0.06,"y":0.46,"label":1},{"x":0.13,"y":0.66,"label":1},{"x":0.2,"y":0.8,"label":1},{"x":0.5,"y":0.5,"label":1},{"x":0.45,"y":0.5,"label":1},{"x":0.5,"y":0.45,"label":1},{"x":0.45,"y":0.45,"label":1},{"x":0.55,"y":0.55,"label":1},{"x":0.5,"y":0.55,"label":1},{"x":0.5,"y":0.2,"label":1},{"x":0.4,"y":0.1,"label":1},{"x":0.6,"y":0.1,"label":1},{"x":0.75,"y":0.15,"label":1},{"x":0.88,"y":0.22,"label":1},{"x":0.9,"y":0.35,"label":1},{"x":0.9,"y":0.49,"label":1},{"x":0.88,"y":0.62,"label":1},{"x":0.9,"y":0.9,"label":1},{"x":0.9,"y":0.8,"label":1},{"x":0.75,"y":0.85,"label":1},{"x":0.55,"y":0.92,"label":1},{"x":0.6,"y":0.95,"label":1},{"x":0.06,"y":0.57,"label":1},{"x":0.09,"y":0.8,"label":1},{"x":0.4,"y":0.9,"label":1}],"model":{"neuronGroups":[{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5},{"bias":0.5}]},{"neurons":[{"bias":0.5}]}],"links":[{"n0":[0,0],"nf":[1,0],"weight":2.2559318523672673},{"n0":[0,0],"nf":[1,1],"weight":3.7705902078344162},{"n0":[0,0],"nf":[1,2],"weight":-5.673868837964195},{"n0":[0,0],"nf":[1,3],"weight":-2.552116396138559},{"n0":[0,0],"nf":[1,4],"weight":-4.765897189158554},{"n0":[0,1],"nf":[1,0],"weight":2.522847383501193},{"n0":[0,1],"nf":[1,1],"weight":-2.9902303588384505},{"n0":[0,1],"nf":[1,2],"weight":2.749623598598969},{"n0":[0,1],"nf":[1,3],"weight":-2.0657459601688077},{"n0":[0,1],"nf":[1,4],"weight":2.311040191441733},{"n0":[1,0],"nf":[2,0],"weight":-2.8083933750840506},{"n0":[1,0],"nf":[2,1],"weight":2.368208438212055},{"n0":[1,0],"nf":[2,2],"weight":2.792010178964303},{"n0":[1,0],"nf":[2,3],"weight":2.1204797088106764},{"n0":[1,0],"nf":[2,4],"weight":3.0855603411983634},{"n0":[1,1],"nf":[2,0],"weight":-2.1619760012233913},{"n0":[1,1],"nf":[2,1],"weight":2.7735676578848043},{"n0":[1,1],"nf":[2,2],"weight":-4.795321974592097},{"n0":[1,1],"nf":[2,3],"weight":-3.1618858651724424},{"n0":[1,1],"nf":[2,4],"weight":2.642537468325151},{"n0":[1,2],"nf":[2,0],"weight":5.111269168104936},{"n0":[1,2],"nf":[2,1],"weight":1.8060793114773712},{"n0":[1,2],"nf":[2,2],"weight":1.2874475479043777},{"n0":[1,2],"nf":[2,3],"weight":3.715659708889894},{"n0":[1,2],"nf":[2,4],"weight":-5.479057778095251},{"n0":[1,3],"nf":[2,0],"weight":4.279970838297447},{"n0":[1,3],"nf":[2,1],"weight":-3.8573191202934085},{"n0":[1,3],"nf":[2,2],"weight":-4.346636276004062},{"n0":[1,3],"nf":[2,3],"weight":1.8026421918582567},{"n0":[1,3],"nf":[2,4],"weight":3.9687935202147346},{"n0":[1,4],"nf":[2,0],"weight":-3.5216391228147197},{"n0":[1,4],"nf":[2,1],"weight":4.599458665307638},{"n0":[1,4],"nf":[2,2],"weight":-4.752572287153145},{"n0":[1,4],"nf":[2,3],"weight":-3.810827524569661},{"n0":[1,4],"nf":[2,4],"weight":3.0650028924296953},{"n0":[2,0],"nf":[3,0],"weight":-4.300364295192499},{"n0":[2,0],"nf":[3,1],"weight":-2.9036061692080217},{"n0":[2,1],"nf":[3,0],"weight":4.132576329093505},{"n0":[2,1],"nf":[3,1],"weight":-3.817976850598705},{"n0":[2,2],"nf":[3,0],"weight":4.606542085589321},{"n0":[2,2],"nf":[3,1],"weight":2.8220313920923323},{"n0":[2,3],"nf":[3,0],"weight":2.3423002019828885},{"n0":[2,3],"nf":[3,1],"weight":2.098573708791525},{"n0":[2,4],"nf":[3,0],"weight":4.4760505444141625},{"n0":[2,4],"nf":[3,1],"weight":3.95752484391276},{"n0":[3,0],"nf":[4,0],"weight":-0.7265226578414495},{"n0":[3,1],"nf":[4,0],"weight":-4.316679309853457}]}}
+},{}],5:[function(require,module,exports){
 const App = require("./App");
 
 function main() {
@@ -235,7 +265,7 @@ function main() {
 }
 
 main();
-},{"./App":1,"./data":3}],5:[function(require,module,exports){
+},{"./App":1,"./data":4}],6:[function(require,module,exports){
 class Color {
   // r, g, b, a are numbers between 0 and 1
   constructor(r, g, b, a) {
@@ -284,12 +314,12 @@ Color.lightBlue = new Color(186 / 255, 224 / 255, 251 / 255);
 Color.lightRed = new Color(252 / 255, 163 / 255, 163 / 255);
 
 module.exports = Color;
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 module.exports = {
   Color: require("./Color"),
   svg: require("./svg")
 };
-},{"./Color":5,"./svg":7}],7:[function(require,module,exports){
+},{"./Color":6,"./svg":8}],8:[function(require,module,exports){
 const svg = {};
 
 svg.createElement = function(element) {
@@ -298,7 +328,7 @@ svg.createElement = function(element) {
 
 module.exports = svg;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 const nn = require("./nn");
 
 module.exports = {
@@ -307,7 +337,7 @@ module.exports = {
   nn: nn,
   Sequential: nn.Sequential
 };
-},{"./common":6,"./nn":14,"./ui":19}],9:[function(require,module,exports){
+},{"./common":7,"./nn":15,"./ui":20}],10:[function(require,module,exports){
 class Layer {
   constructor(args = {}) {
     if (args.inputNeuronGroup == null) {
@@ -319,10 +349,72 @@ class Layer {
     this.inputNeuronGroup = args.inputNeuronGroup;
     this.outputNeuronGroup = args.outputNeuronGroup;
   }
+
+  getBiasArray() {
+    const b = [];
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      b.push(neuron.bias);
+    });
+    return b;
+  }
+
+  getBiasGradArray() {
+    const b = [];
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      b.push(neuron.biasGrad);
+    });
+    return b;
+  }
+
+  setBiasFromArray(arr) {
+    const outputNeurons = this.outputNeuronGroup.neurons;
+    if (arr.length != outputNeurons.length) {
+      throw new Error(`invalid bias size, found ${arr.length}, expected ${outputNeurons.length}`);
+    }
+    outputNeurons.forEach((neuron, i) => {
+      neuron.bias = arr[i];
+    });
+  }
+
+  getWeightArray() {
+    const w = [];
+
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      const wi = [];
+      w.push(wi);
+      neuron.backLinks.forEach(link => {
+        wi.push(link.weight);
+      });      
+    });
+
+    return w;
+  }
+
+  getWeightGradArray() {
+    const w = [];
+
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      const wi = [];
+      w.push(wi);
+      neuron.backLinks.forEach(link => {
+        wi.push(link.weightGrad);
+      });      
+    });
+
+    return w;
+  }
+
+  setWeightFromArray(arr) {
+    this.inputNeuronGroup.neurons.forEach((inputNeuron, j) => {
+      inputNeuron.links.forEach((link, i) => {
+        link.weight = arr[i][j];
+      });
+    });
+  }
 }
 
 module.exports = Layer;
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 class Link {
   constructor(neuralNet, n0, nf, weight) {
     this.neuralNet = neuralNet;
@@ -336,7 +428,7 @@ class Link {
     
     if (weight == null) this.weight = 1;
     else this.weight = weight;
-    this.dWeight = 0;
+    this.weightGrad = 0;
     
     const headless = neuralNet.headless;
     this.headless = headless;
@@ -368,17 +460,29 @@ class Link {
     path.setAttribute("stroke", color);
   }
 
-  backward(regularization) {
-    let regularizationError = 0;
-    this.dWeight = this.n0.activation * this.nf.dPreActivation;
-    // regularization error = 0.5 * regularization * weight^2
-    this.dWeight += regularization * this.weight;
-    regularizationError += 0.5 * regularization * this.weight * this.weight;
-    return regularizationError;
+  zeroGrad() {
+    this.weightGrad = 0.0
   }
 
-  applyGradient(learningRate) {
-    this.weight -= learningRate * this.dWeight;
+  backward(args = {}) {
+    this.weightGrad = this.n0.activation * this.nf.preActivationGrad;
+  }
+
+  forwardRegularization(args = {}) {
+    const regularization = args.regularization ?? 0.0;
+    return regularization * this.weight * this.weight * 0.5;
+  }
+  
+  backwardRegularization(args = {}) {
+    const regularization = args.regularization ?? 0.0;
+    this.weightGrad += regularization * this.weight;
+  }
+
+  optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
+    }
+    this.weight -= lr * this.weightGrad;
   }
 
   toData() {
@@ -408,16 +512,17 @@ class Link {
 
 module.exports = Link;
 
-},{"../common/Color":5,"../common/svg":7}],11:[function(require,module,exports){
+},{"../common/Color":6,"../common/svg":8}],12:[function(require,module,exports){
 const radius = 12;
 const strokeWidth = 2;
 
-function sigmoid(n) {
-  return 1 / (1 + Math.exp(-n));
+function sigmoid(x) {
+  return 1 / (1 + Math.exp(-x));
 }
 
-function dSigmoid(n) {
-  return sigmoid(n) * (1 - sigmoid(n));
+function sigmoidBackward(x, outputGrad) {
+  const s = sigmoid(x);
+  return s * (1 - s) * outputGrad;
 }
 
 class Neuron {
@@ -430,9 +535,9 @@ class Neuron {
     this.preActivation = 0;
     this.activation = sigmoid(this.bias);
 
-    this.dActivation = 0;
-    this.dPreActivation = 0;
-    this.dBias = 0;
+    this.activationGrad = 0;
+    this.preActivationGrad = 0;
+    this.biasGrad = 0;
     
     const headless = group.parent.headless;
     this.headless = headless;
@@ -453,25 +558,24 @@ class Neuron {
     this.activation = sigmoid(this.preActivation);
   }
 
-  backward(regularization) {
-    let regularizationError = 0;
-
+  backward(args = {}) {
     this.links.forEach((link) => {
-      this.dActivation += link.weight * link.dWeight;
+      this.activationGrad += link.weight * link.nf.preActivationGrad;
     });
     
-    this.dPreActivation = this.dActivation * dSigmoid(this.preActivation);
-    this.dBias = this.dPreActivation;
+    this.preActivationGrad = sigmoidBackward(this.preActivation, this.activationGrad);
+    this.biasGrad = this.preActivationGrad;
     
     this.backLinks.forEach((link) => {
-      regularizationError += link.backward(regularization);
+      link.backward(args);
     });
-    
-    return regularizationError;
   }
 
-  applyGradient(learningRate) {
-    this.bias -= learningRate * this.dBias;
+  optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
+    }
+    this.bias -= lr * this.biasGrad;
   }
 
   render() {
@@ -537,12 +641,10 @@ class Neuron {
     };
   }
 
-  reset() {
-    this.preActivation = 0;
-    this.activation = sigmoid(this.bias);
-    this.dActivation = 0;
-    this.dPreActivation = 0;
-    this.dBias = 0;
+  zeroGrad() {
+    this.activationGrad = 0;
+    this.preActivationGrad = 0;
+    this.biasGrad = 0;
   }
 
   toData() {
@@ -558,7 +660,7 @@ class Neuron {
 
 module.exports = Neuron;
 
-},{"../common/Color":5,"../common/svg":7}],12:[function(require,module,exports){
+},{"../common/Color":6,"../common/svg":8}],13:[function(require,module,exports){
 const Neuron = require("./Neuron");
 
 class NeuronGroup {
@@ -632,7 +734,7 @@ class NeuronGroup {
 
 module.exports = NeuronGroup;
 
-},{"./Neuron":11}],13:[function(require,module,exports){
+},{"./Neuron":12}],14:[function(require,module,exports){
 const Link = require("./Link");
 const NeuronGroup = require("./NeuronGroup");
 const Layer = require("./Layer");
@@ -759,8 +861,13 @@ class Sequential {
     this.links.forEach((link) => link.render());
   }
 
-  reset() {
-    this.neuronGroups.forEach((group) => group.reset());
+  zeroGrad() {
+    this.neurons.forEach(neuron => {
+      neuron.zeroGrad();
+    });
+    this.links.forEach(link => {
+      link.zeroGrad();
+    });
   }
 
   randomizeParameters() {
@@ -786,29 +893,44 @@ class Sequential {
     }
   }
 
-  backward(learningRate, regularization) {
-    let regularizationLoss = 0;
-    
+  backward(args = {}) {
     for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
-        regularizationLoss += neuron.backward(regularization);
+        neuron.backward(args);
       });
     }
-    
-    this.applyGradient(learningRate);
-    return regularizationLoss;
   }
 
-  applyGradient(learningRate) {
+  forwardRegularization(args = {}) {
+    const regularization = args.regularization ?? 0.0;
+    let loss = 0.0;
+    this.links.forEach(link => {
+      const w = link.weight;
+      loss += 0.5 * regularization * w * w;
+    });
+    return loss;
+  }
+
+  backwardRegularization(args = {}) {
+    this.links.forEach(link => {
+      link.backwardRegularization(args);
+    });
+  }
+
+  optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
+    }
+
     this.links.forEach((link) => {
-      link.applyGradient(learningRate);
+      link.optimStep(lr);
     });
     
     for (let i = 1; i < this.neuronGroups.length; i++) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
-        neuron.applyGradient(learningRate);
+        neuron.optimStep(lr);
       });
     }
   }
@@ -816,7 +938,7 @@ class Sequential {
   train(args) {
     // TODO decouple data from canvas
     const dataCanvas = args.dataCanvas;
-    const learningRate = args.learningRate;
+    const lr = args.lr;
     const regularization = args.regularization;
     const iters = args.iters;
 
@@ -827,7 +949,6 @@ class Sequential {
     for (let i = 0; i < iters; i++) {
       dataLoss = 0;
       dataCanvas.dataPoints.forEach((dataPoint) => {
-        this.reset();
         // TODO generalize, do not assume 2D input
         inputNeuronGroup.neurons[0].activation = dataPoint.x;
         inputNeuronGroup.neurons[1].activation = dataPoint.y;
@@ -836,13 +957,21 @@ class Sequential {
         const neuron = outputNeuronGroup.neurons[0];
         const output = neuron.activation;
         const d = dataPoint.label - output;
+        // forwardData
         dataLoss += 0.5 * d * d;
-        neuron.dActivation = -d;
+        
+        this.zeroGrad();
+        neuron.activationGrad = -d;
 
-        regularizationLoss = this.backward(
-          learningRate,
-          regularization
-        );
+        regularizationLoss = this.forwardRegularization({
+          regularization: regularization
+        });
+        this.backward();
+        this.backwardRegularization({
+          regularization: regularization
+        });
+
+        this.optimStep(lr);
       });
     }
 
@@ -887,11 +1016,11 @@ class Sequential {
 
 module.exports = Sequential;
 
-},{"../common/svg":7,"./Layer":9,"./Link":10,"./NeuronGroup":12}],14:[function(require,module,exports){
+},{"../common/svg":8,"./Layer":10,"./Link":11,"./NeuronGroup":13}],15:[function(require,module,exports){
 module.exports = {
   Sequential: require("./Sequential")
 };
-},{"./Sequential":13}],15:[function(require,module,exports){
+},{"./Sequential":14}],16:[function(require,module,exports){
 const Color = require("../common/Color");
 const DataPoint = require("./DataPoint");
 const DragBehavior = require("./DragBehavior");
@@ -1016,7 +1145,7 @@ class DataCanvas {
 
 module.exports = DataCanvas;
 
-},{"../common/Color":5,"./DataPoint":16,"./DragBehavior":17}],16:[function(require,module,exports){
+},{"../common/Color":6,"./DataPoint":17,"./DragBehavior":18}],17:[function(require,module,exports){
 const Color = require("../common/Color");
 
 class DataPoint {
@@ -1060,7 +1189,7 @@ class DataPoint {
 }
 
 module.exports = DataPoint;
-},{"../common/Color":5}],17:[function(require,module,exports){
+},{"../common/Color":6}],18:[function(require,module,exports){
 class DragBehavior {
   constructor(canvas) {
     this.canvas = canvas;
@@ -1118,7 +1247,7 @@ class DragBehavior {
 }
 
 module.exports = DragBehavior;
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 class LossPlot {
   constructor(args = {}) {
     const width = args.width ?? 500;
@@ -1173,9 +1302,9 @@ class LossPlot {
 }
 
 module.exports = LossPlot;
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 module.exports = {
   DataCanvas: require("./DataCanvas"),
   LossPlot: require("./LossPlot")
 };
-},{"./DataCanvas":15,"./LossPlot":18}]},{},[4]);
+},{"./DataCanvas":16,"./LossPlot":19}]},{},[5]);
