@@ -43,6 +43,10 @@ class Link {
     path.setAttribute("stroke", color);
   }
 
+  zeroGrad() {
+    this.weightGrad = 0.0
+  }
+
   backward(args = {}) {
     this.weightGrad = this.n0.activation * this.nf.preActivationGrad;
   }
