@@ -151,7 +151,10 @@ class Sequential {
     }
   }
 
-  backward(learningRate, regularization) {
+  backward(args = {}) {
+    const lr = args.lr ?? 0;
+    const regularization = args.regularization ?? 0;
+
     let regularizationLoss = 0;
     
     for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
@@ -161,7 +164,7 @@ class Sequential {
       });
     }
     
-    this.applyGradient(learningRate);
+    this.applyGradient(lr);
     return regularizationLoss;
   }
 
@@ -204,10 +207,10 @@ class Sequential {
         dataLoss += 0.5 * d * d;
         neuron.dActivation = -d;
 
-        regularizationLoss = this.backward(
-          learningRate,
-          regularization
-        );
+        regularizationLoss = this.backward({
+          lr: learningRate,
+          regularization: regularization
+        });
       });
     }
 

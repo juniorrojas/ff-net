@@ -34,7 +34,7 @@ test("backward", () => {
 
   // backward
   outputNeuron.dActivation = 1;
-  model.backward(0, 0);
+  model.backward();
 
   expect(outputNeuron.dPreActivation).toBe(0.25);
   expect(link.dWeight).toBe(0);
