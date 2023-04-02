@@ -6,7 +6,7 @@ class ControlPanel {
   constructor(args = {}) {
     this.app = args.app;
     
-    this.learningRate = 0.2;
+    this.learningRate = 0.08;
     this.regularization = 0.00002;
     
     const div = this.domElement = document.createElement("div");
