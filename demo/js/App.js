@@ -52,15 +52,13 @@ class App {
     if (!this.paused) {
       const model = this.model;
       const dataCanvas = this.dataCanvas;
-      const trainOutput = model.train({
+
+      const { dataLoss, regularizationLoss } = model.train({
         lr: this.controlPanel.learningRate,
         regularization: this.controlPanel.regularization,
         iters: 10,
         dataCanvas: dataCanvas
       });
-
-      const dataLoss = trainOutput.dataLoss;
-      const regularizationLoss = trainOutput.regularizationLoss;
       
       model.render();
       const classify = (x, y) => {
