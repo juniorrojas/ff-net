@@ -128,6 +128,15 @@ class Sequential {
     this.neuronGroups.forEach((group) => group.reset());
   }
 
+  zeroGrad() {
+    this.neurons.forEach(neuron => {
+      neuron.zeroGrad();
+    });
+    this.links.forEach(link => {
+      link.zeroGrad();
+    });
+  }
+
   randomizeParameters() {
     this.links.forEach((link) => {
       let weight = 2 + Math.random() * 4;
