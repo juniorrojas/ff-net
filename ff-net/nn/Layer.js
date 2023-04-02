@@ -18,6 +18,16 @@ class Layer {
     return b;
   }
 
+  setBiasFromArray(arr) {
+    const outputNeurons = this.outputNeuronGroup.neurons;
+    if (arr.length != outputNeurons.length) {
+      throw new Error(`invalid bias size, found ${arr.length}, expected ${outputNeurons.length}`);
+    }
+    outputNeurons.forEach((neuron, i) => {
+      neuron.bias = arr[i];
+    });
+  }
+
   getWeightArray() {
     const inputSize = this.inputNeuronGroup.numNeurons();
     const outputSize = this.outputNeuronGroup.numNeurons();
@@ -38,6 +48,14 @@ class Layer {
     }
 
     return w;
+  }
+
+  setWeightFromArray(arr) {
+    this.inputNeuronGroup.neurons.forEach((inputNeuron, j) => {
+      inputNeuron.links.forEach((link, i) => {
+        link.weight = arr[i][j];
+      });
+    });
   }
 }
 
