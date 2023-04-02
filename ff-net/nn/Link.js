@@ -47,6 +47,16 @@ class Link {
     this.weightGrad = this.n0.activation * this.nf.preActivationGrad;
   }
 
+  forwardRegularization(args = {}) {
+    const regularization = args.regularization ?? 0.0;
+    return regularization * this.weight * this.weight * 0.5;
+  }
+  
+  backwardRegularization(args = {}) {
+    const regularization = args.regularization ?? 0.0;
+    this.weightGrad += regularization * this.weight;
+  }
+
   optimStep(lr) {
     if (lr == null) {
       throw new Error("lr required");

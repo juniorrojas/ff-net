@@ -151,16 +151,6 @@ class Sequential {
     }
   }
 
-  forwardRegularization(args = {}) {
-    const regularization = args.regularization ?? 0.0;
-    let loss = 0.0;
-    this.links.forEach(link => {
-      const w = link.weight;
-      loss += 0.5 * regularization * w * w;
-    });
-    return loss;
-  }
-
   backward(args = {}) {
     let regularizationLoss = 0;
     
@@ -175,10 +165,19 @@ class Sequential {
     // return regularizationLoss;
   }
 
-  backwardRegularization(args = {}) {
+  forwardRegularization(args = {}) {
     const regularization = args.regularization ?? 0.0;
+    let loss = 0.0;
     this.links.forEach(link => {
-      link.weightGrad += regularization * link.weight;
+      const w = link.weight;
+      loss += 0.5 * regularization * w * w;
+    });
+    return loss;
+  }
+
+  backwardRegularization(args = {}) {
+    this.links.forEach(link => {
+      link.backwardRegularization(args);
     });
   }
 
