@@ -5,12 +5,17 @@ const DragBehavior = require("./DragBehavior");
 class DataCanvas {
   constructor(args = {}) {
     this.dataPoints = [];
-    const canvas = this.domElement = document.createElement("canvas");
-    canvas.width = args.domWidth ?? 250;
-    canvas.height = args.domHeight ?? 250;
-    
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
-    this.ctx = ctx;
+
+    const headless = this.headless = args.headless ?? false;
+
+    if (!headless) {
+      const canvas = this.domElement = document.createElement("canvas");
+      canvas.width = args.domWidth ?? 250;
+      canvas.height = args.domHeight ?? 250;
+
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      this.ctx = ctx;
+    }
 
     this.width = args.dataWidth ?? 50;
     this.height = args.dataHeight ?? 50;
@@ -22,9 +27,11 @@ class DataCanvas {
       }
     }
 
-    this.dragBehavior = new DragBehavior(canvas);
-    this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
-    this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
+    if (!headless) {
+      this.dragBehavior = new DragBehavior(canvas);
+      this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
+      this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
+    }
   }
 
   addDataPoint(x, y, label) {
