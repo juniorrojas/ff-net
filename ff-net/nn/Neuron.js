@@ -43,7 +43,8 @@ class Neuron {
     this.activation = sigmoid(this.preActivation);
   }
 
-  backward(regularization) {
+  backward(args = {}) {
+    const regularization = args.regularization ?? 0;
     let regularizationError = 0;
 
     this.links.forEach((link) => {
@@ -54,7 +55,7 @@ class Neuron {
     this.biasGrad = this.preActivationGrad;
     
     this.backLinks.forEach((link) => {
-      regularizationError += link.backward(regularization);
+      regularizationError += link.backward(args);
     });
     
     return regularizationError;

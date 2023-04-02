@@ -153,14 +153,13 @@ class Sequential {
 
   backward(args = {}) {
     const lr = args.lr ?? 0;
-    const regularization = args.regularization ?? 0;
 
     let regularizationLoss = 0;
     
     for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
-        regularizationLoss += neuron.backward(regularization);
+        regularizationLoss += neuron.backward(args);
       });
     }
     

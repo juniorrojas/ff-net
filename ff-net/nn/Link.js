@@ -43,7 +43,8 @@ class Link {
     path.setAttribute("stroke", color);
   }
 
-  backward(regularization) {
+  backward(args = {}) {
+    const regularization = args.regularization ?? 0;
     let regularizationError = 0;
     this.weightGrad = this.n0.activation * this.nf.preActivationGrad;
     // regularization error = 0.5 * regularization * weight^2
