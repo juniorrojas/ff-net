@@ -27,6 +27,10 @@ class DataCanvas {
       this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
       this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
     }
+
+    this.fragmentShader = (x, y) => {
+      return 0.5;
+    }
   }
 
   clearPixels() {
@@ -39,35 +43,34 @@ class DataCanvas {
     }
   }
 
-  addDataPoint(x, y, label) {
-    const dataPoint = new DataPoint(this, x, y, label);
-    this.dataPoints.push(dataPoint);
-    return dataPoint;
+  updatePixels() {
+    const width = this.dataWidth;
+    const height = this.dataHeight;
+    for (let i = 0; i < width; i++) {
+      for (let j = 0; j < height; j++) {
+        const p = this.fragmentShader(i / width, j / height);
+        if (p < 0 || p > 1) {
+          throw new Error(`pixel value must be between 0 and 1, found ${p}`);
+        }
+        const color = Color.lightRed.blend(Color.lightBlue, p);
+        this.pixelColors[i][j] = color;
+      }
+    }
   }
 
-  clear() {
-    this.dataPoints = [];
-  }
-
-  render(classify) {
-    const ctx = this.ctx;
+  flushPixels() {
     const canvas = this.domElement;
+    const ctx = this.ctx;
+
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
     const width = this.dataWidth;
     const height = this.dataHeight;
 
-    for (let i = 0; i < width; i++) {
-      for (let j = 0; j < height; j++) {
-        const label = classify(i / width, j / height);
-        const color = Color.lightRed.blend(Color.lightBlue, label);
-        this.pixelColors[i][j] = color;
-      }
-    }
-
     const fWidth = canvasWidth / width;
     const fHeight = canvasHeight / height;
+
     const canvasImageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     for (let i = 0; i < canvasImageData.data.length / 4; i++) {
@@ -83,7 +86,23 @@ class DataCanvas {
       canvasImageData.data[offset + 3] = 255;
     }
     ctx.putImageData(canvasImageData, 0, 0);
+  }
 
+  addDataPoint(x, y, label) {
+    const dataPoint = new DataPoint(this, x, y, label);
+    this.dataPoints.push(dataPoint);
+    return dataPoint;
+  }
+
+  clear() {
+    this.dataPoints = [];
+  }
+
+  render() {
+    this.updatePixels();
+    if (!this.headless) {
+      this.flushPixels(); 
+    }
     this.dataPoints.forEach((dataPoint) => dataPoint.render());
   }
 
