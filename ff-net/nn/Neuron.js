@@ -19,9 +19,9 @@ class Neuron {
     this.preActivation = 0;
     this.activation = sigmoid(this.bias);
 
-    this.dActivation = 0;
-    this.dPreActivation = 0;
-    this.dBias = 0;
+    this.activationGrad = 0;
+    this.preActivationGrad = 0;
+    this.biasGrad = 0;
     
     const headless = group.parent.headless;
     this.headless = headless;
@@ -46,11 +46,11 @@ class Neuron {
     let regularizationError = 0;
 
     this.links.forEach((link) => {
-      this.dActivation += link.weight * link.dWeight;
+      this.activationGrad += link.weight * link.weightGrad;
     });
     
-    this.dPreActivation = this.dActivation * dSigmoid(this.preActivation);
-    this.dBias = this.dPreActivation;
+    this.preActivationGrad = this.activationGrad * dSigmoid(this.preActivation);
+    this.biasGrad = this.preActivationGrad;
     
     this.backLinks.forEach((link) => {
       regularizationError += link.backward(regularization);
@@ -71,7 +71,7 @@ class Neuron {
   }
 
   optimStep(lr) {
-    this.bias -= lr * this.dBias;
+    this.bias -= lr * this.biasGrad;
   }
 
   render() {
@@ -140,9 +140,9 @@ class Neuron {
   reset() {
     this.preActivation = 0;
     this.activation = sigmoid(this.bias);
-    this.dActivation = 0;
-    this.dPreActivation = 0;
-    this.dBias = 0;
+    this.activationGrad = 0;
+    this.preActivationGrad = 0;
+    this.biasGrad = 0;
   }
 
   toData() {

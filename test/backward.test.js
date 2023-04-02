@@ -33,10 +33,10 @@ test("backward", () => {
   expect(outputNeuron.activation).toBe(0.5);
 
   // backward
-  outputNeuron.dActivation = 1;
+  outputNeuron.activationGrad = 1;
   model.backward();
 
-  expect(outputNeuron.dPreActivation).toBe(0.25);
-  expect(link.dWeight).toBe(0);
-  expect(outputNeuron.dBias).toBe(0.25);
+  expect(outputNeuron.preActivationGrad).toBe(0.25);
+  expect(link.weightGrad).toBe(0);
+  expect(outputNeuron.biasGrad).toBe(0.25);
 });

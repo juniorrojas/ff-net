@@ -53,7 +53,7 @@ class App {
       const model = this.model;
       const dataCanvas = this.dataCanvas;
       const trainOutput = model.train({
-        learningRate: this.controlPanel.learningRate,
+        lr: this.controlPanel.learningRate,
         regularization: this.controlPanel.regularization,
         iters: 10,
         dataCanvas: dataCanvas

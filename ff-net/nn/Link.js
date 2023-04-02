@@ -11,7 +11,7 @@ class Link {
     
     if (weight == null) this.weight = 1;
     else this.weight = weight;
-    this.dWeight = 0;
+    this.weightGrad = 0;
     
     const headless = neuralNet.headless;
     this.headless = headless;
@@ -45,15 +45,15 @@ class Link {
 
   backward(regularization) {
     let regularizationError = 0;
-    this.dWeight = this.n0.activation * this.nf.dPreActivation;
+    this.weightGrad = this.n0.activation * this.nf.preActivationGrad;
     // regularization error = 0.5 * regularization * weight^2
-    this.dWeight += regularization * this.weight;
+    this.weightGrad += regularization * this.weight;
     regularizationError += 0.5 * regularization * this.weight * this.weight;
     return regularizationError;
   }
 
   optimStep(lr) {
-    this.weight -= lr * this.dWeight;
+    this.weight -= lr * this.weightGrad;
   }
 
   toData() {
