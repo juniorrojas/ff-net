@@ -30,8 +30,8 @@ class ControlPanel {
     const uiLearningRate = this.addRow(
       "slider", "learning rate",
       {
-        min: 0.01,
-        max: 0.8,
+        min: 0.005,
+        max: 0.5,
         step: 0.01,
         value: this.learningRate
       }
