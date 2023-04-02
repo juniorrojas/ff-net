@@ -1,12 +1,13 @@
 const radius = 12;
 const strokeWidth = 2;
 
-function sigmoid(n) {
-  return 1 / (1 + Math.exp(-n));
+function sigmoid(x) {
+  return 1 / (1 + Math.exp(-x));
 }
 
-function dSigmoid(n) {
-  return sigmoid(n) * (1 - sigmoid(n));
+function sigmoidBackward(x, outputGrad) {
+  const s = sigmoid(x);
+  return s * (1 - s) * outputGrad;
 }
 
 class Neuron {
@@ -49,7 +50,7 @@ class Neuron {
       this.activationGrad += link.weight * link.weightGrad;
     });
     
-    this.preActivationGrad = this.activationGrad * dSigmoid(this.preActivation);
+    this.preActivationGrad = sigmoidBackward(this.preActivation, this.activationGrad);
     this.biasGrad = this.preActivationGrad;
     
     this.backLinks.forEach((link) => {
