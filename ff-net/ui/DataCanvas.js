@@ -8,7 +8,9 @@ class DataCanvas {
     const canvas = this.domElement = document.createElement("canvas");
     canvas.width = args.domWidth ?? 250;
     canvas.height = args.domHeight ?? 250;
-    this.ctx = canvas.getContext("2d");
+    
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    this.ctx = ctx;
 
     this.width = args.dataWidth ?? 50;
     this.height = args.dataHeight ?? 50;
@@ -86,7 +88,7 @@ class DataCanvas {
       if (dx * dx + dy * dy <= selectionRadius * selectionRadius) {
         const dragState = this.dragBehavior.dragState = {};
         dragState.dataPoint = dataPoint;
-        dragState.offset = {x: dx, y: dy};
+        dragState.offset = { x: dx, y: dy };
         break;
       }
     };
