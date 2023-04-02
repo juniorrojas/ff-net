@@ -124,10 +124,6 @@ class Sequential {
     this.links.forEach((link) => link.render());
   }
 
-  reset() {
-    this.neuronGroups.forEach((group) => group.reset());
-  }
-
   zeroGrad() {
     this.neurons.forEach(neuron => {
       neuron.zeroGrad();
@@ -216,7 +212,6 @@ class Sequential {
     for (let i = 0; i < iters; i++) {
       dataLoss = 0;
       dataCanvas.dataPoints.forEach((dataPoint) => {
-        this.reset();
         // TODO generalize, do not assume 2D input
         inputNeuronGroup.neurons[0].activation = dataPoint.x;
         inputNeuronGroup.neurons[1].activation = dataPoint.y;
@@ -230,7 +225,7 @@ class Sequential {
         
         this.zeroGrad();
         neuron.activationGrad = -d;
-        
+
         regularizationLoss = this.forwardRegularization({
           regularization: regularization
         });

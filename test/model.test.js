@@ -60,6 +60,7 @@ test("data loss", () => {
   ];
   const l2bGrad = [0.2270];
 
+  model.zeroGrad();
   outputNeuron.activationGrad = 1.0;
   model.backward();
   expectCloseArrays(l1.getWeightGradArray(), l1wGrad);
@@ -119,6 +120,7 @@ test("regularization loss", () => {
   ];
   const l2bGrad = [0.2270];
 
+  model.zeroGrad();
   outputNeuron.activationGrad = 1.0;
   model.backward();
   model.backwardRegularization({ regularization: reg });
