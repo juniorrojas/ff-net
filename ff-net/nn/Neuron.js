@@ -56,17 +56,6 @@ class Neuron {
     });
   }
 
-  getLinkToNeuron(dstNeuron) {
-    // TODO use a map to avoid linear search
-    for (let i = 0; i < this.links.length; i++) {
-      const link = this.links[i];
-      if (link.nf == dstNeuron) {
-        return link;
-      }
-    }
-    return null;
-  }
-
   optimStep(lr) {
     if (lr == null) {
       throw new Error("lr required");
