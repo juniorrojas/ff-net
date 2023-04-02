@@ -17,20 +17,25 @@ class DataCanvas {
       this.ctx = ctx;
     }
 
-    this.width = args.dataWidth ?? 50;
-    this.height = args.dataHeight ?? 50;
-    this.pixelColors = [];
-    for (let i = 0; i < this.width; i++) {
-      this.pixelColors.push([]);
-      for (let j = 0; j < this.height; j++) {
-        this.pixelColors[i].push(0);
-      }
-    }
+    this.dataWidth = args.dataWidth ?? 50;
+    this.dataHeight = args.dataHeight ?? 50;
+    this.clearPixels();
 
     if (!headless) {
+      const canvas = this.domElement;
       this.dragBehavior = new DragBehavior(canvas);
       this.dragBehavior.processDragBegin = this.processDragBegin.bind(this);
       this.dragBehavior.processDragProgress = this.processDragProgress.bind(this);
+    }
+  }
+
+  clearPixels() {
+    this.pixelColors = [];
+    for (let i = 0; i < this.dataWidth; i++) {
+      this.pixelColors.push([]);
+      for (let j = 0; j < this.dataHeight; j++) {
+        this.pixelColors[i].push(0);
+      }
     }
   }
 
@@ -50,8 +55,8 @@ class DataCanvas {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    const width = this.width;
-    const height = this.height;
+    const width = this.dataWidth;
+    const height = this.dataHeight;
 
     for (let i = 0; i < width; i++) {
       for (let j = 0; j < height; j++) {
