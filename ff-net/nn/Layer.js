@@ -18,6 +18,14 @@ class Layer {
     return b;
   }
 
+  getBiasGradArray() {
+    const b = [];
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      b.push(neuron.biasGrad);
+    });
+    return b;
+  }
+
   setBiasFromArray(arr) {
     const outputNeurons = this.outputNeuronGroup.neurons;
     if (arr.length != outputNeurons.length) {
@@ -44,6 +52,28 @@ class Layer {
           throw new Error("link not found");
         }
         wi.push(link.weight);
+      }
+    }
+
+    return w;
+  }
+
+  getWeightGradArray() {
+    const inputSize = this.inputNeuronGroup.numNeurons();
+    const outputSize = this.outputNeuronGroup.numNeurons();
+
+    const w = [];
+    for (let i = 0; i < outputSize; i++) {
+      const dstNeuron = this.outputNeuronGroup.neurons[i];
+      const wi = [];
+      w.push(wi);
+      for (let j = 0; j < inputSize; j++) {
+        const srcNeuron = this.inputNeuronGroup.neurons[j];
+        const link = srcNeuron.getLinkToNeuron(dstNeuron);
+        if (link == null) {
+          throw new Error("link not found");
+        }
+        wi.push(link.weightGrad);
       }
     }
 

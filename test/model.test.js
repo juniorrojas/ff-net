@@ -1,5 +1,16 @@
 const ffnet = require("ff-net");
 
+function expectCloseArrays(a, b) {
+  if ((typeof a == "number") && (typeof b == "number")) {
+    expect(a).toBeCloseTo(b);
+  }
+
+  expect(a.length).toBe(b.length);
+  for (let i = 0; i < a.length; i++) {
+    expectCloseArrays(a[i], b[i]);
+  }
+}
+
 test("model", () => {
   const model = new ffnet.Sequential({
     headless: true
@@ -7,17 +18,6 @@ test("model", () => {
   model.addNeuronGroup(2);
   const l1 = model.addFullyConnectedLayer(3);
   const l2 = model.addFullyConnectedLayer(1);
-
-  // const l1w = [
-  //   [ 0.0017,  0.0026],
-  //   [-0.0019, -0.0029],
-  //   [-0.0013, -0.0019]
-  // ];
-  // const l1b = [0.0086, -0.0097, -0.0064];
-  // const l2w = [
-  //   [0.1191, 0.1297, 0.1101]
-  // ];
-  // const l2b = [0.2270];
 
   const l1w = [
     [-0.0053,  0.3793],
@@ -42,13 +42,28 @@ test("model", () => {
 
   const reg = 0.0;
   const inputNeuronGroup = model.getInputNeuronGroup();
-  model.reset();
   inputNeuronGroup.neurons[0].activation = 0.2;
   inputNeuronGroup.neurons[1].activation = 0.3;
   model.forward({ regularization: reg });
-  // model.backward({ regularization: reg });
-
-  const output = model.getOutputNeuronGroup().neurons[0].activation;
-  // console.log(output);
+  const outputNeuron =  model.getOutputNeuronGroup().neurons[0];
+  const output = outputNeuron.activation;
   expect(output).toBeCloseTo(0.3484);
+
+  const l1wGrad = [
+    [ 0.0017,  0.0026],
+    [-0.0019, -0.0029],
+    [-0.0013, -0.0019]
+  ];
+  const l1bGrad = [0.0086, -0.0097, -0.0064];
+  const l2wGrad = [
+    [0.1191, 0.1297, 0.1101]
+  ];
+  const l2bGrad = [0.2270];
+
+  outputNeuron.activationGrad = 1.0;
+  model.backward({ regularization: reg });
+  expectCloseArrays(l1.getWeightGradArray(), l1wGrad);
+  expectCloseArrays(l1.getBiasGradArray(), l1bGrad);
+  expectCloseArrays(l2.getWeightGradArray(), l2wGrad);
+  expectCloseArrays(l2.getBiasGradArray(), l2bGrad);
 });
