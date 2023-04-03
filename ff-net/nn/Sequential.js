@@ -179,23 +179,6 @@ class Sequential {
     });
   }
 
-  optimStep(lr) {
-    if (lr == null) {
-      throw new Error("lr required");
-    }
-
-    this.links.forEach((link) => {
-      link.optimStep(lr);
-    });
-    
-    for (let i = 1; i < this.neuronGroups.length; i++) {
-      const group = this.neuronGroups[i];
-      group.neurons.forEach((neuron) => {
-        neuron.optimStep(lr);
-      });
-    }
-  }
-
   forwardData(x, target, ctx) {
     const inputNeuronGroup = this.getInputNeuronGroup();
     const inputNeurons = inputNeuronGroup.neurons;
@@ -221,6 +204,23 @@ class Sequential {
     const outputNeuron = this.getOutputNeuronGroup().neurons[0];
     outputNeuron.activationGrad = -ctx.d;
     this.backward();
+  }
+
+  optimStep(lr) {
+    if (lr == null) {
+      throw new Error("lr required");
+    }
+
+    this.links.forEach((link) => {
+      link.optimStep(lr);
+    });
+    
+    for (let i = 1; i < this.neuronGroups.length; i++) {
+      const group = this.neuronGroups[i];
+      group.neurons.forEach((neuron) => {
+        neuron.optimStep(lr);
+      });
+    }
   }
 
   train(args) {
