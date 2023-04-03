@@ -157,15 +157,9 @@ class Sequential {
   }
 
   backward(args = {}) {
-    // for (let i = this.neuronGroups.length - 1; i >= 0; i--) {
-    //   const group = this.neuronGroups[i];
-    //   group.neurons.forEach((neuron) => {
-    //     neuron.backward(args);
-    //   });
-    // }
     for (let i = this.numLayers() - 1; i >= 0; i--) {
       const layer = this.layers[i];
-      layer.backward();
+      layer.backward(args);
     }
   }
 

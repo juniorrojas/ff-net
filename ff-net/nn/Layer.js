@@ -10,6 +10,12 @@ class Layer {
     this.outputNeuronGroup = args.outputNeuronGroup;
   }
 
+  backward(args = {}) {
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      neuron.backward(args);
+    });
+  }
+
   getBiasArray() {
     const b = [];
     this.outputNeuronGroup.neurons.forEach(neuron => {
