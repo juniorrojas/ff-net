@@ -11,8 +11,17 @@ class Layer {
   }
 
   backward(args = {}) {
+    const links = [];
+    
     this.outputNeuronGroup.neurons.forEach(neuron => {
       neuron.backward(args);
+      neuron.backLinks.forEach((link) => {
+        links.push(link);
+      });
+    });
+
+    links.forEach(link => {
+      link.backward(args);
     });
   }
 
