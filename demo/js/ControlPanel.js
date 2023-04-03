@@ -1,5 +1,4 @@
-const ffnet = require("ff-net");
-const LossPlot = ffnet.ui.LossPlot;
+const LossPlot = require("./LossPlot");
 const Slider = require("./Slider");
 
 class ControlPanel {
@@ -58,7 +57,6 @@ class ControlPanel {
     
     row = this.addRow("full");
     const lossPlot = this.lossPlot = new LossPlot();
-    lossPlot.domElement.className = "loss-plot-canvas";
     row.cells[0].appendChild(lossPlot.domElement);
   }
 
