@@ -7,7 +7,7 @@ class ControlPanel {
     this.app = args.app;
     
     this.learningRate = 0.08;
-    this.regularization = 0.00002;
+    this.regularization = 0.001;
     
     const div = this.domElement = document.createElement("div");
     div.classList.add("control-panel");
@@ -44,8 +44,8 @@ class ControlPanel {
       "slider", "regularization",
       {
         min: 0,
-        max: 0.0001,
-        step: 0.000001,
+        max: 0.0051,
+        step: 0.00001,
         value: this.regularization
       }
     );

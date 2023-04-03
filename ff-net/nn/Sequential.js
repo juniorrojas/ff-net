@@ -163,6 +163,33 @@ class Sequential {
     }
   }
 
+  forwardData(x, target, ctx) {
+    const inputNeuronGroup = this.getInputNeuronGroup();
+    const inputNeurons = inputNeuronGroup.neurons;
+    if (x.length != inputNeurons.length) {
+      throw new Error(`invalid input, expected ${inputNeurons.length}, found ${x.length}`);
+    }
+    inputNeurons.forEach((inputNeuron, i) => {
+      const xi = x[i];
+      if (typeof xi !== "number") {
+        throw new Error(`invalid input, expected number, found ${xi}`);
+      }
+      inputNeuron.activation = xi;
+    });
+    this.forward();
+    const outputNeuron = this.getOutputNeuronGroup().neurons[0];
+    const output = outputNeuron.activation;
+    const d = target - output;
+    ctx.d = d;
+    return 0.5 * d * d;
+  }
+
+  backwardData(ctx) {
+    const outputNeuron = this.getOutputNeuronGroup().neurons[0];
+    outputNeuron.activationGrad = -ctx.d;
+    this.backward();
+  }
+
   forwardRegularization(args = {}) {
     const regularization = args.regularization ?? 0.0;
     let loss = 0.0;
@@ -206,39 +233,27 @@ class Sequential {
 
     let regularizationLoss, dataLoss;
 
-    const inputNeuronGroup = this.getInputNeuronGroup();
-    const outputNeuronGroup = this.getOutputNeuronGroup();
-
     for (let i = 0; i < iters; i++) {
       dataLoss = 0;
       // TODO batch mode?
       dataPoints.forEach((dataPoint) => {
-        // forward
-        // TODO generalize, do not assume 2D input
-        inputNeuronGroup.neurons[0].activation = dataPoint.x;
-        inputNeuronGroup.neurons[1].activation = dataPoint.y;
-        this.forward();
-        const neuron = outputNeuronGroup.neurons[0];
-        const output = neuron.activation;
-        const d = dataPoint.label - output;
-        // TODO implement forwardData
-        dataLoss += 0.5 * d * d;
-        // TODO avoid computing regularization for every data point
-        regularizationLoss = this.forwardRegularization({
-          regularization: regularization
-        });
-        
-        // backward
+        const input = [dataPoint.x, dataPoint.y];
+        const target = dataPoint.label;
+        const dataCtx = {};
+        dataLoss += this.forwardData(input, target, dataCtx);
         this.zeroGrad();
-        neuron.activationGrad = -d;
-        this.backward();
-        this.backwardRegularization({
-          regularization: regularization
-        });
-        
-        // optim
+        this.backwardData(dataCtx);
         this.optimStep(lr);
       });
+
+      regularizationLoss = this.forwardRegularization({
+        regularization: regularization
+      });
+      this.zeroGrad();
+      this.backwardRegularization({
+        regularization: regularization
+      });
+      this.optimStep(lr);
     }
 
     return {
