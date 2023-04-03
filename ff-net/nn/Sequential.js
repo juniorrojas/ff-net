@@ -210,12 +210,17 @@ class Sequential {
       inputNeuron.activation = xi;
     });
     this.forward();
-    // TODO check that the output group has only one neuron?
     const outputNeuron = this.getOutputNeuronGroup().neurons[0];
     const output = outputNeuron.activation;
     const d = target - output;
     ctx.d = d;
     return 0.5 * d * d;
+  }
+
+  backwardData(ctx) {
+    const outputNeuron = this.getOutputNeuronGroup().neurons[0];
+    outputNeuron.activationGrad = -ctx.d;
+    this.backward();
   }
 
   train(args) {
@@ -228,23 +233,16 @@ class Sequential {
 
     let regularizationLoss, dataLoss;
 
-    const inputNeuronGroup = this.getInputNeuronGroup();
-    const outputNeuronGroup = this.getOutputNeuronGroup();
-
     for (let i = 0; i < iters; i++) {
       dataLoss = 0;
       // TODO batch mode?
       dataPoints.forEach((dataPoint) => {
-        const neuron = outputNeuronGroup.neurons[0];
         const input = [dataPoint.x, dataPoint.y];
         const target = dataPoint.label;
         const dataCtx = {};
         dataLoss += this.forwardData(input, target, dataCtx);
-
         this.zeroGrad();
-        // TODO backwardData
-        neuron.activationGrad = -dataCtx.d;
-        this.backward();
+        this.backwardData(dataCtx);
         this.optimStep(lr);
       });
 
