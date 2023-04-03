@@ -119,11 +119,6 @@ class Sequential {
     return link;
   }
 
-  render() {
-    this.neuronGroups.forEach((group) => group.render());
-    this.links.forEach((link) => link.render());
-  }
-
   zeroGrad() {
     this.neurons.forEach(neuron => {
       neuron.zeroGrad();
@@ -273,6 +268,11 @@ class Sequential {
       dataLoss: dataLoss,
       regularizationLoss: regularizationLoss
     }
+  }
+
+  render() {
+    this.neuronGroups.forEach((group) => group.render());
+    this.links.forEach((link) => link.render());
   }
 
   toData() {
