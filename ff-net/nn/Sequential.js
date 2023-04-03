@@ -196,7 +196,7 @@ class Sequential {
     }
   }
 
-  forwardData(x, target) {
+  forwardData(x, target, ctx) {
     const inputNeuronGroup = this.getInputNeuronGroup();
     const inputNeurons = inputNeuronGroup.neurons;
     if (x.length != inputNeurons.length) {
@@ -214,7 +214,8 @@ class Sequential {
     const outputNeuron = this.getOutputNeuronGroup().neurons[0];
     const output = outputNeuron.activation;
     const d = target - output;
-    return [d, 0.5 * d * d];
+    ctx.d = d;
+    return 0.5 * d * d;
   }
 
   train(args) {
@@ -234,19 +235,15 @@ class Sequential {
       dataLoss = 0;
       // TODO batch mode?
       dataPoints.forEach((dataPoint) => {
-        // TODO generalize, do not assume 2D input
-        // inputNeuronGroup.neurons[0].activation = dataPoint.x;
-        // inputNeuronGroup.neurons[1].activation = dataPoint.y;
-        // this.forward();
         const neuron = outputNeuronGroup.neurons[0];
-        // const output = neuron.activation;
-        // const d = dataPoint.label - output;
-        // dataLoss += 0.5 * d * d;
-        const [d, l] = this.forwardData([dataPoint.x, dataPoint.y], dataPoint.label);
-        dataLoss += l;
+        const input = [dataPoint.x, dataPoint.y];
+        const target = dataPoint.label;
+        const dataCtx = {};
+        dataLoss += this.forwardData(input, target, dataCtx);
 
         this.zeroGrad();
-        neuron.activationGrad = -d;
+        // TODO backwardData
+        neuron.activationGrad = -dataCtx.d;
         this.backward();
         this.optimStep(lr);
       });
