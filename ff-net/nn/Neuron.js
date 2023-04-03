@@ -50,10 +50,6 @@ class Neuron {
     
     this.preActivationGrad = sigmoidBackward(this.preActivation, this.activationGrad);
     this.biasGrad = this.preActivationGrad;
-    
-    this.backLinks.forEach((link) => {
-      link.backward(args);
-    });
   }
 
   optimStep(lr) {
