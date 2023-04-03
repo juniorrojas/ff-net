@@ -15,7 +15,7 @@ class Layer {
     
     this.outputNeuronGroup.neurons.forEach(neuron => {
       neuron.backward(args);
-      neuron.backLinks.forEach((link) => {
+      neuron.inputLinks.forEach((link) => {
         links.push(link);
       });
     });
@@ -57,7 +57,7 @@ class Layer {
     this.outputNeuronGroup.neurons.forEach(neuron => {
       const wi = [];
       w.push(wi);
-      neuron.backLinks.forEach(link => {
+      neuron.inputLinks.forEach(link => {
         wi.push(link.weight);
       });      
     });
@@ -71,7 +71,7 @@ class Layer {
     this.outputNeuronGroup.neurons.forEach(neuron => {
       const wi = [];
       w.push(wi);
-      neuron.backLinks.forEach(link => {
+      neuron.inputLinks.forEach(link => {
         wi.push(link.weightGrad);
       });      
     });

@@ -111,7 +111,7 @@ class Sequential {
   addLink(n0, nf, weight) {
     const link = new Link(this, n0, nf, weight);
     n0.links.push(link);
-    nf.backLinks.push(link);
+    nf.inputLinks.push(link);
     this.links.push(link);
     if (!this.headless) {
       this.svgLinks.appendChild(link.svgElement);

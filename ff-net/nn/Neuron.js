@@ -14,7 +14,7 @@ class Neuron {
   constructor(group, bias) {
     this.group = group;
     this.links = [];
-    this.backLinks = [];
+    this.inputLinks = [];
 
     this.bias = bias;
     this.preActivation = 0;
@@ -37,7 +37,7 @@ class Neuron {
   forward() {
     this.preActivation = 0;
     this.preActivation += this.bias;
-    this.backLinks.forEach((link) => {
+    this.inputLinks.forEach((link) => {
       this.preActivation += link.weight * link.n0.activation;
     });
     this.activation = sigmoid(this.preActivation);
@@ -67,7 +67,7 @@ class Neuron {
     circle.setAttribute("cx", position.x);
     circle.setAttribute("cy", position.y);
 
-    const isInput = this.backLinks.length == 0;
+    const isInput = this.inputLinks.length == 0;
     let fillColor;
     if (isInput) {
       fillColor = Color.blue.blend(Color.red, 0.6);
