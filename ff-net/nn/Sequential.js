@@ -255,6 +255,16 @@ class Sequential {
     data.neuronGroups.forEach((groupData) => {
       NeuronGroup.fromData(this, groupData);
     });
+
+    for (let i = 1; i < this.numNeuronGroups(); i++) {
+      const inputNeuronGroup = this.neuronGroups[i - 1];
+      const outputNeuronGroup = this.neuronGroups[i];
+      const layer = new Layer({
+        inputNeuronGroup: inputNeuronGroup,
+        outputNeuronGroup: outputNeuronGroup
+      });
+      this.layers.push(layer);
+    }
   
     data.links.forEach((linkData) => {
       Link.fromData(this, linkData);
