@@ -1,15 +1,7 @@
 const ffnet = require("ff-net");
+const { toBeCloseToArray } = require("./utils");
 
-function expectCloseArrays(a, b) {
-  if ((typeof a == "number") && (typeof b == "number")) {
-    expect(a).toBeCloseTo(b);
-  }
-
-  expect(a.length).toBe(b.length);
-  for (let i = 0; i < a.length; i++) {
-    expectCloseArrays(a[i], b[i]);
-  }
-}
+expect.extend({ toBeCloseToArray });
 
 test("data loss", () => {
   const model = new ffnet.Sequential({
@@ -63,10 +55,10 @@ test("data loss", () => {
   model.zeroGrad();
   outputNeuron.activationGrad = 1.0;
   model.backward();
-  expectCloseArrays(l1.getWeightGradArray(), l1wGrad);
-  expectCloseArrays(l1.getBiasGradArray(), l1bGrad);
-  expectCloseArrays(l2.getWeightGradArray(), l2wGrad);
-  expectCloseArrays(l2.getBiasGradArray(), l2bGrad);
+  expect(l1.getWeightGradArray()).toBeCloseToArray(l1wGrad);
+  expect(l1.getBiasGradArray()).toBeCloseToArray(l1bGrad);
+  expect(l2.getWeightGradArray()).toBeCloseToArray(l2wGrad);
+  expect(l2.getBiasGradArray()).toBeCloseToArray(l2bGrad);
 });
 
 test("regularization loss", () => {
@@ -124,8 +116,8 @@ test("regularization loss", () => {
   outputNeuron.activationGrad = 1.0;
   model.backward();
   model.backwardRegularization({ regularization: reg });
-  expectCloseArrays(l1.getWeightGradArray(), l1wGrad);
-  expectCloseArrays(l1.getBiasGradArray(), l1bGrad);
-  expectCloseArrays(l2.getWeightGradArray(), l2wGrad);
-  expectCloseArrays(l2.getBiasGradArray(), l2bGrad);
+  expect(l1.getWeightGradArray()).toBeCloseToArray(l1wGrad);
+  expect(l1.getBiasGradArray()).toBeCloseToArray(l1bGrad);
+  expect(l2.getWeightGradArray()).toBeCloseToArray(l2wGrad);
+  expect(l2.getBiasGradArray()).toBeCloseToArray(l2bGrad);
 });
