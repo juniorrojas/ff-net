@@ -13,7 +13,7 @@ function sigmoidBackward(x, outputGrad) {
 class Neuron {
   constructor(group, bias) {
     this.group = group;
-    this.links = [];
+    this.outputLinks = [];
     this.inputLinks = [];
 
     this.bias = bias;
@@ -44,7 +44,7 @@ class Neuron {
   }
 
   backward(args = {}) {
-    this.links.forEach((link) => {
+    this.outputLinks.forEach((link) => {
       this.activationGrad += link.weight * link.nf.preActivationGrad;
     });
     

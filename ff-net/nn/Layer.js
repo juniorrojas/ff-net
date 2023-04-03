@@ -81,7 +81,7 @@ class Layer {
 
   setWeightFromArray(arr) {
     this.inputNeuronGroup.neurons.forEach((inputNeuron, j) => {
-      inputNeuron.links.forEach((link, i) => {
+      inputNeuron.outputLinks.forEach((link, i) => {
         link.weight = arr[i][j];
       });
     });

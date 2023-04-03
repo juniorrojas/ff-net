@@ -110,7 +110,7 @@ class Sequential {
 
   addLink(n0, nf, weight) {
     const link = new Link(this, n0, nf, weight);
-    n0.links.push(link);
+    n0.outputLinks.push(link);
     nf.inputLinks.push(link);
     this.links.push(link);
     if (!this.headless) {
