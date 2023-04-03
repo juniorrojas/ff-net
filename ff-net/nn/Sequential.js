@@ -163,22 +163,6 @@ class Sequential {
     }
   }
 
-  forwardRegularization(args = {}) {
-    const regularization = args.regularization ?? 0.0;
-    let loss = 0.0;
-    this.links.forEach(link => {
-      const w = link.weight;
-      loss += 0.5 * regularization * w * w;
-    });
-    return loss;
-  }
-
-  backwardRegularization(args = {}) {
-    this.links.forEach(link => {
-      link.backwardRegularization(args);
-    });
-  }
-
   forwardData(x, target, ctx) {
     const inputNeuronGroup = this.getInputNeuronGroup();
     const inputNeurons = inputNeuronGroup.neurons;
@@ -204,6 +188,22 @@ class Sequential {
     const outputNeuron = this.getOutputNeuronGroup().neurons[0];
     outputNeuron.activationGrad = -ctx.d;
     this.backward();
+  }
+
+  forwardRegularization(args = {}) {
+    const regularization = args.regularization ?? 0.0;
+    let loss = 0.0;
+    this.links.forEach(link => {
+      const w = link.weight;
+      loss += 0.5 * regularization * w * w;
+    });
+    return loss;
+  }
+
+  backwardRegularization(args = {}) {
+    this.links.forEach(link => {
+      link.backwardRegularization(args);
+    });
   }
 
   optimStep(lr) {
