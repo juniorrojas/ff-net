@@ -48,8 +48,8 @@ class Neuron {
       this.activationGrad += link.weight * link.nf.preActivationGrad;
     });
     
-    this.preActivationGrad = sigmoidBackward(this.preActivation, this.activationGrad);
-    this.biasGrad = this.preActivationGrad;
+    this.preActivationGrad += sigmoidBackward(this.preActivation, this.activationGrad);
+    this.biasGrad += this.preActivationGrad;
   }
 
   optimStep(lr) {
