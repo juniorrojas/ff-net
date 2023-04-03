@@ -196,6 +196,27 @@ class Sequential {
     }
   }
 
+  forwardData(x, target) {
+    const inputNeuronGroup = this.getInputNeuronGroup();
+    const inputNeurons = inputNeuronGroup.neurons;
+    if (x.length != inputNeurons.length) {
+      throw new Error(`invalid input, expected ${inputNeurons.length}, found ${x.length}`);
+    }
+    inputNeurons.forEach((inputNeuron, i) => {
+      const xi = x[i];
+      if (typeof xi !== "number") {
+        throw new Error(`invalid input, expected number, found ${xi}`);
+      }
+      inputNeuron.activation = xi;
+    });
+    this.forward();
+    // TODO check that the output group has only one neuron?
+    const outputNeuron = this.getOutputNeuronGroup().neurons[0];
+    const output = outputNeuron.activation;
+    const d = target - output;
+    return [d, 0.5 * d * d];
+  }
+
   train(args) {
     const dataPoints = args.dataPoints;
     if (dataPoints == null) throw new Error("dataPoints required");
@@ -214,14 +235,16 @@ class Sequential {
       // TODO batch mode?
       dataPoints.forEach((dataPoint) => {
         // TODO generalize, do not assume 2D input
-        inputNeuronGroup.neurons[0].activation = dataPoint.x;
-        inputNeuronGroup.neurons[1].activation = dataPoint.y;
-        this.forward();
+        // inputNeuronGroup.neurons[0].activation = dataPoint.x;
+        // inputNeuronGroup.neurons[1].activation = dataPoint.y;
+        // this.forward();
         const neuron = outputNeuronGroup.neurons[0];
-        const output = neuron.activation;
-        const d = dataPoint.label - output;
-        // TODO implement forwardData
-        dataLoss += 0.5 * d * d;
+        // const output = neuron.activation;
+        // const d = dataPoint.label - output;
+        // dataLoss += 0.5 * d * d;
+        const [d, l] = this.forwardData([dataPoint.x, dataPoint.y], dataPoint.label);
+        dataLoss += l;
+
         this.zeroGrad();
         neuron.activationGrad = -d;
         this.backward();
