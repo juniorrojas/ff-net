@@ -148,13 +148,24 @@ class Sequential {
   }
 
   forward(x) {
-    // const inputNeuronGroup = this.getInputNeuronGroup();
-    // TODO set inputs
+    if (x != null) {
+      const inputNeuronGroup = this.getInputNeuronGroup();
+      // TODO check size consistency
+      inputNeuronGroup.neurons.forEach((neuron, i) => {
+        neuron.activation = x[i];
+      });
+    }
+
     for (let i = 1; i < this.neuronGroups.length; i++) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
         neuron.forward();
       });
+    }
+
+    if (x != null) {
+      const outputNeuronGroup = this.getOutputNeuronGroup();
+      return outputNeuronGroup.neurons.map(n => n.activation);
     }
   }
 

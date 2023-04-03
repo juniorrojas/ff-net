@@ -36,7 +36,7 @@ test("data loss", () => {
   const inputNeuronGroup = model.getInputNeuronGroup();
   inputNeuronGroup.neurons[0].activation = 0.2;
   inputNeuronGroup.neurons[1].activation = 0.3;
-  model.forward({ regularization: reg });
+  model.forward();
   const outputNeuron =  model.getOutputNeuronGroup().neurons[0];
   const output = outputNeuron.activation;
   expect(output).toBeCloseTo(0.3484);
