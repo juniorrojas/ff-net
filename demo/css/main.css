@@ -96,7 +96,7 @@ canvas {
   margin-right: 3px;
 }
 
-#data-canvas, .loss-plot-canvas {
+#data-canvas, .loss-plot {
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.45);
 }
 
@@ -105,16 +105,4 @@ canvas {
   width: 250px;
   height: 250px;
   min-width: 250px;
-}
-
-.loss-plot-canvas {
-  width: 500px;
-  height: 100px;
-}
-
-@media screen and (max-width: 500px) {
-  .loss-plot-canvas {
-    width: 250px;
-    height: 50px;
-  }
 }
