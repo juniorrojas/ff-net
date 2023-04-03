@@ -27,4 +27,7 @@ test("forward", () => {
   y = model.forward([0.2, 0.3]);
   expect(y).not.toBeUndefined();
   expect(y).toBeCloseToArray([0.4867, 0.4025]);
+
+  // invalid input size
+  expect(() => { model.forward([0.1, 0.2, 0.3]); }).toThrow();
 });
