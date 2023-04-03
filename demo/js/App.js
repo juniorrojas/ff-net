@@ -63,7 +63,7 @@ class App {
         lr: this.controlPanel.learningRate,
         regularization: this.controlPanel.regularization,
         iters: 10,
-        dataCanvas: dataCanvas
+        dataPoints: dataCanvas.dataPoints
       });
       
       model.render();

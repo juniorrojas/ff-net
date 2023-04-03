@@ -197,19 +197,22 @@ class Sequential {
   }
 
   train(args) {
-    // TODO decouple data from canvas
-    const dataCanvas = args.dataCanvas;
+    const dataPoints = args.dataPoints;
+    if (dataPoints == null) throw new Error("dataPoints required");
     const lr = args.lr;
-    const regularization = args.regularization;
-    const iters = args.iters;
+    if (lr == null) throw new Error("lr required");
+    const regularization = args.regularization ?? 0.0;
+    const iters = args.iters ?? 1;
 
     let regularizationLoss, dataLoss;
 
     const inputNeuronGroup = this.getInputNeuronGroup();
     const outputNeuronGroup = this.getOutputNeuronGroup();
+
     for (let i = 0; i < iters; i++) {
       dataLoss = 0;
-      dataCanvas.dataPoints.forEach((dataPoint) => {
+      // TODO batch mode?
+      dataPoints.forEach((dataPoint) => {
         // TODO generalize, do not assume 2D input
         inputNeuronGroup.neurons[0].activation = dataPoint.x;
         inputNeuronGroup.neurons[1].activation = dataPoint.y;
@@ -218,12 +221,13 @@ class Sequential {
         const neuron = outputNeuronGroup.neurons[0];
         const output = neuron.activation;
         const d = dataPoint.label - output;
-        // forwardData
+        // TODO implement forwardData
         dataLoss += 0.5 * d * d;
         
         this.zeroGrad();
         neuron.activationGrad = -d;
 
+        // TODO avoid computing regularization for every data point
         regularizationLoss = this.forwardRegularization({
           regularization: regularization
         });
