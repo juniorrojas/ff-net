@@ -147,7 +147,9 @@ class Sequential {
     });
   }
 
-  forward() {
+  forward(x) {
+    // const inputNeuronGroup = this.getInputNeuronGroup();
+    // TODO set inputs
     for (let i = 1; i < this.neuronGroups.length; i++) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
