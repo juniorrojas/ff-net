@@ -1,4 +1,4 @@
-function closeArraysCheck(a, b) {
+function toBeCloseToArray(a, b) {
   if ((typeof a == "number") && (typeof b == "number")) {
     if (Math.abs(a - b) <= 1e-3) {
       return {
@@ -26,7 +26,7 @@ function closeArraysCheck(a, b) {
   }
 
   for (let i = 0; i < a.length; i++) {
-    const r = closeArraysCheck(a[i], b[i]);
+    const r = toBeCloseToArray(a[i], b[i]);
     if (!r.pass) return r;
   }
 
@@ -36,5 +36,5 @@ function closeArraysCheck(a, b) {
 }
 
 module.exports = {
-  closeArraysCheck: closeArraysCheck
+  toBeCloseToArray
 };

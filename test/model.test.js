@@ -1,9 +1,7 @@
 const ffnet = require("ff-net");
-const { closeArraysCheck } = require("./utils");
+const { toBeCloseToArray } = require("./utils");
 
-expect.extend({
-  toBeCloseToArray: closeArraysCheck
-})
+expect.extend({ toBeCloseToArray });
 
 test("data loss", () => {
   const model = new ffnet.Sequential({
