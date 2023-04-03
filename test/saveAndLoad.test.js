@@ -7,6 +7,7 @@ test("save and load", () => {
   model.addFullyConnectedLayer(5);
 
   expect(model.numNeuronGroups()).toBe(3);
+  expect(model.numLayers()).toBe(2);
 
   const data = model.toData();
   const loadedModel = ffnet.Sequential.fromData({
@@ -15,4 +16,5 @@ test("save and load", () => {
   });
 
   expect(loadedModel.numNeuronGroups()).toBe(3);
+  expect(loadedModel.numLayers()).toBe(2);
 });
