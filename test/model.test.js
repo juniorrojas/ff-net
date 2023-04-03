@@ -1,15 +1,38 @@
 const ffnet = require("ff-net");
 
-function expectCloseArrays(a, b) {
+function closeArraysCheck(a, b) {
   if ((typeof a == "number") && (typeof b == "number")) {
-    expect(a).toBeCloseTo(b);
+    if (Math.abs(a - b) <= 1e-3) {
+      return {
+        pass: true,
+      };
+    }
+    return {
+      pass: false,
+      message: () => `not close enough, ${a} != ${b}`
+    };
   }
 
-  expect(a.length).toBe(b.length);
-  for (let i = 0; i < a.length; i++) {
-    expectCloseArrays(a[i], b[i]);
+  if (a.length != b.length) {
+    return {
+      pass: false,
+      message: () => `length mismatch, ${a.length} != ${b.length}`
+    };
   }
+
+  for (let i = 0; i < a.length; i++) {
+    const r = closeArraysCheck(a[i], b[i]);
+    if (!r.pass) return r;
+  }
+
+  return {
+    pass: true
+  };
 }
+
+expect.extend({
+  toBeCloseToArray: closeArraysCheck
+})
 
 test("data loss", () => {
   const model = new ffnet.Sequential({
@@ -63,10 +86,10 @@ test("data loss", () => {
   model.zeroGrad();
   outputNeuron.activationGrad = 1.0;
   model.backward();
-  expectCloseArrays(l1.getWeightGradArray(), l1wGrad);
-  expectCloseArrays(l1.getBiasGradArray(), l1bGrad);
-  expectCloseArrays(l2.getWeightGradArray(), l2wGrad);
-  expectCloseArrays(l2.getBiasGradArray(), l2bGrad);
+  expect(l1.getWeightGradArray()).toBeCloseToArray(l1wGrad);
+  expect(l1.getBiasGradArray()).toBeCloseToArray(l1bGrad);
+  expect(l2.getWeightGradArray()).toBeCloseToArray(l2wGrad);
+  expect(l2.getBiasGradArray()).toBeCloseToArray(l2bGrad);
 });
 
 test("regularization loss", () => {
@@ -124,8 +147,8 @@ test("regularization loss", () => {
   outputNeuron.activationGrad = 1.0;
   model.backward();
   model.backwardRegularization({ regularization: reg });
-  expectCloseArrays(l1.getWeightGradArray(), l1wGrad);
-  expectCloseArrays(l1.getBiasGradArray(), l1bGrad);
-  expectCloseArrays(l2.getWeightGradArray(), l2wGrad);
-  expectCloseArrays(l2.getBiasGradArray(), l2bGrad);
+  expect(l1.getWeightGradArray()).toBeCloseToArray(l1wGrad);
+  expect(l1.getBiasGradArray()).toBeCloseToArray(l1bGrad);
+  expect(l2.getWeightGradArray()).toBeCloseToArray(l2wGrad);
+  expect(l2.getBiasGradArray()).toBeCloseToArray(l2bGrad);
 });
