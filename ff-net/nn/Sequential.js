@@ -244,7 +244,7 @@ class Sequential {
 
   toData() {
     return {
-      groups: this.neuronGroups.map((group) => group.toData()),
+      neuronGroups: this.neuronGroups.map((group) => group.toData()),
       links: this.links.map((link) => link.toData())
     }
   }
@@ -263,7 +263,10 @@ class Sequential {
 
   static fromData(args = {}) {
     const data = args.data;
-    const headless = args.headless;
+    if (data == null) {
+      throw new Error("data required");
+    }
+    const headless = args.headless ?? false;
 
     const sequential = new Sequential({
       headless: headless
