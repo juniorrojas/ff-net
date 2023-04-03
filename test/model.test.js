@@ -13,6 +13,13 @@ function closeArraysCheck(a, b) {
     };
   }
 
+  if (!Array.isArray(a) || !Array.isArray(b)) {
+    return {
+      pass: false,
+      message: () => `expected two arrays, found ${typeof a} and ${typeof b}`
+    };
+  }
+
   if (a.length != b.length) {
     return {
       pass: false,
