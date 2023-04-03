@@ -10,6 +10,21 @@ class Layer {
     this.outputNeuronGroup = args.outputNeuronGroup;
   }
 
+  backward(args = {}) {
+    const links = [];
+    
+    this.outputNeuronGroup.neurons.forEach(neuron => {
+      neuron.backward(args);
+      neuron.inputLinks.forEach((link) => {
+        links.push(link);
+      });
+    });
+
+    links.forEach(link => {
+      link.backward(args);
+    });
+  }
+
   getBiasArray() {
     const b = [];
     this.outputNeuronGroup.neurons.forEach(neuron => {
@@ -42,7 +57,7 @@ class Layer {
     this.outputNeuronGroup.neurons.forEach(neuron => {
       const wi = [];
       w.push(wi);
-      neuron.backLinks.forEach(link => {
+      neuron.inputLinks.forEach(link => {
         wi.push(link.weight);
       });      
     });
@@ -56,7 +71,7 @@ class Layer {
     this.outputNeuronGroup.neurons.forEach(neuron => {
       const wi = [];
       w.push(wi);
-      neuron.backLinks.forEach(link => {
+      neuron.inputLinks.forEach(link => {
         wi.push(link.weightGrad);
       });      
     });
@@ -66,7 +81,7 @@ class Layer {
 
   setWeightFromArray(arr) {
     this.inputNeuronGroup.neurons.forEach((inputNeuron, j) => {
-      inputNeuron.links.forEach((link, i) => {
+      inputNeuron.outputLinks.forEach((link, i) => {
         link.weight = arr[i][j];
       });
     });
