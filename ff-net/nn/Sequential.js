@@ -213,7 +213,6 @@ class Sequential {
       dataLoss = 0;
       // TODO batch mode?
       dataPoints.forEach((dataPoint) => {
-        // forward
         // TODO generalize, do not assume 2D input
         inputNeuronGroup.neurons[0].activation = dataPoint.x;
         inputNeuronGroup.neurons[1].activation = dataPoint.y;
@@ -223,18 +222,9 @@ class Sequential {
         const d = dataPoint.label - output;
         // TODO implement forwardData
         dataLoss += 0.5 * d * d;
-        // TODO avoid computing regularization for every data point
-        // regularizationLoss = this.forwardRegularization({
-        //   regularization: regularization
-        // });
-        
-        // backward
         this.zeroGrad();
         neuron.activationGrad = -d;
         this.backward();
-        // this.backwardRegularization({
-        //   regularization: regularization
-        // });
         this.optimStep(lr);
       });
 
