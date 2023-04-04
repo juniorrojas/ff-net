@@ -13,14 +13,18 @@ class NeuronGroup {
       neuron.render();
     });
   }
-  
+
   addNeuron(bias) {
+    const model = this.parent;
     if (bias == null) bias = 0.5;
     const neuron = new Neuron(this, bias);
     this.neurons.push(neuron);
-    this.parent.neurons.push(neuron);
+    model.neurons.push(neuron);
     if (!this.headless) {
-      this.parent.svgNeurons.appendChild(neuron.svgElement);
+      model.svgNeurons.appendChild(neuron.svgElement);
+    }
+    if (this.numNeurons() > model.maxNumNeuronsPerGroup) {
+      model.maxNumNeuronsPerGroup = this.numNeurons();
     }
     return neuron;
   }
@@ -54,8 +58,8 @@ class NeuronGroup {
     return data;
   }
 
-  static fromData(neuralNet, data) {
-    const neuronGroup = neuralNet.addNeuronGroup();
+  static fromData(model, data) {
+    const neuronGroup = model.addNeuronGroup();
     data.neurons.forEach((neuronData) => {
       Neuron.fromData(neuronGroup, neuronData);
     });

@@ -83,8 +83,6 @@ class Sequential {
     for (let i = 0; i < neurons; i++) {
       group.addNeuron();
     }
-
-    if (neurons > this.maxNumNeuronsPerGroup) this.maxNumNeuronsPerGroup = neurons;
     
     return group;
   }
