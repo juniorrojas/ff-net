@@ -27,4 +27,10 @@ test("max neurons per group", () => {
   expect(model.maxNumNeuronsPerGroup).toBe(10);
   model.clear();
   expect(model.maxNumNeuronsPerGroup).toBe(0);
+
+  const loadedModel = ffnet.Sequential.fromData({
+    data: model.toData(),
+    headless: true
+  });
+  expect(loadedModel.maxNumNeuronsPerGroup).toBe(10);
 });
