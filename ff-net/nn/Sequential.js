@@ -22,6 +22,8 @@ class Sequential {
       this.svgNeurons = svg.createElement("g");
       this.svgElement.appendChild(this.svgNeurons);
     }
+
+    this.maxNumNeuronsPerGroup = 0;
   }
 
   clear() {
@@ -39,6 +41,7 @@ class Sequential {
     this.neuronGroups = [];
     this.layers = [];
     this.neurons = [];
+    this.maxNumNeuronsPerGroup = 0;
   }
 
   numNeuronGroups() {
