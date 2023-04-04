@@ -13,14 +13,7 @@ class NeuronGroup {
       neuron.render();
     });
   }
-
-  reset() {
-    for (let i = 0; i < this.neurons.length; i++) {
-      const neuron = this.neurons[i];
-      neuron.reset();
-    }
-  }
-
+  
   addNeuron(bias) {
     if (bias == null) bias = 0.5;
     const neuron = new Neuron(this, bias);

@@ -11,3 +11,20 @@ test("set activations", () => {
   expect(g.neurons[2].activation).toBe(789);
   expect(g.getActivations()).toEqual([123, 456, 789]);
 });
+
+test("max neurons per group", () => {
+  const model = new ffnet.Sequential({
+    headless: true
+  });
+  expect(model.maxNumNeuronsPerGroup).toBe(0);
+  model.addNeuronGroup(3);
+  expect(model.maxNumNeuronsPerGroup).toBe(3);
+  model.addNeuronGroup(2);
+  expect(model.maxNumNeuronsPerGroup).toBe(3);
+  model.addNeuronGroup(10);
+  expect(model.maxNumNeuronsPerGroup).toBe(10);
+  model.addNeuronGroup(1);
+  expect(model.maxNumNeuronsPerGroup).toBe(10);
+  model.clear();
+  expect(model.maxNumNeuronsPerGroup).toBe(0);
+});
