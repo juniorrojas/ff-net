@@ -119,11 +119,6 @@ class Sequential {
     return link;
   }
 
-  render() {
-    this.neuronGroups.forEach((group) => group.render());
-    this.links.forEach((link) => link.render());
-  }
-
   zeroGrad() {
     this.neurons.forEach(neuron => {
       neuron.zeroGrad();
@@ -147,12 +142,28 @@ class Sequential {
     });
   }
 
-  forward() {
+  forward(x) {
+    if (x != null) {
+      const inputNeuronGroup = this.getInputNeuronGroup();
+      const inputNeurons = inputNeuronGroup.neurons;
+      if (x.length != inputNeurons.length) {
+        throw new Error(`invalid input size, expected ${inputNeuronGroup.length}, found ${x.length}`);
+      }
+      inputNeurons.forEach((neuron, i) => {
+        neuron.activation = x[i];
+      });
+    }
+
     for (let i = 1; i < this.neuronGroups.length; i++) {
       const group = this.neuronGroups[i];
       group.neurons.forEach((neuron) => {
         neuron.forward();
       });
+    }
+
+    if (x != null) {
+      const outputNeuronGroup = this.getOutputNeuronGroup();
+      return outputNeuronGroup.neurons.map(n => n.activation);
     }
   }
 
@@ -163,22 +174,8 @@ class Sequential {
     }
   }
 
-  forwardData(x, target, ctx) {
-    const inputNeuronGroup = this.getInputNeuronGroup();
-    const inputNeurons = inputNeuronGroup.neurons;
-    if (x.length != inputNeurons.length) {
-      throw new Error(`invalid input, expected ${inputNeurons.length}, found ${x.length}`);
-    }
-    inputNeurons.forEach((inputNeuron, i) => {
-      const xi = x[i];
-      if (typeof xi !== "number") {
-        throw new Error(`invalid input, expected number, found ${xi}`);
-      }
-      inputNeuron.activation = xi;
-    });
-    this.forward();
-    const outputNeuron = this.getOutputNeuronGroup().neurons[0];
-    const output = outputNeuron.activation;
+  forwardData(input, target, ctx) {
+    const output = this.forward(input);
     const d = target - output;
     ctx.d = d;
     return 0.5 * d * d;
@@ -260,6 +257,11 @@ class Sequential {
       dataLoss: dataLoss,
       regularizationLoss: regularizationLoss
     }
+  }
+
+  render() {
+    this.neuronGroups.forEach((group) => group.render());
+    this.links.forEach((link) => link.render());
   }
 
   toData() {
