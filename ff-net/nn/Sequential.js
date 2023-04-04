@@ -174,22 +174,8 @@ class Sequential {
     }
   }
 
-  forwardData(x, target, ctx) {
-    const inputNeuronGroup = this.getInputNeuronGroup();
-    const inputNeurons = inputNeuronGroup.neurons;
-    if (x.length != inputNeurons.length) {
-      throw new Error(`invalid input, expected ${inputNeurons.length}, found ${x.length}`);
-    }
-    inputNeurons.forEach((inputNeuron, i) => {
-      const xi = x[i];
-      if (typeof xi !== "number") {
-        throw new Error(`invalid input, expected number, found ${xi}`);
-      }
-      inputNeuron.activation = xi;
-    });
-    this.forward();
-    const outputNeuron = this.getOutputNeuronGroup().neurons[0];
-    const output = outputNeuron.activation;
+  forwardData(input, target, ctx) {
+    const output = this.forward(input);
     const d = target - output;
     ctx.d = d;
     return 0.5 * d * d;
