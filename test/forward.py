@@ -18,7 +18,7 @@ print(model[2].weight)
 print("l2b")
 print(model[2].bias)
 
-x = torch.tensor([0.2, 0.3])
+x = torch.tensor([0.1, 0.5])
 y = model.forward(x)
 print("output")
 print(y)

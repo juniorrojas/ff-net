@@ -145,8 +145,11 @@ class Sequential {
   forward(x) {
     if (x != null) {
       const inputNeuronGroup = this.getInputNeuronGroup();
-      // TODO check size consistency
-      inputNeuronGroup.neurons.forEach((neuron, i) => {
+      const inputNeurons = inputNeuronGroup.neurons;
+      if (x.length != inputNeurons.length) {
+        throw new Error(`invalid input size, expected ${inputNeuronGroup.length}, found ${x.length}`);
+      }
+      inputNeurons.forEach((neuron, i) => {
         neuron.activation = x[i];
       });
     }

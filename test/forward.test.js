@@ -30,4 +30,7 @@ test("forward", () => {
 
   // invalid input size
   expect(() => { model.forward([0.1, 0.2, 0.3]); }).toThrow();
+
+  y = model.forward([0.1, 0.5]);
+  expect(y).toBeCloseToArray([0.4875, 0.4001]);
 });
