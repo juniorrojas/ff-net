@@ -38,12 +38,12 @@ class ControlPanel {
         min: 0.005,
         max: 0.5,
         step: 0.01,
-        value: this.learningRate
+        value: this.learningRate,
+        onUpdate: (value) => {
+          this.learningRate = value;
+        }
       }
     );
-    uiLearningRate.control.domElement.addEventListener("input", () => {
-      this.learningRate = parseFloat(uiLearningRate.control.domElement.value);
-    });
     
     const uiRegularization = this.addRow(
       "slider", "regularization",
@@ -51,12 +51,12 @@ class ControlPanel {
         min: 0,
         max: 0.0051,
         step: 0.00001,
-        value: this.regularization
+        value: this.regularization,
+        onUpdate: (value) => {
+          this.regularization = value;
+        }
       }
     );
-    uiRegularization.control.domElement.addEventListener("input", () => {
-      this.regularization = parseFloat(uiRegularization.control.domElement.value);
-    });
     
     row = this.addRow("text", "loss");
     row.control.className = "formatted-number";
