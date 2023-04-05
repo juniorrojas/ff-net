@@ -27,7 +27,6 @@ class ControlPanel {
     div.classList.add("control-panel");
     
     this.rows = [];
-    this.rowsByLabel = {};
     
     let row;
 
@@ -42,7 +41,7 @@ class ControlPanel {
       model.randomizeParameters();
     });
     
-    const uiLearningRate = this.addRow(
+    this.addRow(
       "slider", "learning rate",
       {
         min: 0.005,
@@ -55,7 +54,7 @@ class ControlPanel {
       }
     );
     
-    const uiRegularization = this.addRow(
+    this.addRow(
       "slider", "regularization",
       {
         min: 0,
@@ -70,6 +69,7 @@ class ControlPanel {
     
     row = this.addRow("text", "loss");
     row.control.className = "formatted-number";
+    this.rowLoss = row;
     
     row = this.addRow("full");
     const lossPlot = this.lossPlot = new LossPlot();
@@ -82,7 +82,6 @@ class ControlPanel {
     const domElement = row.domElement;
     this.domElement.appendChild(domElement);
     this.rows.push(row);
-    this.rowsByLabel[label] = row;
     
     let cell;
     
@@ -121,7 +120,7 @@ class ControlPanel {
       throw new Error("regularizationLoss required to update panel");
     }
     const totalLoss = args.dataLoss + args.regularizationLoss;
-    this.rowsByLabel["loss"].control.textContent = totalLoss.toFixed(10);
+    this.rowLoss.control.textContent = totalLoss.toFixed(10);
     this.lossPlot.push(totalLoss);
   }
 }

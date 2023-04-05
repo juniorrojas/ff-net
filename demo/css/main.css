@@ -62,10 +62,14 @@ canvas {
   padding-right: 0px;
   padding-left: 0px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .control-row {
   margin-bottom: 7px;
+  display: flex;
+  flex-direction: column;
 }
 
 .control-cell {
