@@ -3,8 +3,10 @@ const Slider = require("./Slider");
 
 class Row {
   constructor() {
-    this.domElement = document.createElement("div");
+    const div = this.domElement = document.createElement("div");
+    div.className = "control-row";
     this.cells = [];
+    this.control = null;
   }
 
   addCell() {
@@ -78,11 +80,9 @@ class ControlPanel {
     const row = new Row();
 
     const domElement = row.domElement;
-    domElement.cells = [];
-    domElement.className = "control-row";
     this.domElement.appendChild(domElement);
-    this.rows.push(domElement);
-    this.rowsByLabel[label] = domElement;
+    this.rows.push(row);
+    this.rowsByLabel[label] = row;
     
     let cell;
     
@@ -90,7 +90,7 @@ class ControlPanel {
       cell = document.createElement("div");
       cell.className = "control-cell-full";
       domElement.appendChild(cell);
-      domElement.cells.push(cell);
+      row.cells.push(cell);
     } else {
       cell = row.addCell();
       cell.textContent = label;
@@ -107,10 +107,10 @@ class ControlPanel {
       }
       if (control != cell && control != null) cell.appendChild(control.domElement);
       
-      domElement.control = control;
+      row.control = control;
     }
     
-    return domElement;
+    return row;
   }
 
   update(args) {
