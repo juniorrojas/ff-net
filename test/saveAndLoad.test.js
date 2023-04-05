@@ -10,10 +10,7 @@ test("save and load", () => {
   expect(model.numLayers()).toBe(2);
 
   const data = model.toData();
-  const loadedModel = ffnet.Sequential.fromData({
-    data: data,
-    headless: true
-  });
+  const loadedModel = ffnet.Sequential.fromData(data, { headless: true });
 
   expect(loadedModel.numNeuronGroups()).toBe(3);
   expect(loadedModel.numLayers()).toBe(2);

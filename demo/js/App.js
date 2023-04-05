@@ -16,12 +16,13 @@ class App {
     container.appendChild(row);
     row.className = "content-container-row";
     
-    const model = this.model = nn.Sequential.fromData({
-      data: data.model,
-      headless: false,
-      createDomElement: true
-    });
-    console.log(model.domElement);
+    const model = this.model = nn.Sequential.fromData(
+      data.model,
+      {
+        headless: false,
+        createDomElement: true
+      }
+    );
     model.domElement.classList.add("content-container-cell");
     model.setRenderSize(300, 250);
     row.appendChild(model.domElement);

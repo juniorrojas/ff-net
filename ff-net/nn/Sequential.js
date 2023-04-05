@@ -317,8 +317,7 @@ class Sequential {
     });
   }
 
-  static fromData(args = {}) {
-    const data = args.data;
+  static fromData(data, args = {}) {
     if (data == null) {
       throw new Error("data required");
     }
