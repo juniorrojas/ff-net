@@ -28,10 +28,6 @@ svg {
   user-select: none;
 }
 
-canvas {
-  cursor: default;
-}
-
 .title-container {
   padding-top: 25px;
   padding-bottom: 5px;

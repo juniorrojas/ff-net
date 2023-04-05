@@ -30,7 +30,7 @@ class ControlPanel {
     
     let row;
 
-    row = this.addRow("full");
+    row = this.addFullRow();
     const btnRandomize = document.createElement("div");
     btnRandomize.textContent = "randomize network parameters";
     btnRandomize.className = "btn";
@@ -41,8 +41,9 @@ class ControlPanel {
       model.randomizeParameters();
     });
     
-    this.addRow(
-      "slider", "learning rate",
+    this.addControlRow(
+      "slider",
+      "learning rate",
       {
         min: 0.005,
         max: 0.5,
@@ -54,8 +55,9 @@ class ControlPanel {
       }
     );
     
-    this.addRow(
-      "slider", "regularization",
+    this.addControlRow(
+      "slider",
+      "regularization",
       {
         min: 0,
         max: 0.0051,
@@ -67,47 +69,52 @@ class ControlPanel {
       }
     );
     
-    row = this.addRow("text", "loss");
+    row = this.addControlRow("text", "loss");
     row.control.className = "formatted-number";
     this.rowLoss = row;
     
-    row = this.addRow("full");
+    row = this.addFullRow();
     const lossPlot = this.lossPlot = new LossPlot();
     row.cells[0].appendChild(lossPlot.domElement);
   }
 
-  addRow(type, label, controlArgs = {}) {
+  addRow() {
     const row = new Row();
-
-    const domElement = row.domElement;
-    this.domElement.appendChild(domElement);
+    this.domElement.appendChild(row.domElement);
     this.rows.push(row);
+    return row;
+  }
+
+  addFullRow() {
+    const row = this.addRow();
+    const cell = document.createElement("div");
+    cell.className = "control-cell-full";
+    row.domElement.appendChild(cell);
+    row.cells.push(cell);
+    return row;
+  }
+
+  addControlRow(type, label, controlArgs = {}) {
+    const row = new Row();
     
     let cell;
     
-    if (type == "full") {
-      cell = document.createElement("div");
-      cell.className = "control-cell-full";
-      domElement.appendChild(cell);
-      row.cells.push(cell);
-    } else {
-      cell = row.addCell();
-      cell.textContent = label;
-      
-      cell = row.addCell();
-      let control;
-      switch (type) {
-        case "slider":
-          control = new Slider(controlArgs);
-          break;
-        case "text":
-          control = cell;
-          break;
-      }
-      if (control != cell && control != null) cell.appendChild(control.domElement);
-      
-      row.control = control;
+    cell = row.addCell();
+    cell.textContent = label;
+    
+    cell = row.addCell();
+    let control;
+    switch (type) {
+      case "slider":
+        control = new Slider(controlArgs);
+        break;
+      case "text":
+        control = cell;
+        break;
     }
+    if (control != cell && control != null) cell.appendChild(control.domElement);
+    
+    row.control = control;
     
     return row;
   }
