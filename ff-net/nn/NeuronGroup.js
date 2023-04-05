@@ -1,8 +1,9 @@
 const Neuron = require("./Neuron");
 
 class NeuronGroup {
-  constructor(parent) {
+  constructor(parent, id) {
     this.parent = parent;
+    this.id = id;
     this.neurons = [];
 
     this.headless = parent.headless;
@@ -17,7 +18,8 @@ class NeuronGroup {
   addNeuron(bias) {
     const model = this.parent;
     if (bias == null) bias = 0.5;
-    const neuron = new Neuron(this, bias);
+    const id = this.numNeurons();
+    const neuron = new Neuron(this, id, bias);
     this.neurons.push(neuron);
     model.neurons.push(neuron);
     if (!this.headless) {
@@ -31,10 +33,6 @@ class NeuronGroup {
 
   numNeurons() {
     return this.neurons.length;
-  }
-
-  getIndex() {
-    return this.parent.neuronGroups.indexOf(this);
   }
 
   setActivations(arr) {

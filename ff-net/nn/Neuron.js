@@ -11,8 +11,10 @@ function sigmoidBackward(x, outputGrad) {
 }
 
 class Neuron {
-  constructor(group, bias) {
+  constructor(group, id, bias) {
     this.group = group;
+    this.id = id;
+
     this.outputLinks = [];
     this.inputLinks = [];
 
@@ -85,10 +87,6 @@ class Neuron {
     circle.setAttribute("stroke-width", strokeWidth);
   }
 
-  getIndex() {
-    return this.group.neurons.indexOf(this);
-  }
-
   getPosition() {
     const model = this.group.parent;
     const numNeurons = this.group.numNeurons();
@@ -107,13 +105,13 @@ class Neuron {
     const dx = (width - (radius + strokeWidth) * 2) / (numNeuronGroups - 1);
     const dy = (height - (radius + strokeWidth) * 2) / (maxNumNeuronsPerGroup - 1);
     
-    const x = cx + (this.group.getIndex() - (numNeuronGroups - 1) / 2) * dx;
+    const x = cx + (this.group.id - (numNeuronGroups - 1) / 2) * dx;
     
     let y;
     if (numNeurons == 0) {
       y = cy;
     } else {
-      y = cy + (this.getIndex() - (numNeurons - 1) / 2) * dy;
+      y = cy + (this.id - (numNeurons - 1) / 2) * dy;
     }
     
     return {
