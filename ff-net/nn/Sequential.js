@@ -76,8 +76,8 @@ class Sequential {
 
   addNeuronGroup(neurons) {
     if (neurons == null) neurons = 0;	
-    
-    const group = new NeuronGroup(this);
+    const id = this.numNeuronGroups();
+    const group = new NeuronGroup(this, id);
     this.neuronGroups.push(group);
     
     for (let i = 0; i < neurons; i++) {

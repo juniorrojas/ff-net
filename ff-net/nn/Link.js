@@ -5,7 +5,7 @@ class Link {
     this.n0 = n0;
     this.nf = nf;
     
-    if (this.n0.group.getIndex() + 1 != this.nf.group.getIndex()) {
+    if (this.n0.group.id + 1 != this.nf.group.id) {
       throw "Cannot connect neurons from non-consecutive groups";
     }
     
@@ -71,12 +71,12 @@ class Link {
   toData() {
     const data = {};
     data.n0 = [
-      this.n0.group.getIndex(),
-      this.n0.getIndex()
+      this.n0.group.id,
+      this.n0.id
     ];
     data.nf = [
-      this.nf.group.getIndex(),
-      this.nf.getIndex()
+      this.nf.group.id,
+      this.nf.id
     ];
     data.weight = this.weight;
     return data;
