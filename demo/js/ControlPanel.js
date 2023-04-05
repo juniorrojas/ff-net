@@ -4,6 +4,15 @@ const Slider = require("./Slider");
 class Row {
   constructor() {
     this.domElement = document.createElement("div");
+    this.cells = [];
+  }
+
+  addCell() {
+    const cell = document.createElement("div");
+    cell.className = "control-cell";
+    this.domElement.appendChild(cell);
+    this.cells.push(cell);
+    return cell;
   }
 }
 
@@ -66,14 +75,6 @@ class ControlPanel {
     row.cells[0].appendChild(lossPlot.domElement);
   }
 
-  addCell(row) {
-    const cell = document.createElement("div");
-    cell.className = "control-cell";
-    row.appendChild(cell);
-    row.cells.push(cell);
-    return cell;
-  }
-
   addRow(type, label, controlArgs = {}) {
     const row = new Row();
 
@@ -92,10 +93,10 @@ class ControlPanel {
       domElement.appendChild(cell);
       domElement.cells.push(cell);
     } else {
-      cell = this.addCell(domElement);
+      cell = row.addCell();
       cell.textContent = label;
       
-      cell = this.addCell(domElement);
+      cell = row.addCell();
       let control;
       switch (type) {
         case "slider":
