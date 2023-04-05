@@ -1,6 +1,12 @@
 const LossPlot = require("./LossPlot");
 const Slider = require("./Slider");
 
+class Row {
+  constructor() {
+    this.domElement = document.createElement("div");
+  }
+}
+
 class ControlPanel {
   constructor(args = {}) {
     this.app = args.app;
@@ -69,25 +75,27 @@ class ControlPanel {
   }
 
   addRow(type, label, controlArgs = {}) {
-    const row = document.createElement("div");
-    row.cells = [];
-    row.className = "control-row";
-    this.domElement.appendChild(row);
-    this.rows.push(row);
-    this.rowsByLabel[label] = row;
+    const row = new Row();
+
+    const domElement = row.domElement;
+    domElement.cells = [];
+    domElement.className = "control-row";
+    this.domElement.appendChild(domElement);
+    this.rows.push(domElement);
+    this.rowsByLabel[label] = domElement;
     
     let cell;
     
     if (type == "full") {
       cell = document.createElement("div");
       cell.className = "control-cell-full";
-      row.appendChild(cell);
-      row.cells.push(cell);
+      domElement.appendChild(cell);
+      domElement.cells.push(cell);
     } else {
-      cell = this.addCell(row);
+      cell = this.addCell(domElement);
       cell.textContent = label;
       
-      cell = this.addCell(row);
+      cell = this.addCell(domElement);
       let control;
       switch (type) {
         case "slider":
@@ -99,10 +107,10 @@ class ControlPanel {
       }
       if (control != cell && control != null) cell.appendChild(control.domElement);
       
-      row.control = control;
+      domElement.control = control;
     }
     
-    return row;
+    return domElement;
   }
 
   update(args) {
