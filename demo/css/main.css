@@ -28,10 +28,6 @@ svg {
   user-select: none;
 }
 
-canvas {
-  cursor: default;
-}
-
 .title-container {
   padding-top: 25px;
   padding-bottom: 5px;
@@ -62,10 +58,14 @@ canvas {
   padding-right: 0px;
   padding-left: 0px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .control-row {
   margin-bottom: 7px;
+  display: flex;
+  flex-direction: column;
 }
 
 .control-cell {
@@ -77,6 +77,7 @@ canvas {
 }
 
 .btn {
+  user-select: none;
   width: 250px;
   margin: 8px auto;
   padding: 10px 16px 10px 16px;
@@ -96,7 +97,7 @@ canvas {
   margin-right: 3px;
 }
 
-#data-canvas, .loss-plot-canvas {
+#data-canvas, .loss-plot {
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.45);
 }
 
@@ -105,16 +106,4 @@ canvas {
   width: 250px;
   height: 250px;
   min-width: 250px;
-}
-
-.loss-plot-canvas {
-  width: 500px;
-  height: 100px;
-}
-
-@media screen and (max-width: 500px) {
-  .loss-plot-canvas {
-    width: 250px;
-    height: 50px;
-  }
 }

@@ -37,8 +37,7 @@ class App {
     row.className = "content-container-row";
     
     const controlPanel = this.controlPanel = new ControlPanel({
-      app: this,
-      neuralNet: model
+      model: model
     });
     controlPanel.domElement.classList.add("content-container-cell");
     row.appendChild(controlPanel.domElement);
@@ -51,7 +50,8 @@ class App {
       return model.getOutputNeuronGroup().neurons[0].activation;
     }
     
-    this.update();
+    this.renderLoop();
+    setInterval(() => { this.update() }, 1000 / 60);
   }
 
   update() {
@@ -65,18 +65,20 @@ class App {
         iters: 10,
         dataPoints: dataCanvas.dataPoints
       });
-      
-      model.render();
-      dataCanvas.render();
 
       this.controlPanel.update({
         dataLoss: dataLoss,
         regularizationLoss: regularizationLoss
       });
     }
+  }
+
+  renderLoop() {
+    this.model.render();
+    this.dataCanvas.render();
 
     requestAnimationFrame(() => {
-      this.update();
+      this.renderLoop();
     });
   }
 
