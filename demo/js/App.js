@@ -23,6 +23,16 @@ class App {
         createDomElement: true
       }
     );
+    
+    // const model = this.model = new nn.Sequential({
+    //   headless: false,
+    //   createDomElement: true
+    // });
+    // model.addNeuronGroup(2);
+    // model.addFullyConnectedLayer(4);
+    // model.addFullyConnectedLayer(3);
+    // model.addFullyConnectedLayer(1);
+    
     model.domElement.classList.add("content-container-cell");
     model.setRenderSize(300, 250);
     row.appendChild(model.domElement);
