@@ -29,7 +29,7 @@ class App {
       data: data.model,
       headless: false,
     });
-    model.setSize(width, height);
+    model.setRenderSize(width, height);
     svgModel.appendChild(model.svgElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);

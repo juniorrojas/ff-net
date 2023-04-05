@@ -30,13 +30,13 @@ class Sequential {
 
       const width = args.width ?? 300;
       const height = args.height ?? 100;
-      this.setSize(width, height);
+      this.setRenderSize(width, height);
     }
 
     this.maxNumNeuronsPerGroup = 0;
   }
 
-  setSize(width, height) {
+  setRenderSize(width, height) {
     this.width = width;
     this.height = height;
 
