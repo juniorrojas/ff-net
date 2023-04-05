@@ -5,7 +5,7 @@ class LossPlot extends ffnet.ui.LossPlot {
     super(args);
     this.domElement.className = "loss-plot";
     
-    const mq = window.matchMedia("(max-width: 500px)");
+    const mq = window.matchMedia("(max-width: 530px)");
 
     const updateMq = () => {
       if (mq.matches) {

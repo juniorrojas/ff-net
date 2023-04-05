@@ -16,16 +16,26 @@ class App {
     container.appendChild(row);
     row.className = "content-container-row";
     
-    const svgModel = svg.createElement("svg");
-    svgModel.class = "content-container-cell";
-    svgModel.id = "neural-net";
-    row.appendChild(svgModel);
+    const model = this.model = nn.Sequential.fromData(
+      data.model,
+      {
+        headless: false,
+        createDomElement: true
+      }
+    );
     
-    const model = this.model = nn.Sequential.fromData({
-      data: data.model,
-      headless: false
-    });
-    svgModel.appendChild(model.svgElement);
+    // const model = this.model = new nn.Sequential({
+    //   headless: false,
+    //   createDomElement: true
+    // });
+    // model.addNeuronGroup(2);
+    // model.addFullyConnectedLayer(4);
+    // model.addFullyConnectedLayer(3);
+    // model.addFullyConnectedLayer(1);
+    
+    model.domElement.classList.add("content-container-cell");
+    model.setRenderSize(300, 250);
+    row.appendChild(model.domElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
     dataCanvas.domElement.classList.add("content-container-cell");

@@ -8,6 +8,7 @@ class Sequential {
     this.links = [];
     this.neuronGroups = [];
     this.layers = [];
+    this.maxNumNeuronsPerGroup = 0;
 
     const headless = args.headless ?? true;
     this.headless = headless;
@@ -21,9 +22,29 @@ class Sequential {
       
       this.svgNeurons = svg.createElement("g");
       this.svgElement.appendChild(this.svgNeurons);
-    }
 
-    this.maxNumNeuronsPerGroup = 0;
+      const createDomElement = args.createDomElement ?? false;
+      if (createDomElement) {
+        const domElement = svg.createElement("svg");
+        domElement.appendChild(this.svgElement);
+        this.domElement = domElement;
+      }
+
+      const width = args.width ?? 300;
+      const height = args.height ?? 100;
+      this.setRenderSize(width, height);
+    }
+  }
+
+  setRenderSize(width, height) {
+    this.width = width;
+    this.height = height;
+
+    if (this.domElement != null) {
+      const domElement = this.domElement;
+      domElement.style.width = width;
+      domElement.style.height = height;
+    }
   }
 
   clear() {
@@ -296,19 +317,12 @@ class Sequential {
     });
   }
 
-  static fromData(args = {}) {
-    const data = args.data;
+  static fromData(data, args = {}) {
     if (data == null) {
       throw new Error("data required");
     }
-    const headless = args.headless ?? false;
-
-    const sequential = new Sequential({
-      headless: headless
-    });
-    
-    sequential.loadData(data);
-    
+    const sequential = new Sequential(args);    
+    sequential.loadData(data);    
     return sequential;
   }
 }
