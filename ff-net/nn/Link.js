@@ -6,7 +6,7 @@ class Link {
     this.nf = nf;
     
     if (this.n0.group.id + 1 != this.nf.group.id) {
-      throw "Cannot connect neurons from non-consecutive groups";
+      throw new Error("Cannot connect neurons from non-consecutive groups");
     }
     
     if (weight == null) this.weight = 1;
