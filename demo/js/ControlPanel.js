@@ -17,9 +17,7 @@ class Row {
 }
 
 class ControlPanel {
-  constructor(args = {}) {
-    this.app = args.app;
-    
+  constructor(args = {}) {    
     this.learningRate = 0.08;
     this.regularization = 0.001;
     
@@ -36,7 +34,8 @@ class ControlPanel {
     btnRandomize.textContent = "randomize network parameters";
     btnRandomize.className = "btn";
     row.cells[0].appendChild(btnRandomize);
-    const model = args.neuralNet;
+    
+    const model = args.model;
     btnRandomize.addEventListener("click", () => {
       model.randomizeParameters();
     });
