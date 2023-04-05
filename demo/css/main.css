@@ -90,10 +90,6 @@ svg {
   font-family: monospace;
 }
 
-#neural-net {
-  margin-right: 3px;
-}
-
 #data-canvas, .loss-plot {
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.45);
 }

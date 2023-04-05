@@ -93,9 +93,6 @@ class Neuron {
     const numNeuronGroups = model.numNeuronGroups();
     const maxNumNeuronsPerGroup = model.maxNumNeuronsPerGroup;
     
-    // const container = model.svgElement.parentNode;
-    // if (container == null) return { x: 0, y: 0 };
-    // const containerRect = container.getBoundingClientRect();
     const width = model.width;
     const height = model.height;
     
