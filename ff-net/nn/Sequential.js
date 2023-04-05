@@ -22,6 +22,12 @@ class Sequential {
       this.svgNeurons = svg.createElement("g");
       this.svgElement.appendChild(this.svgNeurons);
 
+      const createDomElement = args.createDomElement ?? false;
+      if (createDomElement) {
+        const domElement = svg.createElement("svg");
+        this.domElement = domElement;
+      }
+
       const width = args.width ?? 300;
       const height = args.height ?? 100;
       this.setSize(width, height);
@@ -33,6 +39,12 @@ class Sequential {
   setSize(width, height) {
     this.width = width;
     this.height = height;
+
+    if (this.domElement != null) {
+      const domElement = this.domElement;
+      domElement.style.width = width;
+      domElement.style.height = height;
+    }
   }
 
   clear() {
@@ -310,14 +322,8 @@ class Sequential {
     if (data == null) {
       throw new Error("data required");
     }
-    const headless = args.headless ?? false;
-
-    const sequential = new Sequential({
-      headless: headless
-    });
-    
-    sequential.loadData(data);
-    
+    const sequential = new Sequential(args);    
+    sequential.loadData(data);    
     return sequential;
   }
 }

@@ -20,7 +20,6 @@ class App {
     const width = 300;
     const height = 250;
     svgModel.class = "content-container-cell";
-    svgModel.id = "model";
     row.appendChild(svgModel);
     svgModel.style.width = width;
     svgModel.style.height = height;
@@ -28,7 +27,7 @@ class App {
     
     const model = this.model = nn.Sequential.fromData({
       data: data.model,
-      headless: false
+      headless: false,
     });
     model.setSize(width, height);
     svgModel.appendChild(model.svgElement);
