@@ -25,6 +25,11 @@ class App {
       data: data.model,
       headless: false
     });
+    const width = 300;
+    const height = 250;
+    svgModel.style.width = width;
+    svgModel.style.height = height;
+    model.setSize(width, height);
     svgModel.appendChild(model.svgElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);

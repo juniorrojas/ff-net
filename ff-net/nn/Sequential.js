@@ -21,9 +21,18 @@ class Sequential {
       
       this.svgNeurons = svg.createElement("g");
       this.svgElement.appendChild(this.svgNeurons);
+
+      const width = args.width ?? 300;
+      const height = args.height ?? 100;
+      this.setSize(width, height);
     }
 
     this.maxNumNeuronsPerGroup = 0;
+  }
+
+  setSize(width, height) {
+    this.width = width;
+    this.height = height;
   }
 
   clear() {
