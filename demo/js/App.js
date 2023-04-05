@@ -15,22 +15,16 @@ class App {
     row = document.createElement("div");
     container.appendChild(row);
     row.className = "content-container-row";
-
-    const svgModel = svg.createElement("svg");
-    const width = 300;
-    const height = 250;
-    svgModel.class = "content-container-cell";
-    row.appendChild(svgModel);
-    svgModel.style.width = width;
-    svgModel.style.height = height;
-    svgModel.style.marginRight = "3px";
     
     const model = this.model = nn.Sequential.fromData({
       data: data.model,
       headless: false,
+      createDomElement: true
     });
-    model.setRenderSize(width, height);
-    svgModel.appendChild(model.svgElement);
+    console.log(model.domElement);
+    model.domElement.classList.add("content-container-cell");
+    model.setRenderSize(300, 250);
+    row.appendChild(model.domElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
     dataCanvas.domElement.classList.add("content-container-cell");

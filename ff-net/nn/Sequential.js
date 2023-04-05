@@ -8,6 +8,7 @@ class Sequential {
     this.links = [];
     this.neuronGroups = [];
     this.layers = [];
+    this.maxNumNeuronsPerGroup = 0;
 
     const headless = args.headless ?? true;
     this.headless = headless;
@@ -25,6 +26,7 @@ class Sequential {
       const createDomElement = args.createDomElement ?? false;
       if (createDomElement) {
         const domElement = svg.createElement("svg");
+        domElement.appendChild(this.svgElement);
         this.domElement = domElement;
       }
 
@@ -32,8 +34,6 @@ class Sequential {
       const height = args.height ?? 100;
       this.setRenderSize(width, height);
     }
-
-    this.maxNumNeuronsPerGroup = 0;
   }
 
   setRenderSize(width, height) {
