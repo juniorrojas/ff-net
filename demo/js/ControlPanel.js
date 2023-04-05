@@ -95,7 +95,7 @@ class ControlPanel {
   }
 
   addControlRow(type, label, controlArgs = {}) {
-    const row = new Row();
+    const row = this.addRow();
     
     let cell;
     
@@ -111,8 +111,10 @@ class ControlPanel {
       case "text":
         control = cell;
         break;
+      default:
+        throw new Error(`invalid control type ${type}`);
     }
-    if (control != cell && control != null) cell.appendChild(control.domElement);
+    if (control != cell) cell.appendChild(control.domElement);
     
     row.control = control;
     
