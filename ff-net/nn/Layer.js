@@ -1,3 +1,19 @@
+class LayerLinks {
+  constructor(layer) {
+    this.layer = layer;
+  }
+
+  *[Symbol.iterator]() {
+    const outputNeurons = this.layer.outputNeuronGroup.neurons;
+    for (let i = 0; i < outputNeurons.length; i++) {
+      const outputNeuron = outputNeurons[i];
+      for (let j = 0; j < outputNeuron.inputLinks.length; j++) {
+        yield outputNeuron.inputLinks[j];
+      }
+    }
+  }
+}
+
 class Layer {
   constructor(args = {}) {
     if (args.inputNeuronGroup == null) {
@@ -8,21 +24,18 @@ class Layer {
     }
     this.inputNeuronGroup = args.inputNeuronGroup;
     this.outputNeuronGroup = args.outputNeuronGroup;
-  }
 
+    this.links = new LayerLinks(this);
+  }
+  
   backward(args = {}) {
-    const links = [];
-    
     this.outputNeuronGroup.neurons.forEach(neuron => {
       neuron.backward(args);
-      neuron.inputLinks.forEach((link) => {
-        links.push(link);
-      });
     });
 
-    links.forEach(link => {
+    for (let link of this.links) {
       link.backward(args);
-    });
+    };
   }
 
   getBiasArray() {
