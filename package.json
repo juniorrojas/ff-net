@@ -5,9 +5,16 @@
   },
   "main": "ff-net/index.js",
   "scripts": {
+    "build": "rollup -c",
     "test": "export NODE_PATH=. && jest"
   },
   "devDependencies": {
-    "jest": "^29.5.0"
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "jest": "^29.5.0",
+    "rollup": "^2.79.1",
+    "rollup-plugin-babel": "^4.4.0"
   }
 }
