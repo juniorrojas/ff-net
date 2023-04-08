@@ -88,11 +88,10 @@ def git_push_deploy(deploy_path, remote, deploy_branch):
     if e != 0:
         raise RuntimeError("git push failed")
     
-def run(remote_url, deploy_branch, push=False, populate_deploy_path=None):
+def run(remote_url, deploy_path, deploy_branch, push=False, populate_deploy_path=None):
     assert populate_deploy_path is not None
     
     remote = "origin"
-    deploy_path = this_dirpath.joinpath("deploy.out")
     
     git_clone(remote_url, remote, deploy_path, deploy_branch)
 

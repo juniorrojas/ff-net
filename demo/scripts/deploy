@@ -45,8 +45,10 @@ if __name__ == "__main__":
             print("github remote could not be inferred, run the script with --remote_url <remote-url>", file=sys.stderr)
             exit(1)
 
+    deploy_path = this_dirpath.joinpath("deploy.out")
     deployutils.run(
         remote_url,
+        deploy_path,
         deploy_branch=args.branch,
         push=args.push,
         populate_deploy_path=populate_deploy_path
