@@ -17,16 +17,26 @@ class App {
     container.appendChild(row);
     row.className = "content-container-row";
     
-    const svgModel = svg.createElement("svg");
-    svgModel.class = "content-container-cell";
-    svgModel.id = "neural-net";
-    row.appendChild(svgModel);
+    const model = this.model = nn.Sequential.fromData(
+      data.model,
+      {
+        headless: false,
+        createDomElement: true
+      }
+    );
     
-    const model = this.model = nn.Sequential.fromData({
-      data: data.model,
-      headless: false
-    });
-    svgModel.appendChild(model.svgElement);
+    // const model = this.model = new nn.Sequential({
+    //   headless: false,
+    //   createDomElement: true
+    // });
+    // model.addNeuronGroup(2);
+    // model.addFullyConnectedLayer(4);
+    // model.addFullyConnectedLayer(3);
+    // model.addFullyConnectedLayer(1);
+    
+    model.domElement.classList.add("content-container-cell");
+    model.setRenderSize(300, 250);
+    row.appendChild(model.domElement);
     
     const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
     dataCanvas.domElement.classList.add("content-container-cell");
@@ -247,7 +257,7 @@ class LossPlot extends ffnet.ui.LossPlot {
     super(args);
     this.domElement.className = "loss-plot";
     
-    const mq = window.matchMedia("(max-width: 500px)");
+    const mq = window.matchMedia("(max-width: 530px)");
 
     const updateMq = () => {
       if (mq.matches) {
@@ -677,11 +687,8 @@ class Neuron {
     const numNeuronGroups = model.numNeuronGroups();
     const maxNumNeuronsPerGroup = model.maxNumNeuronsPerGroup;
     
-    const container = model.svgElement.parentNode;
-    if (container == null) return { x: 0, y: 0 };
-    const containerRect = container.getBoundingClientRect();
-    const width = containerRect.width;
-    const height = containerRect.height;
+    const width = model.width;
+    const height = model.height;
     
     const cy = height / 2;
     const cx = width / 2;
@@ -803,6 +810,7 @@ class Sequential {
     this.links = [];
     this.neuronGroups = [];
     this.layers = [];
+    this.maxNumNeuronsPerGroup = 0;
 
     const headless = args.headless ?? true;
     this.headless = headless;
@@ -816,9 +824,29 @@ class Sequential {
       
       this.svgNeurons = svg.createElement("g");
       this.svgElement.appendChild(this.svgNeurons);
-    }
 
-    this.maxNumNeuronsPerGroup = 0;
+      const createDomElement = args.createDomElement ?? false;
+      if (createDomElement) {
+        const domElement = svg.createElement("svg");
+        domElement.appendChild(this.svgElement);
+        this.domElement = domElement;
+      }
+
+      const width = args.width ?? 300;
+      const height = args.height ?? 100;
+      this.setRenderSize(width, height);
+    }
+  }
+
+  setRenderSize(width, height) {
+    this.width = width;
+    this.height = height;
+
+    if (this.domElement != null) {
+      const domElement = this.domElement;
+      domElement.style.width = width;
+      domElement.style.height = height;
+    }
   }
 
   clear() {
@@ -1091,19 +1119,12 @@ class Sequential {
     });
   }
 
-  static fromData(args = {}) {
-    const data = args.data;
+  static fromData(data, args = {}) {
     if (data == null) {
       throw new Error("data required");
     }
-    const headless = args.headless ?? false;
-
-    const sequential = new Sequential({
-      headless: headless
-    });
-    
-    sequential.loadData(data);
-    
+    const sequential = new Sequential(args);    
+    sequential.loadData(data);    
     return sequential;
   }
 }
