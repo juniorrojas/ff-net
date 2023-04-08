@@ -88,11 +88,11 @@ def git_push_deploy(deploy_path, remote, deploy_branch):
     if e != 0:
         raise RuntimeError("git push failed")
     
-def run(src_path, remote_url, deploy_branch, push=False, populate_deploy_path=None):
+def run(remote_url, deploy_branch, push=False, populate_deploy_path=None):
     assert populate_deploy_path is not None
     
-    remote = "origin"    
-    deploy_path = src_path.joinpath("deploy.out")
+    remote = "origin"
+    deploy_path = this_dirpath.joinpath("deploy.out")
     
     git_clone(remote_url, remote, deploy_path, deploy_branch)
 
@@ -105,12 +105,12 @@ def run(src_path, remote_url, deploy_branch, push=False, populate_deploy_path=No
         else:
             os.remove(filename)
     
-    deploy_index_filename = populate_deploy_path(src_path, deploy_path)
+    deploy_index_filename = populate_deploy_path(deploy_path)
     print(yellow(f"Preview available at:\n{deploy_index_filename}"), file=sys.stderr)
     
     if push:
         a = input(f"Deploy to {remote_url}@{deploy_branch}? [y/_] ")
-        if a != "y":
+        if a.rstrip().lstrip() != "y":
             return
         
         git_push_deploy(deploy_path, remote, deploy_branch)

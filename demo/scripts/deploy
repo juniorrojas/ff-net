@@ -10,19 +10,21 @@ import shutil
 import sys
 import argparse
 
-def populate_deploy_path(project_path, deploy_path):
+def populate_deploy_path(deploy_path):
+    src_path = this_dirpath.parent
+
     deploy_index_filename = str(deploy_path.joinpath("index.html"))
 
     shutil.copy(
-        project_path.joinpath("index.html"),
+        src_path.joinpath("index.html"),
         deploy_index_filename
     )
     shutil.copytree(
-        project_path.joinpath("js.build.out"),
+        src_path.joinpath("js.build.out"),
         deploy_path.joinpath("js.build.out")
     )
     shutil.copytree(
-        project_path.joinpath("css"),
+        src_path.joinpath("css"),
         deploy_path.joinpath("css")
     )
 
@@ -43,10 +45,7 @@ if __name__ == "__main__":
             print("github remote could not be inferred, run the script with --remote_url <remote-url>", file=sys.stderr)
             exit(1)
 
-    src_path = this_dirpath.parent
-
     deployutils.run(
-        src_path,
         remote_url,
         deploy_branch=args.branch,
         push=args.push,
