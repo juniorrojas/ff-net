@@ -6,6 +6,10 @@
   "type": "module",
   "main": "./ff-net/index.js",
   "module": "./build/ff-net.js",
+  "exports": {
+    "import": "./build/ff-net.js",
+    "require": "./ff-net/index.js"
+  },
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "test": "export NODE_PATH=. && jest"
