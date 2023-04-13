@@ -3,9 +3,11 @@
   "author": {
     "name": "Junior Rojas"
   },
-  "main": "ff-net/index.js",
+  "type": "module",
+  "main": "./ff-net/index.js",
+  "module": "./build/ff-net.js",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c rollup.config.js",
     "test": "export NODE_PATH=. && jest"
   },
   "devDependencies": {
