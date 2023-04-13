@@ -3,7 +3,6 @@
   "author": {
     "name": "Junior Rojas"
   },
-  "type": "module",
   "main": "./ff-net/index.js",
   "module": "./build/ff-net.js",
   "exports": {
