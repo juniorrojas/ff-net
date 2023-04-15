@@ -5,10 +5,8 @@
     "test": "export NODE_PATH=. && jest"
   },
   "devDependencies": {
-    "browserify": "^16.5.0",
     "jest": "^29.5.0",
     "puppeteer": "^19.7.4",
-    "watchify": "^4.0.0",
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "rollup": "^2.79.1"
