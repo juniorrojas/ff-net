@@ -89,3 +89,21 @@ dataCanvas.render();
 <div align="center">
   <img src="media/datacanvas.png" width="200px"></img>
 </div>
+
+
+### training
+
+```js
+setInterval(() => {
+  model.train({
+    dataPoints: dataCanvas.dataPoints,
+    lr: 1e-1,
+    iters: 10
+  });
+  dataCanvas.render();
+}, 1000 / 60);
+```
+
+<div align="center">
+  <img src="media/training.png" width="200px"></img>
+</div>
