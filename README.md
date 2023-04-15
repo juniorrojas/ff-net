@@ -38,3 +38,29 @@ Build and publish to `gh-pages`
 npm run build
 ./scripts/deploy --push
 ```
+
+## API reference
+
+```html
+<!DOCTYPE html>
+<body>
+  <script src="https://cdn.rawgit.com/juniorrojas/ff-net/master/build/ff-net.umd.js"></script>
+  <script>
+    const model = new ffnet.Sequential({
+      createDomElement: true,
+      width: 200,
+      height: 200
+    });
+    model.addNeuronGroup(2);
+    model.addFullyConnectedLayer(4);
+    model.addFullyConnectedLayer(4);
+    model.addFullyConnectedLayer(1);
+    model.randomizeParameters();
+    document.body.appendChild(model.domElement);
+    model.render();
+  </script>
+</body>
+</html>
+```
+
+<img src="media/sequential.png" width="200px"></img>
