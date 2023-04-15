@@ -63,4 +63,6 @@ npm run build
 </html>
 ```
 
-<img src="media/sequential.png" width="200px"></img>
+<div align="center">
+  <img src="media/sequential.png" width="200px"></img>
+</div>
