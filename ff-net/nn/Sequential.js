@@ -10,8 +10,12 @@ class Sequential {
     this.layers = [];
     this.maxNumNeuronsPerGroup = 0;
 
-    const headless = args.headless ?? true;
+    let headless = args.headless ?? true;
+    const createDomElement = args.createDomElement ?? false;
+    if (createDomElement) headless = false;
+
     this.headless = headless;
+    
     if (!headless) {
       const svg = require("../common/svg");
 
@@ -23,7 +27,6 @@ class Sequential {
       this.svgNeurons = svg.createElement("g");
       this.svgElement.appendChild(this.svgNeurons);
 
-      const createDomElement = args.createDomElement ?? false;
       if (createDomElement) {
         const domElement = svg.createElement("svg");
         domElement.appendChild(this.svgElement);

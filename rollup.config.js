@@ -1,28 +1,41 @@
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
-import babel from "rollup-plugin-babel";
+import { terser } from "rollup-plugin-terser";
 
-export default {
-  input: "ff-net/index.js",
-  output: {
-    file: "build/ff-net.js",
-    format: "esm",
-    sourcemap: false,
-  },
-  plugins: [
-    resolve(),
-    commonjs(),
-    babel({
-      presets: [
-        [
-          "@babel/preset-env",
-          {
-            targets: {
-              node: "current",
-            },
-          },
-        ],
-      ],
-    }),
-  ],
-};
+const configs = [];
+
+for (let minified of [true, false]) {
+  let outputFilename;
+  configs.push({
+    input: "ff-net/index.js",
+    output: {
+      file: `build/ff-net.module${minified ? ".min": ""}.js`,
+      format: "esm",
+      sourcemap: false
+    },
+    plugins: [
+      resolve(),
+      commonjs(),
+      ...(minified ? [terser()] : [])
+    ],
+  });
+}
+
+for (let minified of [true, false]) {
+  configs.push({
+    input: "ff-net/index.js",
+    output: {
+      file: `build/ff-net.umd${minified ? ".min": ""}.js`,
+      format: "umd",
+      name: "ffnet",
+      sourcemap: false
+    },
+    plugins: [
+      resolve(),
+      commonjs(),
+      ...(minified ? [terser()] : [])
+    ],
+  });
+}
+
+export default configs;
