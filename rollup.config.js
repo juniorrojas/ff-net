@@ -18,6 +18,19 @@ export default [
   {
     input: "ff-net/index.js",
     output: {
+      file: "build/ff-net.module.min.js",
+      format: "esm",
+      sourcemap: false,
+    },
+    plugins: [
+      resolve(),
+      commonjs(),
+      terser()
+    ],
+  },
+  {
+    input: "ff-net/index.js",
+    output: {
       file: "build/ff-net.umd.js",
       format: "umd",
       name: "ffnet"
