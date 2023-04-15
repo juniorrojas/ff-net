@@ -46,23 +46,46 @@ npm run build
 <body>
   <script src="https://cdn.rawgit.com/juniorrojas/ff-net/master/build/ff-net.umd.js"></script>
   <script>
-    const model = new ffnet.Sequential({
-      createDomElement: true,
-      width: 200,
-      height: 200
-    });
-    model.addNeuronGroup(2);
-    model.addFullyConnectedLayer(4);
-    model.addFullyConnectedLayer(4);
-    model.addFullyConnectedLayer(1);
-    model.randomizeParameters();
-    document.body.appendChild(model.domElement);
-    model.render();
+    ...
   </script>
 </body>
 </html>
 ```
 
+### sequential
+
+```js
+const model = new ffnet.Sequential({
+  createDomElement: true,
+  width: 200,
+  height: 200
+});
+model.addNeuronGroup(2);
+model.addFullyConnectedLayer(4);
+model.addFullyConnectedLayer(4);
+model.addFullyConnectedLayer(1);
+model.randomizeParameters();
+document.body.appendChild(model.domElement);
+model.render();
+```
+
 <div align="center">
   <img src="media/sequential.png" width="200px"></img>
+</div>
+
+### data canvas
+
+```js
+const dataCanvas = new ffnet.ui.DataCanvas();
+dataCanvas.addDataPoint(0.5, 0.5, 1);
+dataCanvas.addDataPoint(0.4, 0.1, 0);
+dataCanvas.xyToPixel = (x, y) => {
+  return model.forward([x, y])[0];
+}
+document.body.appendChild(dataCanvas.domElement);
+dataCanvas.render();
+```
+
+<div align="center">
+  <img src="media/datacanvas.png" width="200px"></img>
 </div>
