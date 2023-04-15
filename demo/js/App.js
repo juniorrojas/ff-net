@@ -1,4 +1,4 @@
-const ffnet = require("ff-net");
+const ffnet = require("../../ff-net");
 const ControlPanel = require("./ControlPanel");
 const nn = ffnet.nn;
 const svg = ffnet.common.svg;

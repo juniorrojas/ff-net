@@ -1,4 +1,4 @@
-const ffnet = require("ff-net");
+const ffnet = require("../../ff-net");
 
 class LossPlot extends ffnet.ui.LossPlot {
   constructor(args = {}) {

@@ -1,13 +1,22 @@
 {
   "scripts": {
-    "watch": "export NODE_PATH=..:${NODE_PATH} && mkdir -p js.build.out && watchify js/main.js -o js.build.out/main.js",
-    "build": "export NODE_PATH=..:${NODE_PATH} && mkdir -p js.build.out && browserify js/main.js -o js.build.out/main.js",
+    "build": "rollup -c rollup.config.js",
+    "watch0": "export NODE_PATH=..:${NODE_PATH} && mkdir -p js.build.out && watchify js/main.js -o js.build.out/main.js",
+    "build0": "export NODE_PATH=..:${NODE_PATH} && mkdir -p js.build.out && browserify js/main.js -o js.build.out/main.js",
     "test": "export NODE_PATH=. && jest"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.2",
     "browserify": "^16.5.0",
     "jest": "^29.5.0",
     "puppeteer": "^19.7.4",
     "watchify": "^4.0.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@rollup/plugin-commonjs": "^24.1.0",
+    "rollup": "^2.79.1",
+    "rollup-plugin-babel": "^4.4.0"
   }
 }
