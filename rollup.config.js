@@ -1,5 +1,6 @@
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
+import { terser } from "rollup-plugin-terser";
 
 export default [
   {
@@ -24,6 +25,19 @@ export default [
     plugins: [
       resolve(),
       commonjs()
+    ],
+  },
+  {
+    input: "ff-net/index.js",
+    output: {
+      file: "build/ff-net.umd.min.js",
+      format: "umd",
+      name: "ffnet"
+    },
+    plugins: [
+      resolve(),
+      commonjs(),
+      terser()
     ],
   }
 ];
