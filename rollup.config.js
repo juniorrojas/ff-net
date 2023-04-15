@@ -2,55 +2,40 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 
-export default [
-  {
+const configs = [];
+
+for (let minified of [true, false]) {
+  let outputFilename;
+  configs.push({
     input: "ff-net/index.js",
     output: {
-      file: "build/ff-net.module.js",
+      file: `build/ff-net.module${minified ? ".min": ""}.js`,
       format: "esm",
-      sourcemap: false,
-    },
-    plugins: [
-      resolve(),
-      commonjs()
-    ],
-  },
-  {
-    input: "ff-net/index.js",
-    output: {
-      file: "build/ff-net.module.min.js",
-      format: "esm",
-      sourcemap: false,
+      sourcemap: false
     },
     plugins: [
       resolve(),
       commonjs(),
-      terser()
+      ...(minified ? [terser()] : [])
     ],
-  },
-  {
+  });
+}
+
+for (let minified of [true, false]) {
+  configs.push({
     input: "ff-net/index.js",
     output: {
-      file: "build/ff-net.umd.js",
+      file: `build/ff-net.umd${minified ? ".min": ""}.js`,
       format: "umd",
-      name: "ffnet"
-    },
-    plugins: [
-      resolve(),
-      commonjs()
-    ],
-  },
-  {
-    input: "ff-net/index.js",
-    output: {
-      file: "build/ff-net.umd.min.js",
-      format: "umd",
-      name: "ffnet"
+      name: "ffnet",
+      sourcemap: false
     },
     plugins: [
       resolve(),
       commonjs(),
-      terser()
+      ...(minified ? [terser()] : [])
     ],
-  }
-];
+  });
+}
+
+export default configs;
