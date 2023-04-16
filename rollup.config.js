@@ -5,7 +5,6 @@ import { terser } from "rollup-plugin-terser";
 const configs = [];
 
 for (let minified of [true, false]) {
-  let outputFilename;
   configs.push({
     input: "ff-net/index.js",
     output: {
