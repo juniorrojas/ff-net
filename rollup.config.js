@@ -8,7 +8,7 @@ for (let minified of [true, false]) {
   configs.push({
     input: "ff-net/index.js",
     output: {
-      file: `build/ff-net.module${minified ? ".min": ""}.mjs`,
+      file: `build/ff-net${minified ? ".min": ""}.mjs`,
       format: "esm",
       sourcemap: false
     },
@@ -24,7 +24,7 @@ for (let minified of [true, false]) {
   configs.push({
     input: "ff-net/index.js",
     output: {
-      file: `build/ff-net.umd${minified ? ".min": ""}.js`,
+      file: `build/ff-net${minified ? ".min": ""}.js`,
       format: "umd",
       name: "ffnet",
       sourcemap: false
