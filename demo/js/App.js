@@ -24,8 +24,6 @@ export default class App {
       }
     );
 
-    console.log(model);
-    
     // const model = this.model = new nn.Sequential({
     //   headless: false,
     //   createDomElement: true
@@ -35,9 +33,10 @@ export default class App {
     // model.addFullyConnectedLayer(3);
     // model.addFullyConnectedLayer(1);
     
-    // model.domElement.classList.add("content-container-cell");
-    // model.setRenderSize(300, 250);
-    // row.appendChild(model.domElement);
+    model.domElement.classList.add("content-container-cell");
+    model.setRenderSize(300, 250);
+    row.appendChild(model.domElement);
+    model.render();
     
     // const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
     // dataCanvas.domElement.classList.add("content-container-cell");
