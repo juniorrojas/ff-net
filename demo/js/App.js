@@ -1,8 +1,5 @@
 import ffnet from "../../build/ff-net.mjs";
 import ControlPanel from "./ControlPanel";
-// const nn = ffnet.nn;
-// const svg = ffnet.common.svg;
-// const ui = ffnet.ui;
 
 export default class App {
   constructor(data) {
@@ -24,7 +21,7 @@ export default class App {
       }
     );
 
-    // const model = this.model = new nn.Sequential({
+    // const model = this.model = new ffnet.Sequential({
     //   headless: false,
     //   createDomElement: true
     // });
@@ -38,10 +35,10 @@ export default class App {
     row.appendChild(model.domElement);
     model.render();
     
-    // const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
-    // dataCanvas.domElement.classList.add("content-container-cell");
-    // dataCanvas.domElement.id = "data-canvas";
-    // row.appendChild(dataCanvas.domElement);
+    const dataCanvas = this.dataCanvas = ffnet.ui.DataCanvas.fromData(data.dataPoints);
+    dataCanvas.domElement.classList.add("content-container-cell");
+    dataCanvas.domElement.id = "data-canvas";
+    row.appendChild(dataCanvas.domElement);
     
     row = document.createElement("div");
     container.appendChild(row);
@@ -53,16 +50,16 @@ export default class App {
     controlPanel.domElement.classList.add("content-container-cell");
     row.appendChild(controlPanel.domElement);
 
-    // this.paused = false;
+    this.paused = false;
 
-    // dataCanvas.xyToPixel = (x, y) => {
-    //   model.getInputNeuronGroup().setActivations([x, y]);
-    //   model.forward();
-    //   return model.getOutputNeuronGroup().neurons[0].activation;
-    // }
+    dataCanvas.xyToPixel = (x, y) => {
+      model.getInputNeuronGroup().setActivations([x, y]);
+      model.forward();
+      return model.getOutputNeuronGroup().neurons[0].activation;
+    }
     
-    // this.renderLoop();
-    // setInterval(() => { this.update() }, 1000 / 60);
+    this.renderLoop();
+    setInterval(() => { this.update() }, 1000 / 60);
   }
 
   update() {
