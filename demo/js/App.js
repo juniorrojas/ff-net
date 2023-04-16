@@ -1,5 +1,5 @@
 import ffnet from "../../build/ff-net.mjs";
-import ControlPanel from "./ControlPanel";
+// import ControlPanel from "./ControlPanel";
 // const nn = ffnet.nn;
 // const svg = ffnet.common.svg;
 // const ui = ffnet.ui;
@@ -48,9 +48,9 @@ export default class App {
     // container.appendChild(row);
     // row.className = "content-container-row";
     
-    const controlPanel = this.controlPanel = new ControlPanel({
-      model: model
-    });
+    // const controlPanel = this.controlPanel = new ControlPanel({
+    //   model: model
+    // });
     // controlPanel.domElement.classList.add("content-container-cell");
     // row.appendChild(controlPanel.domElement);
 
