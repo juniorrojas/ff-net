@@ -1,6 +1,3 @@
-// const LossPlot = require("./LossPlot");
-// const Slider = require("./Slider");
-
 import LossPlot from "./LossPlot";
 import Slider from "./Slider";
 
@@ -21,7 +18,7 @@ class Row {
   }
 }
 
-class ControlPanel {
+export default class ControlPanel {
   constructor(args = {}) {    
     this.learningRate = 0.08;
     this.regularization = 0.001;
@@ -136,5 +133,3 @@ class ControlPanel {
     this.lossPlot.push(totalLoss);
   }
 }
-
-module.exports = ControlPanel;
