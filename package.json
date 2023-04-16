@@ -4,9 +4,9 @@
     "name": "Junior Rojas"
   },
   "main": "./ff-net/index.js",
-  "module": "./build/ff-net.module.js",
+  "module": "./build/ff-net.module.mjs",
   "exports": {
-    "import": "./build/ff-net.module.js",
+    "import": "./build/ff-net.module.mjs",
     "require": "./ff-net/index.js"
   },
   "scripts": {
