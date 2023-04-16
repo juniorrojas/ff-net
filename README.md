@@ -47,18 +47,22 @@ Install with npm
 npm install juniorrojas/ff-net
 ```
 
-Then import (cjs)
+Then import using commonjs
 
 ```js
 const ffnet = require("ff-net");
 ```
 
-TODO: ES6 modules?
+or ES6
+
+```js
+import ffnet from "ff-net";
+```
 
 To use in the browser, use the UMD build that exposes `ffnet` as a global variable.
 
 ```html
-<script src="https://cdn.rawgit.com/juniorrojas/ff-net/master/build/ff-net.umd.js"></script>
+<script src="https://cdn.rawgit.com/juniorrojas/ff-net/master/build/ff-net.js"></script>
 ```
 
 
