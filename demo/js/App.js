@@ -1,10 +1,7 @@
-const ffnet = require("../../ff-net");
-const ControlPanel = require("./ControlPanel");
-const nn = ffnet.nn;
-const svg = ffnet.common.svg;
-const ui = ffnet.ui;
+import ffnet from "../../build/ff-net.mjs";
+import ControlPanel from "./ControlPanel";
 
-class App {
+export default class App {
   constructor(data) {
     const container = document.createElement("div");
     container.className = "content-container";
@@ -16,15 +13,15 @@ class App {
     container.appendChild(row);
     row.className = "content-container-row";
     
-    const model = this.model = nn.Sequential.fromData(
+    const model = this.model = ffnet.Sequential.fromData(
       data.model,
       {
         headless: false,
         createDomElement: true
       }
     );
-    
-    // const model = this.model = new nn.Sequential({
+
+    // const model = this.model = new ffnet.Sequential({
     //   headless: false,
     //   createDomElement: true
     // });
@@ -36,8 +33,9 @@ class App {
     model.domElement.classList.add("content-container-cell");
     model.setRenderSize(300, 250);
     row.appendChild(model.domElement);
+    model.render();
     
-    const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
+    const dataCanvas = this.dataCanvas = ffnet.ui.DataCanvas.fromData(data.dataPoints);
     dataCanvas.domElement.classList.add("content-container-cell");
     dataCanvas.domElement.id = "data-canvas";
     row.appendChild(dataCanvas.domElement);
@@ -107,5 +105,3 @@ class App {
     this.paused = false;
   }
 }
-
-module.exports = App;

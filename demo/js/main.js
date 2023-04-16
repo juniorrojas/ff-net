@@ -1,4 +1,5 @@
-const App = require("./App");
+import App from "./App";
+import data from "./data";
 
 function main() {
   const divTitle = document.createElement("div");
@@ -14,7 +15,6 @@ function main() {
   h2.textContent = "feedforward neural network learning in real time";
   divTitle.appendChild(h2);
 
-  const data = require("./data");
   window.initData = data;
   const app = new App(data);
   document.body.appendChild(app.domElement);
