@@ -1,4 +1,4 @@
-class Slider {
+export default class Slider {
   constructor(args = {}) {
     const input = document.createElement("input");
     this.domElement = input;
@@ -19,5 +19,3 @@ class Slider {
     }
   }
 }
-
-module.exports = Slider;

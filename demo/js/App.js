@@ -1,10 +1,10 @@
-const ffnet = require("../../ff-net");
-const ControlPanel = require("./ControlPanel");
-const nn = ffnet.nn;
-const svg = ffnet.common.svg;
-const ui = ffnet.ui;
+import ffnet from "../../build/ff-net.mjs";
+import ControlPanel from "./ControlPanel";
+// const nn = ffnet.nn;
+// const svg = ffnet.common.svg;
+// const ui = ffnet.ui;
 
-class App {
+export default class App {
   constructor(data) {
     const container = document.createElement("div");
     container.className = "content-container";
@@ -16,13 +16,15 @@ class App {
     container.appendChild(row);
     row.className = "content-container-row";
     
-    const model = this.model = nn.Sequential.fromData(
+    const model = this.model = ffnet.Sequential.fromData(
       data.model,
       {
         headless: false,
         createDomElement: true
       }
     );
+
+    console.log(model);
     
     // const model = this.model = new nn.Sequential({
     //   headless: false,
@@ -33,35 +35,35 @@ class App {
     // model.addFullyConnectedLayer(3);
     // model.addFullyConnectedLayer(1);
     
-    model.domElement.classList.add("content-container-cell");
-    model.setRenderSize(300, 250);
-    row.appendChild(model.domElement);
+    // model.domElement.classList.add("content-container-cell");
+    // model.setRenderSize(300, 250);
+    // row.appendChild(model.domElement);
     
-    const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
-    dataCanvas.domElement.classList.add("content-container-cell");
-    dataCanvas.domElement.id = "data-canvas";
-    row.appendChild(dataCanvas.domElement);
+    // const dataCanvas = this.dataCanvas = ui.DataCanvas.fromData(data.dataPoints);
+    // dataCanvas.domElement.classList.add("content-container-cell");
+    // dataCanvas.domElement.id = "data-canvas";
+    // row.appendChild(dataCanvas.domElement);
     
-    row = document.createElement("div");
-    container.appendChild(row);
-    row.className = "content-container-row";
+    // row = document.createElement("div");
+    // container.appendChild(row);
+    // row.className = "content-container-row";
     
     const controlPanel = this.controlPanel = new ControlPanel({
       model: model
     });
-    controlPanel.domElement.classList.add("content-container-cell");
-    row.appendChild(controlPanel.domElement);
+    // controlPanel.domElement.classList.add("content-container-cell");
+    // row.appendChild(controlPanel.domElement);
 
-    this.paused = false;
+    // this.paused = false;
 
-    dataCanvas.xyToPixel = (x, y) => {
-      model.getInputNeuronGroup().setActivations([x, y]);
-      model.forward();
-      return model.getOutputNeuronGroup().neurons[0].activation;
-    }
+    // dataCanvas.xyToPixel = (x, y) => {
+    //   model.getInputNeuronGroup().setActivations([x, y]);
+    //   model.forward();
+    //   return model.getOutputNeuronGroup().neurons[0].activation;
+    // }
     
-    this.renderLoop();
-    setInterval(() => { this.update() }, 1000 / 60);
+    // this.renderLoop();
+    // setInterval(() => { this.update() }, 1000 / 60);
   }
 
   update() {
@@ -107,5 +109,3 @@ class App {
     this.paused = false;
   }
 }
-
-module.exports = App;

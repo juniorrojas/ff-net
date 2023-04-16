@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build": "rollup -c rollup.config.js",
-    "watch": "rollup -c rollup.config.js --watch",
+    "build": "export NODEPATH=.. && rollup -c rollup.config.js",
+    "watch": "export NODEPATH=.. && rollup -c rollup.config.js --watch",
     "test": "export NODE_PATH=. && jest"
   },
   "devDependencies": {

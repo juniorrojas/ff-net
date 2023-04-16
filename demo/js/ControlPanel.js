@@ -1,5 +1,8 @@
-const LossPlot = require("./LossPlot");
-const Slider = require("./Slider");
+// const LossPlot = require("./LossPlot");
+// const Slider = require("./Slider");
+
+import LossPlot from "./LossPlot";
+import Slider from "./Slider";
 
 class Row {
   constructor() {

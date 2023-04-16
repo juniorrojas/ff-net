@@ -1,5 +1,4 @@
-// const App = require("./App");
-import App from "./App";
+const App = require("./App");
 
 function main() {
   const divTitle = document.createElement("div");
