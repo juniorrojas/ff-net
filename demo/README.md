@@ -1,6 +1,6 @@
 # demo
 
-Install dependencies and watch source
+Install dependencies and watch source for development
 
 ```
 npm ci
