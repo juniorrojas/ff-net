@@ -51,7 +51,7 @@ dataCanvas.addDataPoint(0.5, 0.5, 1);
 dataCanvas.addDataPoint(0.4, 0.1, 0);
 dataCanvas.xyToPixel = (x, y) => {
   return model.forward([x, y])[0];
-}
+};
 document.body.appendChild(dataCanvas.domElement);
 dataCanvas.render();
 ```
