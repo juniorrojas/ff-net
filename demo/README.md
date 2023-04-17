@@ -1,7 +1,5 @@
 # demo
 
-## quickstart
-
 Install dependencies and watch source
 
 ```
