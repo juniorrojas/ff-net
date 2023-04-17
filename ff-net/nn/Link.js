@@ -48,6 +48,7 @@ class Link {
   }
 
   backward(args = {}) {
+    this.n0.activationGrad += this.weight * this.nf.preActivationGrad;
     this.weightGrad += this.n0.activation * this.nf.preActivationGrad;
   }
 

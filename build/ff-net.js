@@ -111,6 +111,7 @@
     }
 
     backward(args = {}) {
+      this.n0.activationGrad += this.weight * this.nf.preActivationGrad;
       this.weightGrad += this.n0.activation * this.nf.preActivationGrad;
     }
 
@@ -206,10 +207,6 @@
     }
 
     backward(args = {}) {
-      this.outputLinks.forEach((link) => {
-        this.activationGrad += link.weight * link.nf.preActivationGrad;
-      });
-      
       this.preActivationGrad += sigmoidBackward(this.preActivation, this.activationGrad);
       this.biasGrad += this.preActivationGrad;
     }
