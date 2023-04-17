@@ -48,7 +48,10 @@ class Link {
   }
 
   backward(args = {}) {
-    this.weightGrad += this.n0.activation * this.nf.preActivationGrad;
+    const x = this.n0.activation;
+    const outputGrad = this.nf.preActivationGrad;
+    this.n0.activationGrad += outputGrad * this.weight;
+    this.weightGrad += outputGrad * x;
   }
 
   forwardRegularization(args = {}) {
