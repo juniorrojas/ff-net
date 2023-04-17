@@ -11,7 +11,7 @@ Feedforward neural network learning in real time.
 [live demo](http://juniorrojas.github.io/ff-net)
 
 <div align="center">
-  <img src="media/screenshot.png" width="400px">
+  <img src="media/screenshot.png" width="650px">
 </div>
 
 ## quickstart
@@ -68,6 +68,7 @@ setInterval(() => {
     lr: 1e-1,
     iters: 10
   });
+  model.render();
   dataCanvas.render();
 }, 1000 / 60);
 ```
