@@ -14,15 +14,15 @@ Feedforward neural network learning in real time.
   <img src="media/screenshot.png" width="400px">
 </div>
 
-## Quickstart
+## quickstart
 
-To use in the browser, you can use a UMD build that exposes `ffnet` as a global variable.
+To use in the browser, you can use a [UMD build](./build/ff-net.umd.min.js) that exposes `ffnet` as a global variable.
 
 ```html
-<script src="ff-net.js"></script>
+<script src="ff-net.umd.min.js"></script>
 ```
 
-### Sequential
+### `Sequential`
 
 ```js
 const model = new ffnet.Sequential({
@@ -43,7 +43,7 @@ model.render();
   <img src="media/sequential.png" width="200px"></img>
 </div>
 
-### DataCanvas
+### `DataCanvas`
 
 ```js
 const dataCanvas = new ffnet.ui.DataCanvas();
@@ -61,7 +61,7 @@ dataCanvas.render();
 </div>
 
 
-### Sequential.train
+### `Sequential.train`
 
 ```js
 setInterval(() => {
