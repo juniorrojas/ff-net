@@ -1121,7 +1121,7 @@ class LossPlot {
 
 var LossPlot_1 = LossPlot;
 
-var ui = {
+var ui$1 = {
   DataCanvas: DataCanvas_1,
   LossPlot: LossPlot_1
 };
@@ -1132,12 +1132,14 @@ var common = {
 };
 
 const nn = nn$1;
+const ui = ui$1;
 
 var ffNet = {
-  ui: ui,
   common: common,
   nn: nn,
-  Sequential: nn.Sequential
+  ui: ui,
+  Sequential: nn.Sequential,
+  DataCanvas: ui.DataCanvas
 };
 
 export { ffNet as default };

@@ -1,8 +1,10 @@
 const nn = require("./nn");
+const ui = require("./ui");
 
 module.exports = {
-  ui: require("./ui"),
   common: require("./common"),
   nn: nn,
-  Sequential: nn.Sequential
+  ui: ui,
+  Sequential: nn.Sequential,
+  DataCanvas: ui.DataCanvas
 };
