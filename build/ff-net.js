@@ -111,9 +111,6 @@
     }
 
     backward(args = {}) {
-      // output = w * x
-      // wGrad = outputGrad * x
-      // xGrad = outputGrad * w
       const x = this.n0.activation;
       const outputGrad = this.nf.preActivationGrad;
       this.n0.activationGrad += outputGrad * this.weight;
