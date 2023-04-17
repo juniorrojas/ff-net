@@ -46,7 +46,7 @@ model.render();
 ### `DataCanvas`
 
 ```js
-const dataCanvas = new ffnet.ui.DataCanvas();
+const dataCanvas = new ffnet.DataCanvas();
 dataCanvas.addDataPoint(0.5, 0.5, 1);
 dataCanvas.addDataPoint(0.4, 0.1, 0);
 dataCanvas.xyToPixel = (x, y) => {
