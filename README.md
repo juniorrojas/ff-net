@@ -10,70 +10,24 @@ Feedforward neural network learning in real time.
 
 [live demo](http://juniorrojas.github.io/ff-net)
 
-![screenshot](media/screenshot.png)
+<div align="center">
+  <img src="media/screenshot.png" width="400px">
+</div>
 
-## build demo
+## Quickstart
 
-```
-cd demo
-```
-
-Install dependencies
-
-```
-npm ci
-```
-
-Watch source for development
-
-```
-npm run watch
-```
-
-Open `index.html`
-
-Build and publish to `gh-pages`
-
-```
-npm run build
-./scripts/deploy --push
-```
-
-## Install
-
-Install with npm 
-
-```
-npm install juniorrojas/ff-net
-```
-
-Then import using commonjs
-
-```js
-const ffnet = require("ff-net");
-```
-
-or ES6
-
-```js
-import ffnet from "ff-net";
-```
-
-To use in the browser, use the UMD build that exposes `ffnet` as a global variable.
+To use in the browser, you can use a UMD build that exposes `ffnet` as a global variable.
 
 ```html
-<script src="https://cdn.rawgit.com/juniorrojas/ff-net/master/build/ff-net.js"></script>
+<script src="ff-net.js"></script>
 ```
 
-
-## API reference
-
-### sequential
+### Sequential
 
 ```js
 const model = new ffnet.Sequential({
   createDomElement: true,
-  width: 200,
+  width: 300,
   height: 200
 });
 model.addNeuronGroup(2);
@@ -89,7 +43,7 @@ model.render();
   <img src="media/sequential.png" width="200px"></img>
 </div>
 
-### data canvas
+### DataCanvas
 
 ```js
 const dataCanvas = new ffnet.ui.DataCanvas();
@@ -107,7 +61,7 @@ dataCanvas.render();
 </div>
 
 
-### training
+### Sequential.train
 
 ```js
 setInterval(() => {
