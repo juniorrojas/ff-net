@@ -19,7 +19,7 @@ Feedforward neural network learning in real time.
 To use in the browser, you can use a [UMD build](./build/ff-net.min.js) that exposes `ffnet` as a global variable.
 
 ```html
-<script src="ff-net.umd.min.js"></script>
+<script src="ff-net.min.js"></script>
 ```
 
 ### `Sequential`
