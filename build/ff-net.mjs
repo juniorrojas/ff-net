@@ -68,7 +68,8 @@ class Link$1 {
     
     if (weight == null) this.weight = 1;
     else this.weight = weight;
-    this.weightGrad = 0;
+
+    this.zeroGrad();
     
     const headless = sequential.headless;
     this.headless = headless;
@@ -179,9 +180,7 @@ class Neuron$1 {
     this.preActivation = 0;
     this.activation = sigmoid(this.bias);
 
-    this.activationGrad = 0;
-    this.preActivationGrad = 0;
-    this.biasGrad = 0;
+    this.zeroGrad();
     
     const headless = group.sequential.headless;
     this.headless = headless;

@@ -11,7 +11,8 @@ class Link {
     
     if (weight == null) this.weight = 1;
     else this.weight = weight;
-    this.weightGrad = 0;
+
+    this.zeroGrad();
     
     const headless = sequential.headless;
     this.headless = headless;

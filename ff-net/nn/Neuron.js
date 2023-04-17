@@ -22,9 +22,7 @@ class Neuron {
     this.preActivation = 0;
     this.activation = sigmoid(this.bias);
 
-    this.activationGrad = 0;
-    this.preActivationGrad = 0;
-    this.biasGrad = 0;
+    this.zeroGrad();
     
     const headless = group.sequential.headless;
     this.headless = headless;
