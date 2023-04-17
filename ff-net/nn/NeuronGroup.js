@@ -1,12 +1,12 @@
 const Neuron = require("./Neuron");
 
 class NeuronGroup {
-  constructor(parent, id) {
-    this.parent = parent;
+  constructor(sequential, id) {
+    this.sequential = sequential;
     this.id = id;
     this.neurons = [];
 
-    this.headless = parent.headless;
+    this.headless = sequential.headless;
   }
 
   numNeurons() {
@@ -14,17 +14,17 @@ class NeuronGroup {
   }
 
   addNeuron(bias) {
-    const model = this.parent;
+    const sequential = this.sequential;
     if (bias == null) bias = 0.5;
     const id = this.numNeurons();
     const neuron = new Neuron(this, id, bias);
     this.neurons.push(neuron);
-    model.neurons.push(neuron);
+    sequential.neurons.push(neuron);
     if (!this.headless) {
-      model.svgNeurons.appendChild(neuron.svgElement);
+      sequential.svgNeurons.appendChild(neuron.svgElement);
     }
-    if (this.numNeurons() > model.maxNumNeuronsPerGroup) {
-      model.maxNumNeuronsPerGroup = this.numNeurons();
+    if (this.numNeurons() > sequential.maxNumNeuronsPerGroup) {
+      sequential.maxNumNeuronsPerGroup = this.numNeurons();
     }
     return neuron;
   }
@@ -62,8 +62,8 @@ class NeuronGroup {
     return data;
   }  
 
-  static fromData(model, data) {
-    const neuronGroup = model.addNeuronGroup();
+  static fromData(sequential, data) {
+    const neuronGroup = sequential.addNeuronGroup();
     data.neurons.forEach((neuronData) => {
       Neuron.fromData(neuronGroup, neuronData);
     });

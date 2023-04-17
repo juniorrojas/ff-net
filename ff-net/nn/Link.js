@@ -1,6 +1,6 @@
 class Link {
-  constructor(neuralNet, n0, nf, weight) {
-    this.neuralNet = neuralNet;
+  constructor(sequential, n0, nf, weight) {
+    this.sequential = sequential;
 
     this.n0 = n0;
     this.nf = nf;
@@ -11,9 +11,10 @@ class Link {
     
     if (weight == null) this.weight = 1;
     else this.weight = weight;
-    this.weightGrad = 0;
+
+    this.zeroGrad();
     
-    const headless = neuralNet.headless;
+    const headless = sequential.headless;
     this.headless = headless;
     if (!headless) {
       const svg = require("../common/svg");
@@ -85,13 +86,13 @@ class Link {
     return data;
   }
 
-  static fromData(neuralNet, data) {
+  static fromData(sequential, data) {
     const weight = data.weight;
     const a = data.n0;
     const b = data.nf;
-    const n0 = neuralNet.neuronGroups[a[0]].neurons[a[1]];
-    const nf = neuralNet.neuronGroups[b[0]].neurons[b[1]];
-    const link = neuralNet.addLink(n0, nf, weight);
+    const n0 = sequential.neuronGroups[a[0]].neurons[a[1]];
+    const nf = sequential.neuronGroups[b[0]].neurons[b[1]];
+    const link = sequential.addLink(n0, nf, weight);
     return link;
   }
 }

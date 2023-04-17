@@ -62,8 +62,8 @@
   var Color_1 = Color$2;
 
   class Link$1 {
-    constructor(neuralNet, n0, nf, weight) {
-      this.neuralNet = neuralNet;
+    constructor(sequential, n0, nf, weight) {
+      this.sequential = sequential;
 
       this.n0 = n0;
       this.nf = nf;
@@ -74,9 +74,10 @@
       
       if (weight == null) this.weight = 1;
       else this.weight = weight;
-      this.weightGrad = 0;
+
+      this.zeroGrad();
       
-      const headless = neuralNet.headless;
+      const headless = sequential.headless;
       this.headless = headless;
       if (!headless) {
         const svg = svg_1;
@@ -148,13 +149,13 @@
       return data;
     }
 
-    static fromData(neuralNet, data) {
+    static fromData(sequential, data) {
       const weight = data.weight;
       const a = data.n0;
       const b = data.nf;
-      const n0 = neuralNet.neuronGroups[a[0]].neurons[a[1]];
-      const nf = neuralNet.neuronGroups[b[0]].neurons[b[1]];
-      const link = neuralNet.addLink(n0, nf, weight);
+      const n0 = sequential.neuronGroups[a[0]].neurons[a[1]];
+      const nf = sequential.neuronGroups[b[0]].neurons[b[1]];
+      const link = sequential.addLink(n0, nf, weight);
       return link;
     }
   }
@@ -185,11 +186,9 @@
       this.preActivation = 0;
       this.activation = sigmoid(this.bias);
 
-      this.activationGrad = 0;
-      this.preActivationGrad = 0;
-      this.biasGrad = 0;
+      this.zeroGrad();
       
-      const headless = group.parent.headless;
+      const headless = group.sequential.headless;
       this.headless = headless;
       
       if (!headless) {
@@ -247,13 +246,13 @@
     }
 
     getPosition() {
-      const model = this.group.parent;
+      const sequential = this.group.sequential;
       const numNeurons = this.group.numNeurons();
-      const numNeuronGroups = model.numNeuronGroups();
-      const maxNumNeuronsPerGroup = model.maxNumNeuronsPerGroup;
+      const numNeuronGroups = sequential.numNeuronGroups();
+      const maxNumNeuronsPerGroup = sequential.maxNumNeuronsPerGroup;
       
-      const width = model.width;
-      const height = model.height;
+      const width = sequential.width;
+      const height = sequential.height;
       
       const cy = height / 2;
       const cx = width / 2;
@@ -298,12 +297,12 @@
   const Neuron = Neuron_1;
 
   class NeuronGroup$1 {
-    constructor(parent, id) {
-      this.parent = parent;
+    constructor(sequential, id) {
+      this.sequential = sequential;
       this.id = id;
       this.neurons = [];
 
-      this.headless = parent.headless;
+      this.headless = sequential.headless;
     }
 
     numNeurons() {
@@ -311,17 +310,17 @@
     }
 
     addNeuron(bias) {
-      const model = this.parent;
+      const sequential = this.sequential;
       if (bias == null) bias = 0.5;
       const id = this.numNeurons();
       const neuron = new Neuron(this, id, bias);
       this.neurons.push(neuron);
-      model.neurons.push(neuron);
+      sequential.neurons.push(neuron);
       if (!this.headless) {
-        model.svgNeurons.appendChild(neuron.svgElement);
+        sequential.svgNeurons.appendChild(neuron.svgElement);
       }
-      if (this.numNeurons() > model.maxNumNeuronsPerGroup) {
-        model.maxNumNeuronsPerGroup = this.numNeurons();
+      if (this.numNeurons() > sequential.maxNumNeuronsPerGroup) {
+        sequential.maxNumNeuronsPerGroup = this.numNeurons();
       }
       return neuron;
     }
@@ -359,8 +358,8 @@
       return data;
     }  
 
-    static fromData(model, data) {
-      const neuronGroup = model.addNeuronGroup();
+    static fromData(sequential, data) {
+      const neuronGroup = sequential.addNeuronGroup();
       data.neurons.forEach((neuronData) => {
         Neuron.fromData(neuronGroup, neuronData);
       });
