@@ -306,11 +306,9 @@
 
       this.headless = parent.headless;
     }
-    
-    render() {
-      this.neurons.forEach((neuron) => {
-        neuron.render();
-      });
+
+    numNeurons() {
+      return this.neurons.length;
     }
 
     addNeuron(bias) {
@@ -329,10 +327,6 @@
       return neuron;
     }
 
-    numNeurons() {
-      return this.neurons.length;
-    }
-
     setActivations(arr) {
       const n = this.numNeurons();
       if (arr.length != n) {
@@ -347,12 +341,24 @@
       return this.neurons.map(neuron => neuron.activation);
     }
 
+    forward() {
+      this.neurons.forEach((neuron) => {
+        neuron.forward();
+      });
+    }
+    
+    render() {
+      this.neurons.forEach((neuron) => {
+        neuron.render();
+      });
+    }
+
     toData() {
       const data = {
         neurons: this.neurons.map((neuron) => neuron.toData())
       };
       return data;
-    }
+    }  
 
     static fromData(model, data) {
       const neuronGroup = model.addNeuronGroup();
@@ -653,14 +659,12 @@
 
       for (let i = 1; i < this.neuronGroups.length; i++) {
         const group = this.neuronGroups[i];
-        group.neurons.forEach((neuron) => {
-          neuron.forward();
-        });
+        group.forward();
       }
 
       if (x != null) {
         const outputNeuronGroup = this.getOutputNeuronGroup();
-        return outputNeuronGroup.neurons.map(n => n.activation);
+        return outputNeuronGroup.getActivations();
       }
     }
 
