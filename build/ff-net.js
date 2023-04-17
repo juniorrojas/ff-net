@@ -189,7 +189,7 @@
       this.preActivationGrad = 0;
       this.biasGrad = 0;
       
-      const headless = group.parent.headless;
+      const headless = group.sequential.headless;
       this.headless = headless;
       
       if (!headless) {
@@ -247,13 +247,13 @@
     }
 
     getPosition() {
-      const model = this.group.parent;
+      const sequential = this.group.sequential;
       const numNeurons = this.group.numNeurons();
-      const numNeuronGroups = model.numNeuronGroups();
-      const maxNumNeuronsPerGroup = model.maxNumNeuronsPerGroup;
+      const numNeuronGroups = sequential.numNeuronGroups();
+      const maxNumNeuronsPerGroup = sequential.maxNumNeuronsPerGroup;
       
-      const width = model.width;
-      const height = model.height;
+      const width = sequential.width;
+      const height = sequential.height;
       
       const cy = height / 2;
       const cx = width / 2;
@@ -298,12 +298,12 @@
   const Neuron = Neuron_1;
 
   class NeuronGroup$1 {
-    constructor(parent, id) {
-      this.parent = parent;
+    constructor(sequential, id) {
+      this.sequential = sequential;
       this.id = id;
       this.neurons = [];
 
-      this.headless = parent.headless;
+      this.headless = sequential.headless;
     }
 
     numNeurons() {
@@ -311,17 +311,17 @@
     }
 
     addNeuron(bias) {
-      const model = this.parent;
+      const sequential = this.sequential;
       if (bias == null) bias = 0.5;
       const id = this.numNeurons();
       const neuron = new Neuron(this, id, bias);
       this.neurons.push(neuron);
-      model.neurons.push(neuron);
+      sequential.neurons.push(neuron);
       if (!this.headless) {
-        model.svgNeurons.appendChild(neuron.svgElement);
+        sequential.svgNeurons.appendChild(neuron.svgElement);
       }
-      if (this.numNeurons() > model.maxNumNeuronsPerGroup) {
-        model.maxNumNeuronsPerGroup = this.numNeurons();
+      if (this.numNeurons() > sequential.maxNumNeuronsPerGroup) {
+        sequential.maxNumNeuronsPerGroup = this.numNeurons();
       }
       return neuron;
     }
@@ -359,8 +359,8 @@
       return data;
     }  
 
-    static fromData(model, data) {
-      const neuronGroup = model.addNeuronGroup();
+    static fromData(sequential, data) {
+      const neuronGroup = sequential.addNeuronGroup();
       data.neurons.forEach((neuronData) => {
         Neuron.fromData(neuronGroup, neuronData);
       });

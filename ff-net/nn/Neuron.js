@@ -26,7 +26,7 @@ class Neuron {
     this.preActivationGrad = 0;
     this.biasGrad = 0;
     
-    const headless = group.parent.headless;
+    const headless = group.sequential.headless;
     this.headless = headless;
     
     if (!headless) {
@@ -84,13 +84,13 @@ class Neuron {
   }
 
   getPosition() {
-    const model = this.group.parent;
+    const sequential = this.group.sequential;
     const numNeurons = this.group.numNeurons();
-    const numNeuronGroups = model.numNeuronGroups();
-    const maxNumNeuronsPerGroup = model.maxNumNeuronsPerGroup;
+    const numNeuronGroups = sequential.numNeuronGroups();
+    const maxNumNeuronsPerGroup = sequential.maxNumNeuronsPerGroup;
     
-    const width = model.width;
-    const height = model.height;
+    const width = sequential.width;
+    const height = sequential.height;
     
     const cy = height / 2;
     const cx = width / 2;
