@@ -1,6 +1,6 @@
-const ffnet = require("../../ff-net");
+import ffnet from "../../build/ff-net.mjs";
 
-class LossPlot extends ffnet.ui.LossPlot {
+export default class LossPlot extends ffnet.ui.LossPlot {
   constructor(args = {}) {
     super(args);
     this.domElement.className = "loss-plot";
@@ -24,5 +24,3 @@ class LossPlot extends ffnet.ui.LossPlot {
     updateMq();
   }
 }
-
-module.exports = LossPlot;

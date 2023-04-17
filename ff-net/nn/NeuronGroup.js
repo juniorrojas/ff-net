@@ -8,11 +8,9 @@ class NeuronGroup {
 
     this.headless = parent.headless;
   }
-  
-  render() {
-    this.neurons.forEach((neuron) => {
-      neuron.render();
-    });
+
+  numNeurons() {
+    return this.neurons.length;
   }
 
   addNeuron(bias) {
@@ -31,10 +29,6 @@ class NeuronGroup {
     return neuron;
   }
 
-  numNeurons() {
-    return this.neurons.length;
-  }
-
   setActivations(arr) {
     const n = this.numNeurons();
     if (arr.length != n) {
@@ -49,12 +43,24 @@ class NeuronGroup {
     return this.neurons.map(neuron => neuron.activation);
   }
 
+  forward() {
+    this.neurons.forEach((neuron) => {
+      neuron.forward();
+    });
+  }
+  
+  render() {
+    this.neurons.forEach((neuron) => {
+      neuron.render();
+    });
+  }
+
   toData() {
     const data = {
       neurons: this.neurons.map((neuron) => neuron.toData())
     };
     return data;
-  }
+  }  
 
   static fromData(model, data) {
     const neuronGroup = model.addNeuronGroup();

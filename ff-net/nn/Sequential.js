@@ -183,14 +183,12 @@ class Sequential {
 
     for (let i = 1; i < this.neuronGroups.length; i++) {
       const group = this.neuronGroups[i];
-      group.neurons.forEach((neuron) => {
-        neuron.forward();
-      });
+      group.forward();
     }
 
     if (x != null) {
       const outputNeuronGroup = this.getOutputNeuronGroup();
-      return outputNeuronGroup.neurons.map(n => n.activation);
+      return outputNeuronGroup.getActivations();
     }
   }
 

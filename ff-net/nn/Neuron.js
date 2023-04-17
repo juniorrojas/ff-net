@@ -46,10 +46,6 @@ class Neuron {
   }
 
   backward(args = {}) {
-    this.outputLinks.forEach((link) => {
-      this.activationGrad += link.weight * link.nf.preActivationGrad;
-    });
-    
     this.preActivationGrad += sigmoidBackward(this.preActivation, this.activationGrad);
     this.biasGrad += this.preActivationGrad;
   }
