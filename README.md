@@ -34,8 +34,8 @@ model.addNeuronGroup(2);
 model.addFullyConnectedLayer(4);
 model.addFullyConnectedLayer(4);
 model.addFullyConnectedLayer(1);
-model.randomizeParameters();
 document.body.appendChild(model.domElement);
+model.randomizeParameters();
 model.render();
 ```
 
