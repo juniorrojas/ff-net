@@ -10,9 +10,11 @@ Feedforward neural network learning in real time.
 
 [live demo](http://juniorrojas.github.io/ff-net)
 
-<div align="center">
-  <img src="media/screenshot.png" width="650px">
-</div>
+<a href="http://juniorrojas.github.io/ff-net">
+  <div align="center">
+    <img src="media/screenshot.png" width="650px">
+  </div>
+</a>
 
 ## quickstart
 
