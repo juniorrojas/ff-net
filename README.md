@@ -40,7 +40,7 @@ model.render();
 ```
 
 <div align="center">
-  <img src="media/sequential.png" width="200px"></img>
+  <img src="media/sequential.png" width="300px"></img>
 </div>
 
 ### `DataCanvas`
