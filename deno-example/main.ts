@@ -1,4 +1,4 @@
-import ffnet from "https://cdn.rawgit.com/juniorrojas/ff-net/master/build/ff-net.mjs"
+import ffnet from "https://raw.githubusercontent.com/juniorrojas/ff-net/master/build/ff-net.mjs";
 
 const model = new ffnet.Sequential();
 model.addNeuronGroup(3);
