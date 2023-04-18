@@ -5,7 +5,6 @@ function main() {
   const divTitle = document.createElement("div");
   document.body.appendChild(divTitle);
   divTitle.className = "title-container";
-  divTitle.textContent = "";
 
   const h1 = document.createElement("h1");
   h1.textContent = "ff-net";
