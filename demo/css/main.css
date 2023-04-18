@@ -28,7 +28,7 @@ svg {
   user-select: none;
 }
 
-.title-container {
+/* .title-container {
   padding-top: 25px;
   padding-bottom: 5px;
   margin-bottom: 30px;
@@ -36,7 +36,7 @@ svg {
   padding-left: 5px;
   background-color: rgb(46, 53, 56);
   box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.65);
-}
+} */
 
 .content-container {
   width: 100%;
