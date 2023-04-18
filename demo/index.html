@@ -2,10 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    
+    <meta name="viewport" content="width=device-width, user-scalable=no">    
     <title>ff-net</title>
-    
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700">
     <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
@@ -14,7 +12,8 @@
       (function() {
         const script = document.createElement("script");
         const now = new Date();
-        script.src = "js.build.out/main.js?t=" + now.toISOString();
+        const nstr = now.toISOString();
+        script.src = `js.build.out/main.js?t=${nstr}`;
         document.body.appendChild(script);
       })();
     </script>
