@@ -1,29 +1,27 @@
 const puppeteer = require("puppeteer");
 
 class Window {
-  constructor(args) {
-    if (args == null) args = {};
+  constructor(args = {}) {
     this.width = args.width ?? 400;
     this.height = args.height ?? 400;
     this.headless = args.headless ?? false;
-    if (args.indexFilename == null) {
-      throw new Error("indexFilename required");
-    }
-    this.indexFilename = args.indexFilename;
+    this.deviceScaleFactor = args.deviceScaleFactor ?? 1;
+    this.indexUrl = args.indexUrl;
   }
 
   async launch() {
-    let width = this.width;
-    let height = this.height;
-    let browser = this.browser = await puppeteer.launch({
+    const width = this.width;
+    const height = this.height;
+    const deviceScaleFactor = this.deviceScaleFactor;
+    const browser = this.browser = await puppeteer.launch({
       headless: this.headless,
       args: [
         `--window-size=${this.width},${this.height}`
       ]
     });
-    let page = await browser.newPage();
-    await page.setViewport({ width: width, height: height, deviceScaleFactor: 1 });
-    await page.goto(`file://${this.indexFilename}`);
+    const page = await browser.newPage();
+    await page.setViewport({ width: width, height: height, deviceScaleFactor: deviceScaleFactor });
+    await page.goto(this.indexUrl);
     this.page = page;
   }
 
@@ -34,7 +32,7 @@ class Window {
   async screenshot() {
     return await this.page.screenshot.apply(this.page, arguments);
   }
-  
+
   async close() {
     await this.browser.close();
   }
