@@ -1,15 +1,15 @@
 # demo
 
-Install dependencies and watch source for development
+Install dependencies and watch source for development.
 
 ```
 npm ci
 npm run watch
 ```
 
-Open `build.out/index.html`
+Run an HTTP server serving files from `build.out` to preview the build.
 
-Build and publish to `gh-pages`
+Build and publish to `gh-pages`.
 
 ```
 npm run build
