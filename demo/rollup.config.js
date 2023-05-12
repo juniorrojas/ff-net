@@ -2,6 +2,8 @@ import fs from "fs";
 import resolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 
+let mainHash = null;
+
 function buildMain() {
   return {
     generateBundle(outputOptions, bundle, isWrite) {
@@ -10,7 +12,8 @@ function buildMain() {
           const filename = bundle[k].fileName;
           const i = filename.indexOf(".");
           if (filename.substr(0, i) == "main") {
-            mainHash = filename.substring(i + 1, filename.lastIndexOf("."));
+            const i2 = filename.lastIndexOf(".");
+            mainHash = filename.substring(i + 1, i2);
             break;
           }
         }
@@ -23,12 +26,10 @@ function buildMain() {
   }
 }
 
-let mainHash = null;
-
 export default {
   input: ["js/main.js"],
   output: {
-    dir: "./js.build.out/",
+    dir: "./build.out/",
     format: "esm",
     sourcemap: false,
     entryFileNames: "[name].[hash].js",
