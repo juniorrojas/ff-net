@@ -3,9 +3,9 @@ const puppeteer = require("puppeteer");
 class Window {
   constructor(args) {
     if (args == null) args = {};
-    this.width = args.width == null ? 400 : args.width;
-    this.height = args.height == null ? 400 : args.height;
-    this.headless = args.headless == null ? false : args.headless;
+    this.width = args.width ?? 400;
+    this.height = args.height ?? 400;
+    this.headless = args.headless ?? false;
     if (args.indexFilename == null) {
       throw new Error("indexFilename required");
     }
