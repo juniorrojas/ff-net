@@ -28,7 +28,7 @@ def populate_deploy_path(deploy_path):
         deploy_path.joinpath("css")
     )
 
-    return deploy_index_filename
+    # return deploy_index_filename
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
@@ -45,7 +45,7 @@ if __name__ == "__main__":
             print("github remote could not be inferred, run the script with --remote_url <remote-url>", file=sys.stderr)
             exit(1)
 
-    deploy_path = this_dirpath.joinpath("deploy.out")
+    deploy_path = this_dirpath.parent.joinpath("deploy.out")
     deployutils.run(
         remote_url,
         deploy_path,

@@ -45,5 +45,3 @@ export default function main() {
   document.body.appendChild(app.domElement);
   window.app = app;
 }
-
-// main();
