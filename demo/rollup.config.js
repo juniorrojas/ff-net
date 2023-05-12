@@ -3,7 +3,7 @@ import terser from "@rollup/plugin-terser";
 import fs from "fs";
 import fsp from "fs/promises";
 
-const outputDirname = "build.out";
+const buildDirname = "build.out";
 let mainHash = null;
 
 function fileExists(filename) {
@@ -27,7 +27,7 @@ async function cleandir(dirname) {
 function buildMain() {
   return {
     buildStart: async () => {
-      await cleandir(outputDirname);
+      await cleandir(buildDirname);
     },
     generateBundle: async (outputOptions, bundle, isWrite) => {
       if (isWrite) {
@@ -44,9 +44,9 @@ function buildMain() {
     },
     writeBundle() {
       const content = `import main from "./main.${mainHash}.js";\nwindow.vstr = \"${mainHash}\"\nmain();`;
-      fs.writeFileSync("build.out/main.js", content);
-      fs.copyFileSync("index.html", "build.out/index.html");
-      fs.copyFileSync("index.css", "build.out/index.css");
+      fs.writeFileSync(`${buildDirname}/main.js`, content);
+      fs.copyFileSync("index.html", `${buildDirname}/index.html`);
+      fs.copyFileSync("index.css", `${buildDirname}/index.css`);
     }
   }
 }
@@ -54,7 +54,7 @@ function buildMain() {
 export default {
   input: ["js/main.js"],
   output: {
-    dir: outputDirname,
+    dir: buildDirname,
     format: "esm",
     sourcemap: false,
     entryFileNames: "[name].[hash].js",
