@@ -3,6 +3,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import fsp from "fs/promises";
 
+const outputDirname = "build.out";
 let mainHash = null;
 
 function fileExists(filename) {
@@ -26,7 +27,7 @@ async function cleandir(dirname) {
 function buildMain() {
   return {
     buildStart: async () => {
-      await cleandir("build.out");
+      await cleandir(outputDirname);
     },
     generateBundle: async (outputOptions, bundle, isWrite) => {
       if (isWrite) {
@@ -53,7 +54,7 @@ function buildMain() {
 export default {
   input: ["js/main.js"],
   output: {
-    dir: "./build.out/",
+    dir: outputDirname,
     format: "esm",
     sourcemap: false,
     entryFileNames: "[name].[hash].js",
