@@ -37,7 +37,7 @@ function makeHeader() {
   divTitle.appendChild(h2);
 }
 
-function main() {
+export default function main() {
   makeGitHubCorner();
   makeHeader();
   window.initData = data;
@@ -45,5 +45,3 @@ function main() {
   document.body.appendChild(app.domElement);
   window.app = app;
 }
-
-main();

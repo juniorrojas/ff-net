@@ -7,28 +7,16 @@ import sys
 sys.path.insert(0, str(this_dirpath))
 import deployutils
 import shutil
-import sys
 import argparse
 
 def populate_deploy_path(deploy_path):
     src_path = this_dirpath.parent
+    build_path = src_path.joinpath("build.out")
 
-    deploy_index_filename = str(deploy_path.joinpath("index.html"))
-
-    shutil.copy(
-        src_path.joinpath("index.html"),
-        deploy_index_filename
-    )
-    shutil.copytree(
-        src_path.joinpath("js.build.out"),
-        deploy_path.joinpath("js.build.out")
-    )
-    shutil.copytree(
-        src_path.joinpath("css"),
-        deploy_path.joinpath("css")
-    )
-
-    return deploy_index_filename
+    for filename in os.listdir(build_path):
+        _, ext = os.path.splitext(filename)
+        if ext in [".html", ".css", ".js"]:
+            shutil.copy(build_path.joinpath(filename), deploy_path.joinpath(filename))
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
@@ -45,7 +33,7 @@ if __name__ == "__main__":
             print("github remote could not be inferred, run the script with --remote_url <remote-url>", file=sys.stderr)
             exit(1)
 
-    deploy_path = this_dirpath.joinpath("deploy.out")
+    deploy_path = this_dirpath.parent.joinpath("deploy.out")
     deployutils.run(
         remote_url,
         deploy_path,
