@@ -7,7 +7,7 @@ npm ci
 npm run watch
 ```
 
-Open `index.html`
+Open `build.out/index.html`
 
 Build and publish to `gh-pages`
 
