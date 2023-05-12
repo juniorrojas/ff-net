@@ -1,6 +1,6 @@
-import fs from "fs";
 import resolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
+import fs from "fs";
 import fsp from "fs/promises";
 
 const outputDirname = "build.out";
