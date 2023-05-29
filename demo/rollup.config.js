@@ -1,4 +1,3 @@
-import resolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import fs from "fs";
 import fsp from "fs/promises";
@@ -60,7 +59,6 @@ export default {
     entryFileNames: "[name].[hash].js",
   },
   plugins: [
-    resolve(),
     buildMain(),
     terser()
   ],
