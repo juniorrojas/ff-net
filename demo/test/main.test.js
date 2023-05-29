@@ -1,8 +1,9 @@
-const utils = require("./utils");
+import Window from "./utils/Window.js";
+import { runWebServer } from "./utils/server.js";
 
 test("main", async () => {
   const main = async (port) => {
-    const window = new utils.Window({
+    const window = new Window({
       headless: true,
       width: 800,
       height: 700,
@@ -59,7 +60,7 @@ test("main", async () => {
     }
   }
 
-  await utils.runWebServer({
+  await runWebServer({
     staticDirname: `${__dirname}/../build.out/`,
     onReady: main
   });
