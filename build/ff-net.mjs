@@ -399,7 +399,8 @@ class Layer$1 {
 
     for (let link of this.links) {
       link.backward(args);
-    }  }
+    }
+  }
 
   getBiasArray() {
     const b = [];

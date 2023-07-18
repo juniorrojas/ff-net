@@ -405,7 +405,8 @@
 
       for (let link of this.links) {
         link.backward(args);
-      }  }
+      }
+    }
 
     getBiasArray() {
       const b = [];
