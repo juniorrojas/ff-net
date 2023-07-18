@@ -35,7 +35,7 @@ class Layer {
 
     for (let link of this.links) {
       link.backward(args);
-    };
+    }
   }
 
   getBiasArray() {
