@@ -256,7 +256,13 @@ class Neuron$1 {
     const cy = height / 2;
     const cx = width / 2;
     
-    const dx = (width - (radius + strokeWidth) * 2) / (numNeuronGroups - 1);
+    let dx;
+    if (numNeuronGroups < 2) {
+      dx = 0;
+    } else {
+      dx = (width - (radius + strokeWidth) * 2) / (numNeuronGroups - 1);
+    }
+
     const dy = (height - (radius + strokeWidth) * 2) / (maxNumNeuronsPerGroup - 1);
     
     const x = cx + (this.group.id - (numNeuronGroups - 1) / 2) * dx;
