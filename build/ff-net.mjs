@@ -1,3 +1,8 @@
+/**
+ * ff-net
+ * (c) 2023 Junior Rojas
+ * License: MIT
+ */
 const svg = {};
 
 svg.createElement = function(element) {

@@ -2,6 +2,19 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 
+function header() {
+  return {
+    renderChunk(code) {
+      return `/**
+ * ff-net
+ * (c) 2023 Junior Rojas
+ * License: MIT
+ */
+${code}`;
+    }
+  };
+}
+
 const configs = [];
 
 for (let minified of [true, false]) {
@@ -15,7 +28,8 @@ for (let minified of [true, false]) {
     plugins: [
       resolve(),
       commonjs(),
-      ...(minified ? [terser()] : [])
+      ...(minified ? [terser()] : []),
+      header(),
     ],
   });
 }
@@ -32,7 +46,8 @@ for (let minified of [true, false]) {
     plugins: [
       resolve(),
       commonjs(),
-      ...(minified ? [terser()] : [])
+      ...(minified ? [terser()] : []),
+      header(),
     ],
   });
 }
