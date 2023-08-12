@@ -3,7 +3,7 @@ import data from "./data";
 
 const headerBackgroundColor = "rgb(46, 53, 56)";
 
-function makeGitHubCorner() {
+function makeGitHubLink() {
   const a = document.createElement("a");
   document.body.appendChild(a);
   a.href = "https://github.com/juniorrojas/ff-net";
@@ -36,7 +36,7 @@ function makeHeader() {
 }
 
 export default function main() {
-  makeGitHubCorner();
+  makeGitHubLink();
   makeHeader();
   window.initData = data;
   const app = new App(data);
