@@ -13,10 +13,18 @@ def populate_deploy_path(deploy_path):
     src_path = this_dirpath.parent
     build_path = src_path.joinpath("build.out")
 
+    shutil.copy(
+        src_path.joinpath(".gitignore"),
+        deploy_path.joinpath(".gitignore")
+    )
+
     for filename in os.listdir(build_path):
         _, ext = os.path.splitext(filename)
         if ext in [".html", ".css", ".js"]:
-            shutil.copy(build_path.joinpath(filename), deploy_path.joinpath(filename))
+            shutil.copy(
+                build_path.joinpath(filename),
+                deploy_path.joinpath(filename)
+            )
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
