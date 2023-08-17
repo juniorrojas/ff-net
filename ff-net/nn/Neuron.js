@@ -1,4 +1,3 @@
-const radius = 12;
 const strokeWidth = 2;
 
 function sigmoid(x) {
@@ -11,9 +10,10 @@ function sigmoidBackward(x, outputGrad) {
 }
 
 class Neuron {
-  constructor(group, id, bias) {
+  constructor(group, id, bias, radius) {
     this.group = group;
     this.id = id;
+    this.radius = radius ?? 12;
 
     this.outputLinks = [];
     this.inputLinks = [];
@@ -32,7 +32,7 @@ class Neuron {
       const svgElement = this.svgElement = svg.createElement("g");
       const svgCircle = this.svgCircle = svg.createElement("circle");
       svgElement.appendChild(svgCircle);
-      svgCircle.setAttribute("r", radius);
+      svgCircle.setAttribute("r", this.radius);
     }
   }
 
@@ -64,6 +64,7 @@ class Neuron {
     const position = this.getPosition();
     circle.setAttribute("cx", position.x);
     circle.setAttribute("cy", position.y);
+    this.svgCircle.setAttribute("r", this.radius);
 
     const isInput = this.inputLinks.length == 0;
     let fillColor;
@@ -94,6 +95,8 @@ class Neuron {
     
     const cy = height / 2;
     const cx = width / 2;
+
+    const radius = this.radius;
     
     let dx;
     if (numNeuronGroups < 2) {
