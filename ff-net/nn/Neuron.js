@@ -29,8 +29,10 @@ class Neuron {
     
     if (!headless) {
       const svg = require("../common/svg");
-      const svgElement = this.svgElement = svg.createElement("circle");
-      svgElement.setAttribute("r", radius);
+      const svgElement = this.svgElement = svg.createElement("g");
+      const svgCircle = this.svgCircle = svg.createElement("circle");
+      svgElement.appendChild(svgCircle);
+      svgCircle.setAttribute("r", radius);
     }
   }
 
@@ -58,7 +60,7 @@ class Neuron {
   render() {
     const Color = require("../common/Color");
     
-    const circle = this.svgElement;
+    const circle = this.svgCircle;
     const position = this.getPosition();
     circle.setAttribute("cx", position.x);
     circle.setAttribute("cy", position.y);
