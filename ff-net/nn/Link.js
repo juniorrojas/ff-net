@@ -23,6 +23,9 @@ class Link {
     }
   }
 
+  get sourceNeuron() { return this.n0; }
+  get targetNeuron() { return this.nf; }
+
   render() {
     const Color = require("../common/Color");
 
