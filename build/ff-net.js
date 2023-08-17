@@ -91,6 +91,9 @@
       }
     }
 
+    get sourceNeuron() { return this.n0; }
+    get targetNeuron() { return this.nf; }
+
     render() {
       const Color = Color_1;
 
@@ -167,7 +170,6 @@
 
   var Link_1 = Link$1;
 
-  const radius = 12;
   const strokeWidth = 2;
 
   function sigmoid(x) {
@@ -180,9 +182,10 @@
   }
 
   class Neuron$1 {
-    constructor(group, id, bias) {
+    constructor(group, id, bias, radius) {
       this.group = group;
       this.id = id;
+      this.radius = radius ?? 12;
 
       this.outputLinks = [];
       this.inputLinks = [];
@@ -198,8 +201,10 @@
       
       if (!headless) {
         const svg = svg_1;
-        const svgElement = this.svgElement = svg.createElement("circle");
-        svgElement.setAttribute("r", radius);
+        const svgElement = this.svgElement = svg.createElement("g");
+        const svgCircle = this.svgCircle = svg.createElement("circle");
+        svgElement.appendChild(svgCircle);
+        svgCircle.setAttribute("r", this.radius);
       }
     }
 
@@ -227,10 +232,11 @@
     render() {
       const Color = Color_1;
       
-      const circle = this.svgElement;
+      const circle = this.svgCircle;
       const position = this.getPosition();
       circle.setAttribute("cx", position.x);
       circle.setAttribute("cy", position.y);
+      this.svgCircle.setAttribute("r", this.radius);
 
       const isInput = this.inputLinks.length == 0;
       let fillColor;
@@ -261,6 +267,8 @@
       
       const cy = height / 2;
       const cx = width / 2;
+
+      const radius = this.radius;
       
       let dx;
       if (numNeuronGroups < 2) {
