@@ -393,6 +393,14 @@
         }
       }
     }
+
+    forEach(f) {
+      let i = 0;
+      for (let link of this) {
+        f(link, i);
+        i++;
+      }
+    }
   }
 
   class Layer$1 {
