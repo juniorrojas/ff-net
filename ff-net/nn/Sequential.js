@@ -32,11 +32,11 @@ class Sequential {
         domElement.appendChild(this.svgElement);
         this.domElement = domElement;
       }
-
-      const width = args.width ?? 300;
-      const height = args.height ?? 100;
-      this.setRenderSize(width, height);
     }
+
+    const width = args.width ?? 300;
+    const height = args.height ?? 100;
+    this.setRenderSize(width, height);
   }
 
   setRenderSize(width, height) {

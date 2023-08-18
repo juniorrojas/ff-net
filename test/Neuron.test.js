@@ -1,6 +1,4 @@
 const ffnet = require("ff-net");
-const { toBeCloseToArray } = require("./utils");
-expect.extend({ toBeCloseToArray });
 
 test("single neuron position", () => {
   const sequential = new ffnet.Sequential({
@@ -12,5 +10,7 @@ test("single neuron position", () => {
   expect(sequential.numNeurons()).toBe(1);
   const neuron = g.neurons[0];
   const pos = neuron.getPosition();
-  expect(pos).toBeCloseToArray([100, 50]);
+  console.log(pos);
+  expect(pos.x).toBeCloseTo(100);
+  expect(pos.y).toBeCloseTo(50);
 });
