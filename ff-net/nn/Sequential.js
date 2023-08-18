@@ -36,10 +36,10 @@ class Sequential {
 
     const width = args.width ?? 300;
     const height = args.height ?? 100;
-    this.setRenderSize(width, height);
+    this.setSize(width, height);
   }
 
-  setRenderSize(width, height) {
+  setSize(width, height) {
     this.width = width;
     this.height = height;
 
