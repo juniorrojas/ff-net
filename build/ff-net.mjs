@@ -271,7 +271,12 @@ class Neuron$1 {
       dx = (width - (radius + strokeWidth) * 2) / (numNeuronGroups - 1);
     }
 
-    const dy = (height - (radius + strokeWidth) * 2) / (maxNumNeuronsPerGroup - 1);
+    let dy;
+    if (maxNumNeuronsPerGroup < 2) {
+      dy = 0;
+    } else {
+      dy = (height - (radius + strokeWidth) * 2) / (maxNumNeuronsPerGroup - 1);
+    }
     
     const x = cx + (this.group.id - (numNeuronGroups - 1) / 2) * dx;
     
@@ -528,14 +533,14 @@ class Sequential {
         domElement.appendChild(this.svgElement);
         this.domElement = domElement;
       }
-
-      const width = args.width ?? 300;
-      const height = args.height ?? 100;
-      this.setRenderSize(width, height);
     }
+
+    const width = args.width ?? 300;
+    const height = args.height ?? 100;
+    this.setSize(width, height);
   }
 
-  setRenderSize(width, height) {
+  setSize(width, height) {
     this.width = width;
     this.height = height;
 
