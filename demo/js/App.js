@@ -31,7 +31,7 @@ export default class App {
     // model.addFullyConnectedLayer(1);
     
     model.domElement.classList.add("content-container-cell");
-    model.setSize(300, 250);
+    model.setRenderSize(300, 250);
     row.appendChild(model.domElement);
     model.render();
     
