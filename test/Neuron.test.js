@@ -10,7 +10,6 @@ test("single neuron position", () => {
   expect(sequential.numNeurons()).toBe(1);
   const neuron = g.neurons[0];
   const pos = neuron.getPosition();
-  console.log(pos);
   expect(pos.x).toBeCloseTo(100);
   expect(pos.y).toBeCloseTo(50);
 });
