@@ -91,12 +91,16 @@ class Sequential {
     return this.neuronGroups[0];
   }
 
+  get inputNeuronGroup() { return this.getInputNeuronGroup(); }
+
   getOutputNeuronGroup() {
     if (this.neuronGroups.length == 0) {
       throw new Error("no neuron groups available");
     }
     return this.neuronGroups[this.neuronGroups.length - 1];
   }
+
+  get outputNeuronGroup() { return this.getOutputNeuronGroup(); }
 
   addNeuronGroup(neurons) {
     if (neurons == null) neurons = 0;	
