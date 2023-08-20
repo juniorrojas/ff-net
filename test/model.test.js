@@ -33,7 +33,7 @@ test("data loss", () => {
   expect(l2.getBiasArray()).toEqual(l2b);
   
   model.forward([0.2, 0.3]);
-  const outputNeuron =  model.getOutputNeuronGroup().neurons[0];
+  const outputNeuron =  model.outputNeuronGroup.neurons[0];
   const output = outputNeuron.activation;
   expect(output).toBeCloseTo(0.3484);
 
@@ -90,7 +90,7 @@ test("regularization loss", () => {
   model.forward([0.2, 0.3]);
   const regularizationLoss = model.forwardRegularization({ regularization: reg });
   expect(regularizationLoss).toBeCloseTo(0.9302);
-  const outputNeuron =  model.getOutputNeuronGroup().neurons[0];
+  const outputNeuron =  model.outputNeuronGroup.neurons[0];
   const output = outputNeuron.activation;
   expect(output).toBeCloseTo(0.3484);
 

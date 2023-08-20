@@ -46,10 +46,10 @@ test("manual forward", () => {
   model.addFullyConnectedLayer(1);
   expect(model.numLayers()).toBe(1);
 
-  const inputNeuronGroup = model.getInputNeuronGroup();
+  const inputNeuronGroup = model.inputNeuronGroup;
   const inputNeuron = inputNeuronGroup.neurons[0];
   inputNeuron.activation = 0;
-  const outputNeuronGroup = model.getOutputNeuronGroup();
+  const outputNeuronGroup = model.outputNeuronGroup;
   const outputNeuron = outputNeuronGroup.neurons[0];
   outputNeuron.bias = 0;
 

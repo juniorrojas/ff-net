@@ -11,9 +11,9 @@ test("single layer backward", () => {
   expect(model.numLayers()).toBe(1);
   expect(model.numLinks()).toBe(1);
 
-  const inputNeuronGroup = model.getInputNeuronGroup();
+  const inputNeuronGroup = model.inputNeuronGroup;
   const inputNeuron = inputNeuronGroup.neurons[0];
-  const outputNeuronGroup = model.getOutputNeuronGroup();
+  const outputNeuronGroup = model.outputNeuronGroup;
   const outputNeuron = outputNeuronGroup.neurons[0];
   const link = model.links[0];
 
