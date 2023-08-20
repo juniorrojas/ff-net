@@ -598,12 +598,16 @@
       return this.neuronGroups[0];
     }
 
+    get inputNeuronGroup() { return this.getInputNeuronGroup(); }
+
     getOutputNeuronGroup() {
       if (this.neuronGroups.length == 0) {
         throw new Error("no neuron groups available");
       }
       return this.neuronGroups[this.neuronGroups.length - 1];
     }
+
+    get outputNeuronGroup() { return this.getOutputNeuronGroup(); }
 
     addNeuronGroup(neurons) {
       if (neurons == null) neurons = 0;	
@@ -625,9 +629,9 @@
       if (neurons == null) {
         throw new Error("number of output neurons required to create fully connected layer");
       }
-      const inputGroup = this.getOutputNeuronGroup();
+      const inputGroup = this.outputNeuronGroup;
       this.addNeuronGroup(neurons);
-      const outputGroup = this.getOutputNeuronGroup();
+      const outputGroup = this.outputNeuronGroup;
       inputGroup.neurons.forEach((inputNeuron) => {
         outputGroup.neurons.forEach((outputNeuron) => {
           this.addLink(inputNeuron, outputNeuron);
@@ -678,7 +682,7 @@
 
     forward(x) {
       if (x != null) {
-        const inputNeuronGroup = this.getInputNeuronGroup();
+        const inputNeuronGroup = this.inputNeuronGroup;
         const inputNeurons = inputNeuronGroup.neurons;
         if (x.length != inputNeurons.length) {
           throw new Error(`invalid input size, expected ${inputNeuronGroup.length}, found ${x.length}`);
@@ -694,7 +698,7 @@
       }
 
       if (x != null) {
-        const outputNeuronGroup = this.getOutputNeuronGroup();
+        const outputNeuronGroup = this.outputNeuronGroup;
         return outputNeuronGroup.getActivations();
       }
     }
@@ -714,7 +718,7 @@
     }
 
     backwardData(ctx) {
-      const outputNeuron = this.getOutputNeuronGroup().neurons[0];
+      const outputNeuron = this.outputNeuronGroup.neurons[0];
       outputNeuron.activationGrad = -ctx.d;
       this.backward();
     }
