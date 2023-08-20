@@ -124,7 +124,7 @@ class Sequential {
     }
     const inputGroup = this.outputNeuronGroup;
     this.addNeuronGroup(neurons);
-    const outputGroup = this.getOutputNeuronGroup();
+    const outputGroup = this.outputNeuronGroup;
     inputGroup.neurons.forEach((inputNeuron) => {
       outputGroup.neurons.forEach((outputNeuron) => {
         this.addLink(inputNeuron, outputNeuron);
@@ -175,7 +175,7 @@ class Sequential {
 
   forward(x) {
     if (x != null) {
-      const inputNeuronGroup = this.getInputNeuronGroup();
+      const inputNeuronGroup = this.inputNeuronGroup;
       const inputNeurons = inputNeuronGroup.neurons;
       if (x.length != inputNeurons.length) {
         throw new Error(`invalid input size, expected ${inputNeuronGroup.length}, found ${x.length}`);
@@ -191,7 +191,7 @@ class Sequential {
     }
 
     if (x != null) {
-      const outputNeuronGroup = this.getOutputNeuronGroup();
+      const outputNeuronGroup = this.outputNeuronGroup;
       return outputNeuronGroup.getActivations();
     }
   }
