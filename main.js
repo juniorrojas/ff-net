@@ -1,3 +1,3 @@
-import main from "./main.8d5e9384.js";
-window.vstr = "8d5e9384"
+import main from "./main.be9f1cc3.js";
+window.vstr = "be9f1cc3"
 main();
