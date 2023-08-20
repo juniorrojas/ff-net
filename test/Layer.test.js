@@ -15,7 +15,7 @@ test("array utils", () => {
     [2, 5]
   ]);
 
-  model.getOutputNeuronGroup().neurons.forEach((neuron, i) => {
+  model.outputNeuronGroup.neurons.forEach((neuron, i) => {
     neuron.bias = (i + 1) * 10;
   });
   expect(layer.getBiasArray()).toEqual([

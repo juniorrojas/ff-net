@@ -49,7 +49,7 @@ test("manual forward", () => {
   const inputNeuronGroup = model.getInputNeuronGroup();
   const inputNeuron = inputNeuronGroup.neurons[0];
   inputNeuron.activation = 0;
-  const outputNeuronGroup = model.getOutputNeuronGroup();
+  const outputNeuronGroup = model.outputNeuronGroup;
   const outputNeuron = outputNeuronGroup.neurons[0];
   outputNeuron.bias = 0;
 

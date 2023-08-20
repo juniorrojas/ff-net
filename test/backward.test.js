@@ -13,7 +13,7 @@ test("single layer backward", () => {
 
   const inputNeuronGroup = model.getInputNeuronGroup();
   const inputNeuron = inputNeuronGroup.neurons[0];
-  const outputNeuronGroup = model.getOutputNeuronGroup();
+  const outputNeuronGroup = model.outputNeuronGroup;
   const outputNeuron = outputNeuronGroup.neurons[0];
   const link = model.links[0];
 

@@ -15,7 +15,7 @@ test("add layers", () => {
   expect(model.numNeurons()).toBe(2);
   expect(model.numLinks()).toBe(0);
   expect(model.getInputNeuronGroup()).toBe(g0);
-  expect(model.getOutputNeuronGroup()).toBe(g0);  
+  expect(model.outputNeuronGroup).toBe(g0);  
 
   expect(() => { model.addFullyConnectedLayer(); }).toThrow();
 
@@ -27,7 +27,7 @@ test("add layers", () => {
   expect(model.numLinks()).toBe(6);
   expect(model.getInputNeuronGroup()).toBe(g0);
   expect(layer0.inputNeuronGroup).toBe(g0);
-  expect(layer0.outputNeuronGroup).toBe(model.getOutputNeuronGroup());
+  expect(layer0.outputNeuronGroup).toBe(model.outputNeuronGroup);
 
   const layer1 = model.addFullyConnectedLayer(5);
   expect(model.layers[1]).toBe(layer1);
