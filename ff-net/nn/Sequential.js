@@ -211,7 +211,7 @@ class Sequential {
   }
 
   backwardData(ctx) {
-    const outputNeuron = this.getOutputNeuronGroup().neurons[0];
+    const outputNeuron = this.outputNeuronGroup.neurons[0];
     outputNeuron.activationGrad = -ctx.d;
     this.backward();
   }
