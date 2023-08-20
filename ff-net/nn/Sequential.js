@@ -122,7 +122,7 @@ class Sequential {
     if (neurons == null) {
       throw new Error("number of output neurons required to create fully connected layer");
     }
-    const inputGroup = this.getOutputNeuronGroup();
+    const inputGroup = this.outputNeuronGroup;
     this.addNeuronGroup(neurons);
     const outputGroup = this.getOutputNeuronGroup();
     inputGroup.neurons.forEach((inputNeuron) => {
