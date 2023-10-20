@@ -5,7 +5,7 @@
     "test": "export NODE_PATH=. && jest"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.1",
+    "@babel/core": "^7.23.2",
     "@babel/plugin-transform-runtime": "^7.22.2",
     "@babel/preset-env": "^7.22.2",
     "@rollup/plugin-terser": "^0.4.1",
