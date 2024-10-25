@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "watch": "rollup -c rollup.config.js --watch",
