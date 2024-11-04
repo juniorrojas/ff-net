@@ -3,6 +3,10 @@
  * (c) 2023 Junior Rojas
  * License: MIT
  */
+function getDefaultExportFromCjs (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
 const svg = {};
 
 svg.createElement = function(element) {
@@ -1178,4 +1182,6 @@ var ffNet = {
   DataCanvas: ui.DataCanvas
 };
 
-export { ffNet as default };
+var index = /*@__PURE__*/getDefaultExportFromCjs(ffNet);
+
+export { index as default };
