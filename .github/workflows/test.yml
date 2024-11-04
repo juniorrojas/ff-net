@@ -5,19 +5,19 @@ on:
     paths-ignore:
       - README.md
     branches:
-      - master
+      - main
   pull_request:
     paths-ignore:
       - README.md
     branches:
-      - master
+      - main
 
 jobs:
   test-lib:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Test lib
         run: |
           npm ci
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Test demo
         run: |
           npm ci
