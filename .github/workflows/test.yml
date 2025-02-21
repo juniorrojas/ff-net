@@ -27,11 +27,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Test demo
+      - name: Build lib
         run: |
           npm ci
           npm run build
+      - name: Build demo
+        run: |
           cd demo
           npm ci
           npm run build
+      - name: Test demo
+        run: |
           npm test
