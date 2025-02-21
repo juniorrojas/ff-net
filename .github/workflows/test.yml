@@ -38,4 +38,5 @@ jobs:
           npm run build
       - name: Test demo
         run: |
+          cd demo
           npm test
