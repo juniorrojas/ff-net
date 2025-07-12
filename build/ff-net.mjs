@@ -550,8 +550,8 @@ class Sequential {
 
     if (this.domElement != null) {
       const domElement = this.domElement;
-      domElement.style.width = width;
-      domElement.style.height = height;
+      domElement.style.width = `${width}px`;
+      domElement.style.height = `${height}px`;
     }
   }
 
